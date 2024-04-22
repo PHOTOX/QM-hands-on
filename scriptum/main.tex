@@ -1,0 +1,97 @@
+% Koma-Script class has better defaults for us, let's use it!
+% https://mirrors.nic.cz/tex-archive/macros/latex/contrib/koma-script/doc/scrguien.pdf
+% https://tex.stackexchange.com/questions/73248/what-packages-are-incompatible-with-koma-script
+
+% Two sided book, chapter can begin on both left and right page
+\documentclass[paper=b5,parskip=half,open=any,headsepline=true,11pt]{scrbook}
+
+% Number pages to header
+% https://tex.stackexchange.com/a/278627/220596
+\usepackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\ohead{\headmark}
+\ihead*{\pagemark}
+
+% The toolbox package allows us to use conditional compilation, so we can get colored and black-and-white versions from the same source
+\usepackage{etoolbox}
+
+% all includes and settings are in a separate file
+\input{scriptum/header.tex}
+
+% https://www.overleaf.com/learn/latex/Glossaries#Acronyms
+\usepackage[acronym]{glossaries}
+\makeglossaries
+\input{scriptum/zkratky.tex}
+
+% https://www.overleaf.com/learn/latex/Indices
+\usepackage{imakeidx}
+\makeindex
+
+% custom hyphenation of words
+\input{scriptum/hyphenation.tex}
+
+\usepackage{subcaption}
+
+\title{Quantum Mechanics: Hands on}
+\author{Jiří Janoš, Tomáš Jíra}
+
+%%%%%%%%%%%%%%%%%%
+% BEGIN DOCUMENT %
+%%%%%%%%%%%%%%%%%%
+\begin{document}
+\frontmatter
+\pagestyle{scrheadings}
+
+% TITULNI STRANA
+\input{scriptum/titulni_strana.tex}
+% Nasledující v tuto chvíli není potřeba, je uděláno automaticky pomocí \frontmatter
+%\pagestyle{plain}
+%\pagenumbering{roman}
+%\setcounter{page}{3}
+
+% OBSAH
+\tableofcontents
+
+\chapter{Introduction}
+\label{kap:uvod}
+\input{scriptum/texty/uvod.tex}
+
+\mainmatter
+
+\chapter{Hartree--Fock method}
+\label{kap:hf}
+\input{scriptum/texty/hf}
+
+\chapter{Quantum dynamics}
+\label{kap:qd}
+\input{scriptum/texty/qd}
+
+
+
+\chapter{Literature}
+\label{kap:literatura}
+\input{scriptum/texty/literatura.tex}
+
+% \chapter{Apendixes}
+% \label{kap:dodatky}
+% \input{texty/dodatky.tex}
+
+\chapter{Acknoledgement}
+\label{kap:podekovani}
+\input{scriptum/texty/podekovani}
+
+% Seznam zkratek - pri migraci prestalo fungovat!
+\printglossary
+\printglossary[type=\acronymtype,title=List of acronyms]
+\addcontentsline{toc}{chapter}{List of acronyms}
+
+
+% list of codes
+\renewcommand*{\lstlistlistingname}{List of codes}
+\lstlistoflistings
+\addcontentsline{toc}{chapter}{List of codes}
+
+\backmatter
+\printindex
+
+\end{document}

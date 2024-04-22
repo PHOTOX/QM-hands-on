@@ -1,0 +1,42 @@
+In this chapter, we shall look at the time-dependent Schrodinger equation and its numerical solutions. To make notation clear through out this chapter.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{c|c}
+         $\Psi$ & wave function \\
+         $t$ & time
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:my_label}
+\end{table}
+
+We will solve TDSR
+
+\begin{equation}
+    i\hbar\frac{\dd\Psi}{\dd t} = \hat{H}\Psi
+\end{equation}
+
+propagators:
+
+Fourier transform necessary
+\begin{lstlisting}[language=Python, style=mystyle2]
+p = 2*np.pi*np.fft.fftfreq(ngrid, d=dx)
+\end{lstlisting}
+
+\section{Correlation function}
+
+
+
+\section{Applications}
+
+\begin{itemize}
+    \item coherent and squeezed gaussian states
+    \item optimization of stationary states
+    \item absorption spectrum
+\end{itemize}
+
+\section{Codes: solutions}
+\subsection{Quantum dynamics in real time}
+\lstset{style=mystyle}
+\lstinputlisting[caption=Solution: quantum dynamics in real time,language=Python]{codes/solutions/quantum_dynamics.py}
+
