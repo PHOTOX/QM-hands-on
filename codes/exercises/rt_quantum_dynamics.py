@@ -1,8 +1,8 @@
-"""1D quantum dynamics code in real and imaginary time. Exercise for students"""
+"""Exercise for chapter Quantum dynamics: real-time quantum dynamics."""
 
 # import necessary libraries
-import matplotlib.pyplot as plt
-import numpy as np
+import matplotlib.pyplot as plt  # plotting
+import numpy as np  # numerical python
 
 # parameters of the simulation
 ngrid = 500  # number of grid points
@@ -10,35 +10,28 @@ xmin, xmax = -15, 15  # minimum and maximum of x
 simtime = 100.0  # simulation time in atomic time units
 dt = 0.5  # time step in atomic time units
 m = 1.0  # mass in atomic units
-dynamics = ['rt', 'it'][1]  # select if real- or imaginary-time dynamics
 
-# generate x grid
-x = np.linspace(xmin, xmax, ngrid)
+# generate equidistant x grid from xmin to xmax
+x =  # fill in (we recommend using function linspace from numpy)
 
 # generate momentum grid for the discrete Fourier transform
-dx = (xmax - xmin)/(ngrid - 1)
+dx =  # fill in distance between two neighbouring (x_{i+1}-x_{i})
 p = 2*np.pi*np.fft.fftfreq(ngrid, d=dx)
 
 # generate potential V
-V = 0.005*x**2
+V =  # fill in
 
 # generate kinetic energy T in momentum space
-T = p**2/2/m
+T =  # fill in
 
 # generate V propagator with time step dt/2
-if dynamics == 'rt':
-    expV =
-elif dynamics == 'it':
-    expV =
+expV =  # fill in
 
 # generate T propagator in momentum space with time step dt
-if dynamics == 'rt':
-    expT =
-elif dynamics == 'it':
-    expT =
+expT =  # fill in
 
 # initiate wave function; be careful, it must be a complex numpy array
-psi =
+psi =  # fill in
 
 # initiate online plotting to follow the wave function on the fly
 plt.ion()
@@ -48,36 +41,35 @@ t = 0  # set initial time to 0
 print("\nLaunching quantum dynamics.\n---------------------------\n")
 while t < simtime:  # loop until simulation time is reached
     # propagate half-step in V
-
+    # fill in
 
     # propagate full step in T
     # first Fourier transform to momentum space
     psi_k = np.fft.fft(psi, norm="ortho")
     # apply expT in momentum space
-
+    # fill in
     # finally inverse Fourier transform back to coordinate space
     psi = np.fft.ifft(psi_k, norm="ortho")
 
     # propagate half-step in V for the second time
-
+    # fill in
 
     # calculate new time after propagation
     t += dt
 
-    # if imaginary-time dynamics, renormalization is necessary
-    if dynamics == 'it':
-
-
     # calculate norm
-    norm =
+    norm = # fill in
+
+    # check that norm is conserved
+    # fill in, choose a reasonable threshold, e.g. 0.00001
 
     # calculate expectation value of energy
     # potential energy <V>
-    energyV =
+    energyV = # fill in
     # kinetic energy <T>, T operator will be again applied in the momentum space
-    energyT =
+    energyT = # fill in
     # total energy <E>
-    energy = energyV + energyT
+    energy = # fill in
 
     # print simulation data
     print(f"--Time: {t:.2f} a.t.u.")
