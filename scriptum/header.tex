@@ -236,6 +236,7 @@ group-minimum-digits = 4
 % https://tex.stackexchange.com/questions/86128/how-should-imaginary-numbers-be-typeset
 %\newcommand{\ii}{i}
 \newcommand{\ii}{\mathrm{i}}
+\newcommand{\e}{\mathrm{e}}
 
 
 %Kolafova zavorka pres 3 radky
@@ -350,3 +351,10 @@ pdfstartview=FitV]{hyperref}
 % This is to get rid of the warning
 % https://tex.stackexchange.com/a/514194
 \setlist{labelwidth=*}
+
+
+% https://www.overleaf.com/learn/latex/Glossaries#Acronyms
+% just \printglossary as described broke so I used fix introduced herehttps://stackoverflow.com/questions/66924808/unable-to-show-the-glossary-with-printglossary-in-latex
+\usepackage[acronym]{glossaries}
+% \makeglossaries
+\makenoidxglossaries
