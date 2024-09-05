@@ -1,20 +1,31 @@
-In this chapter, we shall look at the time-dependent Schrodinger equation and its numerical solutions. To make notation clear through out this chapter.
+Up to this point, we have taken the time-independent perspective on quantum mechanics focusing on methods for calculating stationary states. However, the world around us is in constant motion and for its full description, we need to have a time-dependent perspective. In this chapter, we shall take a look at time evolution in quantum mechanics and show how to describe dynamics with numerical methods. We will focus only on one-dimensional systems that bring understanding of phenomena and are easy to implement.
 
-\begin{table}[ht]
-    \centering
-    \begin{tabular}{c|c}
-         $\Psi$ & wave function \\
-         $t$ & time
-    \end{tabular}
-    \caption{Caption}
-    \label{tab:my_label}
-\end{table}
+\section{Theoretical background}
 
-We will solve TDSR
-
+The time evolution in quantum mechanics is governed by the \acrfull{tdse},
 \begin{equation}
-    i\hbar\frac{\dd\Psi}{\dd t} = \hat{H}\Psi
+    i\hbar\frac{\dd\psi(x,t)}{\dd t} = \hat{H}(x)\psi(x,t) \, ,
+    \label{eq:tdse}
 \end{equation}
+where $i$ is the imaginary unit, $\hbar$ is the reduced Planck constant, $\psi$ is the wave function, $\hat{H}$ is the Hamiltonian, $t$ is time and $x$ is the position of the particle. The solution of the \acrshort{tdse} can be in general written as
+\begin{equation}
+    \psi(x,t) = \hat{U}(t)\psi(x,0) \, .
+    \label{eq:U}
+\end{equation}
+The operator $\hat{U}$ is called \textit{propagator} or the \textit{time evolution operator}. Application of the evolution operator to a wave function is equivalent to evolving the wave function in time. The knowledge of the evolution operator is, therefore, elementary for a description of dynamics in quantum systems.
+
+If the Hamiltonian $\hat{H}$ is time-independent, meaning that $\hat{H}$ is not a function of time, we can formally find a solution of equation~\eqref{eq:tdse} in the following form:
+\begin{equation}
+    \psi(x,t) = \e^{-\frac{i}{\hbar}\hat{H}(x)t} \psi(x,0)\, .
+    \label{eq:tdse2}
+\end{equation}
+Note that the result resembles the separation of variables for differential equations, only for equations with operators. Comparing equations~\eqref{eq:tdse2} and \eqref{eq:U}, we see that the evolution operator 
+Considering the Hamiltonian to be time-independent works for all systems that are not perturbed externally, such as by electromagnetic radiation or scattering atoms passing by. 
+
+\textbf{All these claims to be verified!!!}
+
+
+\section{Numerical solution: the split-operator method}
 
 propagators:
 
@@ -28,8 +39,13 @@ p = 2*np.pi*np.fft.fftfreq(ngrid, d=dx)
 Following is the incomplete code that students are supposed to complete.
 
 \lstset{style=mystyle}
-\lstinputlisting[caption=Exercise: quantum dynamics in real-time,language=Python]{codes/exercises/quantum_dynamics.py}
+\lstinputlisting[caption=Exercise: quantum dynamics in real-time,language=Python]{codes/exercises/rt_quantum_dynamics.py}
 
+
+
+
+\clearpage
+\textbf{THIS IS FOR NEXT CHAPTERS}
 \section{Correlation function}
 
 
