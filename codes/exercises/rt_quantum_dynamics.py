@@ -11,12 +11,15 @@ simtime = 100.0  # simulation time in atomic time units
 dt = 0.5  # time step in atomic time units
 m = 1.0  # mass in atomic units
 
+# physical constants in atomic units
+hbar =  # fill in
+
 # generate equidistant x grid from xmin to xmax
 x =  # fill in (we recommend using function linspace from numpy)
 
 # generate momentum grid for the discrete Fourier transform
 dx =  # fill in distance between two neighbouring (x_{i+1}-x_{i})
-p = 2*np.pi*np.fft.fftfreq(ngrid, d=dx)
+k = 2*np.pi*np.fft.fftfreq(ngrid, d=dx)
 
 # generate potential V
 V =  # fill in
@@ -58,18 +61,18 @@ while t < simtime:  # loop until simulation time is reached
     t += dt
 
     # calculate norm
-    norm = # fill in
+    norm =  # fill in
 
     # check that norm is conserved
     # fill in, choose a reasonable threshold, e.g. 0.00001
 
     # calculate expectation value of energy
     # potential energy <V>
-    energyV = # fill in
+    energyV =  # fill in
     # kinetic energy <T>, T operator will be again applied in the momentum space
-    energyT = # fill in
+    energyT =  # fill in
     # total energy <E>
-    energy = # fill in
+    energy =  # fill in
 
     # print simulation data
     print(f"--Time: {t:.2f} a.t.u.")

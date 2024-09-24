@@ -11,6 +11,8 @@ simtime = 100.0  # simulation time in atomic time units
 dt = 0.5  # time step in atomic time units
 m = 1.0  # mass in atomic units
 dynamics = ['rt', 'it'][1]  # select if real- or imaginary-time dynamics
+nstates = 3  # number of stationary states to be optimized
+
 
 # generate x grid
 x = np.linspace(xmin, xmax, ngrid)

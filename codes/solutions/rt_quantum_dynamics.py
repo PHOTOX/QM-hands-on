@@ -11,18 +11,21 @@ simtime = 100.0  # simulation time in atomic time units
 dt = 0.5  # time step in atomic time units
 m = 1.0  # mass in atomic units
 
+# physical constants in atomic units
+hbar = 1.0
+
 # generate equidistant x grid from xmin to xmax
 x = np.linspace(xmin, xmax, ngrid)
 
 # generate momentum grid for the discrete Fourier transform
 dx = (xmax - xmin)/(ngrid - 1)
-p = 2*np.pi*np.fft.fftfreq(ngrid, d=dx)
+k = 2*np.pi*np.fft.fftfreq(ngrid, d=dx)
 
 # generate potential V
 V = 0.005*x**2
 
 # generate kinetic energy T in momentum space
-T = p**2/2/m
+T = hbar**2*k**2/2/m
 
 # generate V propagator with time step dt/2
 expV = np.exp(-1j*V*dt/2)
