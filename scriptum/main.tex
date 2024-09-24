@@ -19,16 +19,11 @@
 \input{scriptum/header.tex}
 
 % https://www.overleaf.com/learn/latex/Glossaries#Acronyms
-\usepackage[acronym]{glossaries}
-\makeglossaries
 \input{scriptum/zkratky.tex}
 
 % https://www.overleaf.com/learn/latex/Indices
 \usepackage{imakeidx}
 \makeindex
-
-% custom hyphenation of words
-\input{scriptum/hyphenation.tex}
 
 \usepackage{subcaption}
 
@@ -58,22 +53,39 @@
 
 \mainmatter
 
+\part{Electronic structure theory}
+
 \chapter{Hartree--Fock method}
 \label{kap:hf}
 \input{scriptum/texty/hf}
 
-\chapter{Quantum dynamics}
+\chapter{Second-order Møller--Plesset method}
+\label{kap:mp2}
+
+\part{Time-dependent quantum mechanics}
+
+\chapter{Quantum dynamics in real time}
 \label{kap:qd}
 \input{scriptum/texty/qd}
 
-\chapter{Solutions}
+\chapter{Wave packet spectrum and correlation function}
+\label{kap:spec}
+% \input{scriptum/texty/qd}
+
+\chapter{Imaginary time dynamics and stationary states}
+\label{kap:imqd}
+% \input{scriptum/texty/qd}
+
+
+
+\chapter*{Solutions}
 \label{kap:sol}
 \input{scriptum/texty/solutions}
 
 
 
 
-\chapter{Literature}
+\chapter*{Literature}
 \label{kap:literatura}
 \input{scriptum/texty/literatura.tex}
 
@@ -81,13 +93,13 @@
 % \label{kap:dodatky}
 % \input{texty/dodatky.tex}
 
-\chapter{Acknoledgement}
+\chapter*{Acknoledgement}
 \label{kap:podekovani}
 \input{scriptum/texty/podekovani}
 
-% Seznam zkratek - pri migraci prestalo fungovat!
-\printglossary
-\printglossary[type=\acronymtype,title=List of acronyms]
+% Seznam zkratek
+% \printglossary[type=\acronymtype,title=List of acronyms,toctitle=List of acronyms]
+\printnoidxglossary[type=\acronymtype,title=List of acronyms,toctitle=List of acronyms]
 \addcontentsline{toc}{chapter}{List of acronyms}
 
 
