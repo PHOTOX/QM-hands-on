@@ -1,7 +1,22 @@
-Lets code everything!
+The quantum mechanics is gradually becoming one of the pillars of chemistry, penetrating in all its branches. University libraries are full of textbooks explaining basic phenomena in quantum mechanics, introducing simple examples with analytic solutions such as harmonic potential, rectangular well and others. It fair to say that all students of quantum chemistry have seen Hartree--Fock equations or the time-dependent Schrödinger equation. Many of them have also solved these equation or are doing so routinely using quantum chemistry codes available to the community. However, only a small fraction of the current students has ever implemented any of these equations or even know how to proceed with their implementation. The authors were typical examples of such students after finishing their Masters degrees. 
 
-\section{Brief introduction to Python}
-\subsection{Importing packages}
+We believe that the reason for that is a abundance of well-optimized and ready-to-use codes containing standard methods of quantum chemistry. There is, indeed, no need to reinvent the wheel. Nevertheless, it is worth to look at the equations and their implementation at least one since it provides valuable insights and forces one to truly understand what they are doing. Therefore, we prepared this short \textit{Quantum Mechanics: Hands on} material which introduces the main techniques of quantum chemistry and guide students to their own simple implementation. The text contains prepared exercises and their solutions in a form of Python scripts suitable even for programming beginners.
+
+The text is split into two parts. The \textit{Electronic structure theory} part will deal with the basic methods for solving electronic structure of atoms and molecules such as the Hartree--Fock method, MP2 method, configuration interaction and Hückel method. The \textit{Time-dependent quantum mechanics} part will delve into numerical methods for solving the time-dependent Schrödinger equation in real and imaginary time, Bohmian dynamics and others. 
+
+
+\section*{Brief introduction to Python}
+
+
 \begin{lstlisting}[language=Python, style=mystyle2]
 import numpy as np
+\end{lstlisting}
+
+Calling functions from a Python library, e.g. number $\pi$, is done as follows:
+\begin{lstlisting}[language=Python, style=mystyle2]
+pi = np.pi
+\end{lstlisting}
+of if we want to take absolute value of a number
+\begin{lstlisting}[language=Python, style=mystyle2]
+number = np.abs(-1)
 \end{lstlisting}
