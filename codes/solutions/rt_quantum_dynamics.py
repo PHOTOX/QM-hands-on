@@ -39,6 +39,7 @@ psi = (2*alpha/np.pi)**0.25*np.exp(-alpha*(x - x0)**2 + 1j*p0*(x - x0), dtype=co
 
 # initiate online plotting to follow the wave function on the fly
 plt.ion()
+ymin, ymax = np.min(V), np.max(V)  # plotting range of the vertical axis
 
 # propagation
 t = 0  # set initial time to 0
@@ -85,16 +86,21 @@ while t < simtime:  # loop until simulation time is reached
 
     # plot
     plt.cla()  # clean figure
-    plt.plot(x, np.conjugate(psi)*psi + energy, color='grey', label=r"$|\Psi|^2$")  # density
-    plt.fill_between(x, np.real(psi) + energy, np.zeros(ngrid) + energy, alpha=0.2, label=r"$Re[\Psi]$")  # plot Re(wf)
-    plt.fill_between(x, np.imag(psi) + energy, np.zeros(ngrid) + energy, alpha=0.2, label=r"$Im[\Psi]$")  # plot Im(wf)
+    plt.fill_between(x, np.abs(psi) + energy, energy, alpha=0.2, color='black', label=r"$|\Psi|$")  # plot |wf|
+    plt.plot(x, np.real(psi) + energy, linestyle='--', label=r"$Re[\Psi]$")  # plot Re(wf)
+    plt.plot(x, np.imag(psi) + energy, linestyle='--', label=r"$Im[\Psi]$")  # plot Im(wf)
     plt.plot(x, V, color='black')  # plot potential
     plt.title(f"$E = $ {energy:.4f} a.u.")
     plt.xlabel("$x$ (a.u.)")
     plt.ylabel("$\Psi$")
+    # set new ymin, ymax
+    max_wf = np.max(np.abs(psi))
+    ymin, ymax = min([ymin, -max_wf + energy]), max([ymax, max_wf + energy])
+    plt.ylim(ymin, ymax)
     plt.legend(frameon=False)
     plt.pause(interval=0.01)  # update plot and wait given interval
 
 # close online plotting
 plt.pause(2.0)  # wait 2s before closing the window
 plt.ioff()
+plt.close()
