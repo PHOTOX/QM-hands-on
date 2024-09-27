@@ -1,6 +1,10 @@
 # QM-hands-on
-Materials for "Quantum Mechanics: Hands on" lecture at UCT Prague.
+Materials for "Quantum Mechanics: Hands on" lecture at UCT Prague. The repository contains the study materials in $$\mathrm{\LaTeX}$$  and Python codes implementing the discussed topics.
 
-All the python codes are available in the `codes` folder with two subfolders: `exercises` and `solutions`.
-- `exercises` contains prepared exercise codes which are to be compeleted by students.
-- `solutions` contains full codes solving the problems for students as reference.
+The text is in a $$\mathrm{\LaTeX}$$ format in the folder `scriptum`. PDF will be uploaded any time a new chapter is finished.
+
+All the Python codes are available in the `codes` folder within two subfolders: `exercises` and `solutions`.
+- `exercises` contains prepared exercise codes for students to complete. 
+- `solutions` contains completed codes for students as a reference. 
+
+These codes are simple and meant for Python beginners. More advanced students are encouraged to create their own codes employing higher programming standards.
