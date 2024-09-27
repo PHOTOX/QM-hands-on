@@ -15,7 +15,14 @@
 % Math-style ISO turns capital greek letters italic
 \usepackage[math-style=ISO,warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
 \usepackage{realscripts}
-  
+\usepackage{graphicx}
+\usepackage{csquotes}
+\usepackage{lscape}     % Landscape orientace pro velké tabulky
+\usepackage{braket}
+\usepackage{xcolor}
+
+
+
 % https://www.overleaf.com/learn/latex/Questions/Which%20OTF%20or%20TTF%20fonts%20are%20supported%20via%20fontspec%3F#Latin-script_Fonts
 % Font sampler: https://www.overleaf.com/articles/fontspec-all-the-fonts/hjrpnxhrrtxc
 % font recommendations https://practicaltypography.com/free-fonts.html
@@ -45,6 +52,11 @@
 \definecolor{codeblue}{rgb}{0,0.5,1}
 \definecolor{codeorange}{rgb}{1,0.5,0}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+  basicstyle=\ttfamily,
+  backgroundcolor=\color{backcolour},   
+}
 
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{backcolour},   
@@ -84,11 +96,28 @@
     tabsize=2
 }
 
-\usepackage{graphicx}
-\usepackage{csquotes}
+\lstdefinestyle{bash}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblack},
+    %numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codeblue},
+    % basicstyle=\sffamily\normalsize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    % numbers=false,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    prebreak=\raisebox{-1ex}[0ex][0ex]{\color{codeorange}\ensuremath{\hookleftarrow}}
+}
+\newcommand\bash[1]{\colorbox{backcolour}{\lstinline[language=bash,style=bash]{#1}}} 
+\newcommand\python[1]{\colorbox{backcolour}{\lstinline[language=bash,style=mystyle2]{#1}}} 
 
-\usepackage{lscape}     % Landscape orientace pro velké tabulky
-\usepackage{braket}
 
 % Better footnote positioning
 % https://mirrors.nic.cz/tex-archive/macros/latex/contrib/footmisc/footmisc.pdf
