@@ -21,7 +21,9 @@
 \usepackage{braket}
 \usepackage{xcolor}
 
-
+% library
+\usepackage[style=chem-acs]{biblatex} % bibliography
+\addbibresource{library.bib}
 
 % https://www.overleaf.com/learn/latex/Questions/Which%20OTF%20or%20TTF%20fonts%20are%20supported%20via%20fontspec%3F#Latin-script_Fonts
 % Font sampler: https://www.overleaf.com/articles/fontspec-all-the-fonts/hjrpnxhrrtxc
@@ -380,6 +382,9 @@ pdfstartview=FitV]{hyperref}
 % This is to get rid of the warning
 % https://tex.stackexchange.com/a/514194
 \setlist{labelwidth=*}
+
+\usepackage{attachfile} % embedding files in PDF
+
 
 
 % https://www.overleaf.com/learn/latex/Glossaries#Acronyms

@@ -1,6 +1,7 @@
 Up to this point, we have taken the time-independent perspective on quantum mechanics, focusing on methods for calculating stationary states of electrons in molecules. In this chapter, we shift to time-dependent quantum mechanics and look at the time evolution of quantum systems. We will focus on simple low-dimensional models and introduce a simple numerical scheme suitable for wave function propagation. The power of simple low-dimensional models resides in the conceptual understanding of time evolution in quantum mechanics: they allow us to examine dynamics such as interference of two wave packets, tunnelling through energy barriers, or reflection of the wave packet on boundaries.
 
 \section{Theoretical background}
+\label{sec:qdtheoback}
 
 The time evolution in quantum mechanics is governed by the \acrfull{tdse},
 \begin{equation}
@@ -10,7 +11,7 @@ The time evolution in quantum mechanics is governed by the \acrfull{tdse},
 where $i$ is the imaginary unit, $\hbar$ is the reduced Planck constant, $\psi$ is the wave function, $\hat{H}$ is the Hamiltonian, $t$ is time and $x$ represents the position of a quantum particle, such as an electron, proton, or any other particle. The solution of the \acrshort{tdse} can be in general written as
 \begin{equation}
     \psi(x,t) = \hat{U}(t)\psi(x,0) \, .
-    \label{eq:U}
+    \label{eq:U }
 \end{equation}
 The operator $\hat{U}$ is called a \textit{propagator} or \textit{time evolution operator}. Application of the propagator to a wave function is equivalent to evolving the wave function from time 0 to time t. The knowledge of the evolution operator is, therefore, elementary for a description of dynamics in quantum systems.
 
@@ -47,92 +48,111 @@ where $\hat{T}$ represents the kinetic energy operator, $\hat{V}$ stands for the
     \hat{U}(t) = \sum_{l=0}^\infty \frac{(\hat{T}+\hat{V})^l}{l!} \left( -\frac{i}{\hbar} t\right)^l \, .
     \label{eq:U3}
 \end{equation}
-Calculating this propagator requires computing an infinite series of powers of the Hamiltonian, further complicated by the fact that $\hat{T}$ and $\hat{V}$ do not commute. This makes direct evaluation infeasible for most of the potential.
+Calculating this propagator requires computing an infinite series of powers of the Hamiltonian, further complicated by the fact that $\hat{T}$ and $\hat{V}$ do not commute and the exponential cannot be factorized. This makes direct evaluation infeasible for most of the potential.
 
 Thus, analytical solutions of the \acrshort{tdse} are used only in model systems, usually when the complete basis of the respective Hilbert space is known. Instead, most time-dependent problems are solved numerically where arbitrary Hamiltonians are possible. 
 
-\section{*Numerical solution: the Split-Operator method}
-\textbf{Three steps}
-\begin{enumerate}
-    \item pseudospectral basis
-    \item fourier method
-    \item split operator
-\end{enumerate}
+\section{Numerical solution}
 
-We shall introduce a simple pseudospectral method, that represents the wave function on a grid. It means that we will generate an equidistant grid of points representing the coordinate $x$ and then we will represent on that grid. The complicated part will be evaluation of the propagator, which will be done through the Split-Operator method.
+Systems of chemical interest span, in general, an infinite Hilbert space. In other words, an infinite number of orthogonal basis functions are required to fully represent the wave function of such a system. However, any computer can only handle a finite basis set, since computer memory is finite, and often even quite limited. Thus, in any numerical implementation of quantum mechanics, we work in a truncated basis set. This basis truncation is the first and fundamental source of error for any computer simulation. There are other sources of error due to the numeric schemes employed, e.g. trapezoid rule for integration, or due to a finite time step in our propagation. While these sources of error can be eliminated by improving our numeric schemes or the time step, the truncation error will be always present and dependent on how much we truncated our basis.
+% consider reformulating the fundamental error and other errors
+
+In this text, we will represent the system on a grid of discrete points, a natural representation for a computer. These grid points (we can think of them as a set of Dirac $\delta$-distributions) form our truncated basis set commonly referred to as a \textit{pseudospectral} basis. 
+In the following, we will explain how to work with such a representation, including how to evaluate the action of an operator and calculate the expectation value. In the end, the flow of the text will lead us to the evolution operator $\hat{U}(t)$ and techniques for efficient propagation of the wave function.
+
+\subsection{Representing wave function on a grid: the \textit{pseudospectral} basis}
+
+As stated above we will work in a truncated \textit{pseudospectral} basis and represent the system with a set of $N$ discrete points. Since we work as usual in chemistry in the position representation, we start with discretizing the position coordinate $x$ and replacing it by a set of points:
 \begin{align}
-    x &\rightarrow \{x_0, x_1, x_2, \dots, x_N\} \\
-    \psi(x,t) &\rightarrow \{\psi_0, \psi_1, \psi_2, \dots, \psi_N\}
+    x &\rightarrow \{x_0, x_1, x_2, \dots, x_N\} \, .
 \end{align}
-with a fixed $\Delta x = x_i - x_{i-1}$
+It is convenient for numerical applications to make the grid equidistant, meaning that the distance between any two neighbouring grid points, $\Delta x = x_i - x_{i-1}$, remains constant. 
 
-Normalization must be numeric using e.g. trapezoidal rule
+Next, we express the wave function $\psi$ on this grid by evaluating it at each grid point $x_i$, giving:
+\begin{align}
+    \psi(x,t) &\rightarrow \{\psi(x_0,t), \psi(x_1,t), \psi(x_2,t), \dots, \psi(x_N,t)\} =  \{\psi_{0,t}, \psi_{1,t}, \psi_{2,t}, \dots, \psi_{N,t}\} \, .
+\end{align}
+We have now two indexes of $\psi$: the grid point index $i$ and time index $t$. Further in the text, we will drop the index $t$ to simplify the notation unless $\psi$ in two different times will appear in the equation.
+
+Having the wave function defined on a grid, the next step is to compute its norm. In the position representation, the norm is an integral of $\psi^*\psi$ over the position $x$, which can be numerically realized for example by the trapezoidal rule:
 \begin{equation}
-    \langle \psi(x,t) | \psi(x,t) \rangle = \int_{-\infty}^\infty \psi^*(x,t)\psi(x,t) \dd x = \sum_{j=1}^N \frac{\psi^*_{j-1}\psi_{j-1} + \psi^*_{j}\psi_{j}}{2} \Delta x
+    \langle \psi(x,t) | \psi(x,t) \rangle = \int_{-\infty}^\infty \psi^*(x,t)\psi(x,t) \dd x = \sum_{j=1}^N \frac{\psi^*_{j-1}\psi_{j-1} + \psi^*_{j}\psi_{j}}{2} \Delta x \, .
 \end{equation}
+While the trapezoidal rule is a simple and commonly used method, more accurate numerical integration schemes can be employed to reduce integration errors, though these may come at the cost of increased computational effort.
 
-Before we look at how to evaluate the propagator on a grid, we will need to know how to apply the Hamiltonian operator on a grid. Applying the potential energy operator $\hat{V}(x) = V(x)$ is simple. We discretize the potential energy on the $x$-grid
+With the wave function defined, our attention now turns to operators: how to represent them and how to apply them. We will start with operators dependent only on the position $x$ since they are simple to represent on the grid. Take the potential energy operator $V(x)$ which can be represented on the grid similarly to the wave function as
 \begin{align}
-    V(x) &\rightarrow \{V_0, V_1, V_2, \dots, V_N\}
+    V(x) &\rightarrow \{V(x_0), V(x_1), V(x_2), \dots, V(x_N)\} = \{V_0, V_1, V_2, \dots, V_N\} \, .
 \end{align}
-which leads to 
+Now, applying the potential energy operator to the wave function reduces to a simple multiplication of the discretized operator and wave function as 
 \begin{align}
-    \hat{V}\psi &\rightarrow \{V_0 \psi_0, V_1 \psi_1, V_2 \psi_2, \dots, V_N \psi_N\}
+    \hat{V}\psi &\rightarrow \{V_0 \psi_0, V_1 \psi_1, V_2 \psi_2, \dots, V_N \psi_N\} \, .
 \end{align}
+The expectation value of the potential energy in analogy with the norm using the trapezoid rule: 
+\begin{equation}
+    \langle \psi(x,t) | \hat{V} | \psi(x,t) \rangle = \int_{-\infty}^\infty \psi^*(x,t)V(x)\psi(x,t) \dd x = \sum_{j=1}^N \frac{V_{j-1}\psi^*_{j-1}\psi_{j-1} + V_{j}\psi^*_{j}\psi_{j}}{2} \Delta x
+\end{equation}
+Any operator that depends only on the position $x$ can be represented on the grid similarly to $\hat{V}$ and the expectation values are then evaluated in the same manner as above.
+However, operators that depend on momentum $\hat{p}$ require a more complex treatment, as they involve derivatives, which cannot be directly represented on the grid in the same straightforward manner.
 
-The kinetic energy operator is evaluated using Fourier method in the so-called $k$-space (or momentum space since momentum is $p=\hbar k$). The wave function in the k-space is obtained by \acrfull{ft} $\mathcal{F}$:
+
+\subsection{*Applying the kinetic energy operator: the Fourier method}
+
+% better structure: first show how to transfer between reps and then how we use it to evaluate
+
+To evaluate the action of the kinetic energy operator, or any other operator depending on momentum, it is convenient to switch to a basis where the action of momentum operator $\hat{p}$ is a simple multiplication. Such basis is the basis of the free particle states $\e^{-ikx}$, the so-called $k$-space or momentum space since $p = \hbar k$. The wave function represented in the $k$-space can be obtained by \acrfull{ft} $\mathcal{F}$ as
 \begin{align}
     \psi(k,t) = \mathcal{F}[\psi(x,t)] =\int_{-\infty}^\infty \psi(x,t) \e^{-ikx}\dd x \, .
 \end{align}
-and the \acrshort{ft} kinetic operator 
+Performing the \acrshort{ft} on a computer is a routine task and allows us to easily transfer between the position representation $\psi(x,t)$ and momentum representation $\psi(k,t)$.
 
+The action of the kinetic operator on the wave function is cumbersome to evaluate numerically in the position space due to the derivatives, but it is simple in the $k$-space using the \acrshort{ft}:
 \begin{align}
     \mathcal{F}[\hat{T}\psi(x,t)] &= \mathcal{F}\left[-\frac{\hbar^2}{2m}\frac{\dd^2 \psi(x,t)}{\dd x^2}\right] = -\frac{\hbar^2}{2m} \int_{-\infty}^\infty \frac{\dd^2 \psi(x,t)}{\dd x^2}  \e^{-ikx}\dd x \stackrel{p.p.}{=} -\frac{\hbar^2}{2m} i k \int_{-\infty}^\infty \frac{\dd \psi(x,t)}{\dd x} \e^{-ikx}\dd x \notag \\
     &\stackrel{p.p.}{=} \frac{\hbar^2}{2m} k^2 \int_{-\infty}^\infty \psi(x,t) \e^{-ikx}\dd x = \frac{\hbar^2 k^2}{2m} \psi(k,t) \, .
+    \label{eq:qdftkspace}
 \end{align}
-where $p.p.$ signifies integration per partes. 
+where $p.p.$ signifies integration \textit{per partes}. The result of $\hat{T}\psi$ in the $k$-space is very straightforward, just multiply $\psi(k,t)$ by the kinetic energy $\frac{\hbar^2 k^2}{2m}$.
 
-The evaluation of $\hat{T}\psi(x,t)$ in the momentum space then requires \acrfull{ift} $\mathcal{F}^{-1}$
+However, we are interested in the action of $\hat{T}$ in the position space since we work on our $x$-grid. This is easily achieved by evaluating the action of $\hat{T}$ in the $k$-space, as we showed in Eq.~\eqref{eq:qdftkspace}, and then transforming the result back to the position representation with the \acrfull{ift} $\mathcal{F}^{-1}$ as
 \begin{align}
     \hat{T}\psi(x,t) &= \mathcal{F}^{-1}\left[\frac{\hbar^2 k^2}{2m} \psi(k,t)\right] \, .
 \end{align}
-To summarize evaluation of the kinetic operator, we need first to \acrshort{ft} the wave function to the $k$-space, multiply it by $\frac{\hbar^2 k^2}{2m}$, and then \acrshort{ift} back to the position space:
+Once again, \acrshort{ift} is a routine operation performed on computers.
+
+Let us now summarize the evaluation of $\hat{T}\psi(x,t)$. First, the wave function $\psi(x,t)$ has to be \acrshort{ft} to the momentum representation $\psi(k,t)$. Then, the action of $\hat{T}$ on $\psi(k,t)$ is evaluated by simply multiplying it by $\frac{\hbar^2 k^2}{2m}$. Finally, the \acrshort{ift} is applied to $\frac{\hbar^2 k^2}{2m} \psi(k,t)$ transforming it back to the position space. The whole procedure is depicted in the following scheme:
 \begin{equation}
-    \psi(x,t) \stackrel{FT}{\longrightarrow} \psi(k,t) \longrightarrow \frac{\hbar^2 k^2}{2m} \psi(k,t) \stackrel{IFT}{\longrightarrow} \hat{T}\psi(x,t)
+    \psi(x,t) \stackrel{FT}{\longrightarrow} \psi(k,t) \longrightarrow \frac{\hbar^2 k^2}{2m} \psi(k,t) \stackrel{IFT}{\longrightarrow} \hat{T}\psi(x,t) \, .
 \end{equation}
 
-We will first discretize time into a series of time steps
-\begin{align}
-    t &= \{t_0, t_1, t_2, \dots, t_n\} 
-\end{align}
+\subsection{*The propagator and the Split-operator technique}
 
-or rather
+As we discussed in section~\ref{sec:qdtheoback}, evaluating the propagator is strenuous due to its exponential structure and the non-commutativity of the potential and kinetic operators. The non-commutativity is the major issue for us as it prevents us from factorizing the propagator as
 \begin{equation}
-    t_{i+1} = t_i +\Delta t
+    \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \neq \e^{-\frac{i}{\hbar}V(x)t}\e^{-\frac{i}{\hbar}\hat{T}(x)t}\, .
 \end{equation}
+If we could factorize the propagator as above, we could evaluate the exponential of $\hat{V}$ (in the position representation) and the exponential of $\hat{T}$ (in the momentum representation) separately. However, the non-commutativity of $\hat{V}$ and $\hat{T}$ does not allow for such factorization.
 
-and the propagator
+A way to deal with this problem is to split the propagator into a series of $n$ short-time propagator
 \begin{equation}
-    \hat{U}(t) = \e^{-\frac{i}{\hbar}\hat{H}(x)t} = \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \cdots \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \, .
+    \hat{U}(t) = \e^{-\frac{i}{\hbar}\hat{H}(x)t} = \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \cdots \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \, ,
     \label{eq:U4}
 \end{equation}
-
-
+where $\Delta t$ is a fixed time step. Now, each individual short-time propagator acts on the wave function and causes a small alteration (understand short-time propagation). This operator can be approximated in the following way
 \begin{equation}
-    \e^{-\frac{i}{\hbar} \hat{T} t} = \sum_{l=0}^\infty \frac{\hat{T}^l}{l!} \left( -\frac{i}{\hbar} t\right)^l = \sum_{l=0}^\infty \frac{(-k^2)^l}{l!} \left( -\frac{i}{\hbar} t\right)^l =  \e^{\frac{i}{\hbar} k^2 t}\, ,
+    \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} = \e^{-\frac{i}{\hbar}V(x)\Delta t/2}\e^{-\frac{i}{\hbar}\hat{T}(x)\Delta t}\e^{-\frac{i}{\hbar}\hat{V}(x)\Delta t/2} + \mathcal{O}(\Delta t^3) \, ,
 \end{equation}
+where we symmetrically factorized the exponential of $\hat{H}$ into separate exponentials of $\hat{V}$ and $\hat{T}$. The factorization here is possible only if the time step $\Delta t$ is short since the error behaves as $\Delta t^3$. 
 
+These exponentials now need to be evaluated. While the exponential of the potential energy is simply evaluated on the grid and multiplied by the wave function, the exponential of the kinetic energy operator must be evaluated using the Fourier method introduced in the previous subsection as
 \begin{equation}
-    \psi(x,t) \stackrel{FT}{\longrightarrow} \psi(k,t) \longrightarrow \e^{\frac{i}{\hbar} \frac{\hbar^2 k^2}{2m} t} \psi(k,t) \stackrel{IFT}{\longrightarrow} \e^{-\frac{i}{\hbar} \hat{T} t}\psi(x,t)
+    \psi(x,t) \stackrel{FT}{\longrightarrow} \psi(k,t) \longrightarrow \e^{\frac{i}{\hbar} \frac{\hbar^2 k^2}{2m} t} \psi(k,t) \stackrel{IFT}{\longrightarrow} \e^{-\frac{i}{\hbar} \hat{T} t}\psi(x,t) \, .
 \end{equation}
+The whole propagation is then done in a series of short time steps $\Delta t$. At each time step, the wave function is first propagated by a half step in potential energy, then a full step in kinetic energy and finally again a half step in potential energy. 
 
-propagators:
-Either use Trotter formula or in Tannor there is O(T\^3) formula.
-
-\begin{equation}
-    \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} = \e^{-\frac{i}{\hbar}V(x)\Delta t/2}\e^{-\frac{i}{\hbar}\hat{T}(x)\Delta t}\e^{-\frac{i}{\hbar}\hat{V}(x)\Delta t/2} + \mathcal{O}(\Delta t^3)
-\end{equation}
-
+% \begin{equation}
+%     \e^{-\frac{i}{\hbar} \hat{T} t} = \sum_{l=0}^\infty \frac{\hat{T}^l}{l!} \left( -\frac{i}{\hbar} t\right)^l = \sum_{l=0}^\infty \frac{(-k^2)^l}{l!} \left( -\frac{i}{\hbar} t\right)^l =  \e^{\frac{i}{\hbar} k^2 t}\, ,
+% \end{equation}
 
 \section{Code}
 
@@ -218,14 +238,14 @@ The value of $\kappa$ will tell us how big portion of the density is located in 
 \subsection*{Exercise: Heisenberg's uncertainity relations}
 
 The uncertainty principle developed by Werner Heisenberg is one of the corner stones of quantum mechanics. It states that
-\begin{equation}
+\begin{equation*}
     \Delta x \Delta p \ge \frac{\hbar}{2} \, , 
-\end{equation}
+\end{equation*}
 where
-\begin{align}
+\begin{align*}
     \Delta x &= \braket{x^2} - \braket{x}^2 = \bra{\psi(x, t)}x^2\ket{\psi(x,t)} -  \bra{\psi(x, t)}x\ket{\psi(x,t)}^2\\
     \Delta p &= \braket{p^2} - \braket{p}^2 = \bra{\psi(x, t)}\hat{p}^2\ket{\psi(x,t)} -  \bra{\psi(x, t)}\hat{p}\ket{\psi(x,t)}^2 \, .
-\end{align}
+\end{align*}
 However, the uncertainty principle states only the lower boundary for $\Delta x \Delta p$ and does not tell us if it remains constant, rises or oscillates throughout the time evolution. The goal of this exercise is to empirically estimate whether the product $ \Delta x \Delta p$ remains constant in time or not. If not, how does it behave?
 
 \paragraph{Assignment:} Evolve an arbitrary initial Gaussian wave packet in a harmonic oscillator and estimate the product $\Delta x \Delta p$ in time during the dynamics. Try the same also for a Morse potential and a double-well potential. Estimate how the product $\Delta x \Delta p$ behaves and if the behaviour differs between the potentials.
