@@ -8,7 +8,7 @@ import numpy as np  # numerical python
 ngrid = 500  # number of grid points
 xmin, xmax = -15, 15  # minimum and maximum of x
 simtime = 100.0  # simulation time in atomic time units
-dt = 0.5  # time step in atomic time units
+dt = 0.2  # time step in atomic time units
 m = 1.0  # mass in atomic units
 
 # physical constants in atomic units
@@ -98,7 +98,7 @@ while t < simtime:  # loop until simulation time is reached
     ymin, ymax = min([ymin, -max_wf + energy]), max([ymax, max_wf + energy])
     plt.ylim(ymin, ymax)
     plt.legend(frameon=False)
-    plt.pause(interval=0.01)  # update plot and wait given interval
+    plt.pause(interval=0.0001)  # update plot and wait given interval
 
 # close online plotting
 plt.pause(2.0)  # wait 2s before closing the window
