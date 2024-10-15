@@ -49,12 +49,12 @@ while t < simtime:  # loop until simulation time is reached
     psi *= expV
 
     # propagate full step in T
-    # first Fourier transform to momentum space
-    psi_k = np.fft.fft(psi, norm="ortho")
+    # first the inverse Fourier transform to momentum space
+    psi_k = np.fft.ifft(psi, norm="ortho")
     # apply expT in momentum space
     psi_k *= expT
-    # finally inverse Fourier transform back to coordinate space
-    psi = np.fft.ifft(psi_k, norm="ortho")
+    # finally the Fourier transform back to coordinate space
+    psi = np.fft.fft(psi_k, norm="ortho")
 
     # propagate half-step in V for the second time
     psi *= expV
@@ -74,15 +74,15 @@ while t < simtime:  # loop until simulation time is reached
     # potential energy <V>
     energyV = np.real(np.trapz(y=np.conjugate(psi)*V*psi, x=x))/norm
     # kinetic energy <T>, T operator will be again applied in the momentum space
-    psi_k = np.fft.fft(psi, norm="ortho")
-    psi_t = np.fft.ifft(T*psi_k, norm="ortho")
+    psi_k = np.fft.ifft(psi, norm="ortho")
+    psi_t = np.fft.fft(T*psi_k, norm="ortho")
     energyT = np.real(np.trapz(y=np.conjugate(psi)*psi_t, x=x))/norm
     # total energy <E>
     energy = energyV + energyT
 
     # print simulation data
     print(f"--Time: {t:.2f} a.t.u.")
-    print(f"  <psi|psi> = {norm:.4f}, <E> = {energy:.4f}, <V> = {energyV:.4f}, <T> = {energyT:.4f}")
+    print(f"  <psi|psi> = {norm:.8f}, <E> = {energy:.6f}, <V> = {energyV:.6f}, <T> = {energyT:.6f}")
 
     # plot
     plt.cla()  # clean figure
@@ -90,7 +90,7 @@ while t < simtime:  # loop until simulation time is reached
     plt.plot(x, np.real(psi) + energy, linestyle='--', label=r"$Re[\Psi]$")  # plot Re(wf)
     plt.plot(x, np.imag(psi) + energy, linestyle='--', label=r"$Im[\Psi]$")  # plot Im(wf)
     plt.plot(x, V, color='black')  # plot potential
-    plt.title(f"$E = $ {energy:.4f} a.u.")
+    plt.title(f"Time: {t:.2f} a.t.u.\n" + r"$\langle \psi | \psi \rangle$" + f" = {norm:.8f}; $E = $ {energy:.6f} a.u.")
     plt.xlabel("$x$ (a.u.)")
     plt.ylabel("$\Psi$")
     # set new ymin, ymax
