@@ -1,4 +1,4 @@
-"""Solution for chapter Quantum dynamics: real-time quantum dynamics."""
+"""Solution for chapter Quantum dynamics in real time."""
 
 # import necessary libraries
 import matplotlib.pyplot as plt  # plotting

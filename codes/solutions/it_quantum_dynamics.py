@@ -1,4 +1,4 @@
-"""1D quantum dynamics code in real and imaginary time."""
+"""Solution for chapter Imaginary-time dynamics and stationary states."""
 
 # import necessary libraries
 import matplotlib.pyplot as plt
@@ -10,7 +10,6 @@ xmin, xmax = -15, 15  # minimum and maximum of x
 simtime = 100.0  # simulation time in atomic time units
 dt = 0.5  # time step in atomic time units
 m = 1.0  # mass in atomic units
-dynamics = ['rt', 'it'][1]  # select if real- or imaginary-time dynamics
 nstates = 3  # number of stationary states to be optimized
 
 
