@@ -1,5 +1,147 @@
+In the previous Chapter, we discussed the time evolution of a wave function governed by the evolution operator $\hat{U}(t)$ and introduced a simple technique for propagating the wave function numerically. This gives us a powerful tool to play with quantum dynamics as we tested in the exercises. Moreover, the wave packet's time evolution contains the operator's energy spectrum. This allows us not only to calculate the energy spectrum of the system but also to construct absorption spectra using time-dependent formulation.
 
-%%%%%%%%%%%%%%%
-%%% README %%%%
-%%%%%%%%%%%%%%%
-% Make sure that the Fourier is done correctly from a numerical perspective!
+\section{Motivation}
+\label{sec:autocorrintro}
+
+\begin{equation}
+    \psi(x,0) = \sum_k c_k \phi_k(x)
+\end{equation}
+where we determine the coefficients $c_k$ as 
+\begin{equation}
+    c_k = \langle \phi_k(x) | \psi(x,0) \rangle = \int_{-\infty}^\infty \phi_k^*(x) \psi(x,0) \dd x
+\end{equation}
+
+the propagation is then governed by equation the propagator, see Eq.~\eqref{eq:U}
+\begin{equation}
+    \psi(x,t) = \hat{U}(t)\psi(x,0) = \e^{-\frac{i}{\hbar}\hat{H}(x)t} \psi(x,0) = \sum_k c_k \e^{-\frac{i}{\hbar}\hat{H}(x)t} \phi_k(x) \, .
+\end{equation}
+where we have taken the propagation from Eq.~\eqref{eq:U1}.
+
+The action of the propagator on a given eigenstate $\phi_k$ can be evaluate using the Taylor expansion of the exponential (Eq.~\eqref{eq:U2}):
+\begin{equation}
+    \e^{-\frac{i}{\hbar}\hat{H}(x)t} \phi_k(x) = \sum_{l=0}^\infty \left( -\frac{i}{\hbar} t\right)^l \frac{\hat{H}^l}{l!} \phi_k(x) = \sum_{l=0}^\infty \left( -\frac{i}{\hbar} t\right)^l \frac{E_k^l}{l!}  \phi_k(x) = \e^{-\frac{i}{\hbar}E_k t} \phi_k(x)
+\end{equation}
+using the fact that $\hat{H}(x)t \phi_k(x) = E_k \phi_k(x)$. The result is then
+\begin{equation}
+    \psi(x,t) = \sum_k c_k \e^{-\frac{i}{\hbar}E_k t}\phi_k(x) \, .
+    \label{eq:tdpsi1}
+\end{equation}
+
+Note that for $\hat{H} \neq \hat{H}(t)$, the coefficients $c_k$ are time independent.
+
+Thus, if we know the complete set of eigenfunction of the Hamiltonian, we can very easily calculate the time evolution of the wave function. However, it is rarely the case that we know the full set of eigenfunctions and for time propagation, we usual need to use techniques shown in Chapter~\ref{kap:qd}. This treatment allows us to theoretical study and derive the spectrum relation.
+
+We will now introduce the autocorrelation function
+\begin{equation}
+    S(t) = \langle \psi(x,0) | \psi(x,t) \rangle =\int_{-\infty}^{\infty}\psi^*(x,0) \psi(x,t) \dd x\, ,
+\end{equation}
+% \begin{equation}
+%     S(t) = \int \langle \psi(x,0) | \psi(x,t) \rangle \dd t =\int \left(\int_{-\infty}^{\infty}\psi^*(x,0) \psi(x,t) \dd x\right)\dd t \, ,
+% \end{equation}
+which equals to
+\begin{align}
+    S(t) &= \int_{-\infty}^{\infty} \sum_l \sum_k c_l^* \phi_l^*(x) c_k \e^{-\frac{i}{\hbar}E_k t}\phi_k(x) \dd x \notag\\
+    &= \sum_l \sum_k c^*_l c_k \e^{-\frac{i}{\hbar}E_k t} \int_{-\infty}^{\infty}  \phi_l^*(x) \phi_k(x) \dd x \notag\\
+    &= \sum_l \sum_k c^*_l c_k \e^{-\frac{i}{\hbar}E_k t} \delta_{kl} \notag\\
+    &= \sum_k |c_k|^2 \e^{-\frac{i}{\hbar}E_k t}
+\end{align}
+Thus, the composition of the autocorrelation function is..
+
+Now taking the integral and multiplying with $\e^{i\omega t} = \e^{\frac{i}{\hbar}Et}$, i.e. taking the \acrlong{ift}
+\begin{equation}
+    \sigma(E) = \int_{-\infty}^{\infty} S(t) \e^{i\omega t} \dd t = \sum_k |c_k|^2 \int_{-\infty}^{\infty} \e^{\frac{i}{\hbar}(E-E_k)t} \dd t = \sum_k |c_k|^2 \delta(E-E_k)
+\end{equation}
+
+\section{Numerical application}
+
+The maximum energy resolution is determined by the length of the signal. Using the time-energy uncertainty principle, we can derive
+\begin{equation}
+    \Delta E \approx \frac{\hbar}{T}
+\end{equation}
+
+We calculate only the time evolution for time zero, but what do we do with the integral, which need to start at time $-\infty$? Let us first explore the properties of the autocorrelation function.
+
+\begin{align}
+    S(t) &= \langle \psi(x,0) | \psi(x,t) \rangle = \langle \psi(x,0) | \e^{-\frac{i}{\hbar}\hat{H}(x)t} |\psi(x,0) \rangle = \langle \psi(x,0) | \e^{\frac{i}{\hbar}\hat{H}(x)t} |\psi(x,0) \rangle^* \notag \\
+    &= \langle \psi(x,0) | \e^{-\frac{i}{\hbar}\hat{H}(x)(-t)} |\psi(x,0) \rangle^* = S^*(-t) \, .
+\end{align}
+
+
+\section{Code}
+
+We will reuse the code from the previous section and just improve it.
+
+First, we need to store the wave function and create arrays for the autocorrelation function and time:
+\begin{lstlisting}[language=Python, style=mystyle2]
+...
+# save the initial wave function for calculating the autocorrelation function
+psi0 = psi  # initial wave function
+time, autocorr = [], []  # empty lists for appending values of time and autocorrelation function
+...
+\end{lstlisting}
+
+Then, during the propagation, we need to calculate the values of the autocorrelation function and append them
+\begin{lstlisting}[language=Python, style=mystyle2]
+while t < simtime:  # loop until simulation time is reached
+    ... 
+    # calculate the autocorrelation function S(t) = <psi(0)|psi(t)>
+    overlap =  # calculate the overlap
+
+    autocorr.append(overlap)  # appending the overlap to our autocorrelation function list
+    time.append(t)  # appending t to our time list
+    ...
+\end{lstlisting}
+
+So far this is the modification of the code from the previous chapter. Note that for efficiency, it is also convenient to remove the plotting part of the code as the plotting is the slowest part of the code.
+
+Now, at the end of the propagation, we need to process the autocorrelation function and calculate the spectrum. 
+\begin{lstlisting}[language=Python, style=mystyle2]
+### autocorrelation function section ###
+autocorr = np.array(autocorr)  # converting the autocorrelation function to a numpy array
+time = np.array(time)  # converting the time to a numpy array
+
+# apply the damping to the autocorrelation function in form of exp(-kappa*time)
+autocorr =  # apply the damping factor
+
+# extend the autocorrelation function to negative times assuming that S(t) = S^*(-t)
+time = np.concatenate([-time[::-1], time])  # new time array in range [-t_max, t_max]
+autocorr = np.concatenate([np.conjugate(autocorr[::-1]), autocorr])  # new symmetric autocorr in range [-t_max, t_max]
+
+# calculate spectrum from autocorrelation function and the frequency axis corresponding to it
+spectrum = # fill in the inverse Fourier transform
+freq = 2*np.pi*np.fft.fftfreq(len(time), d=dt)
+
+# plot results
+fig, axs = plt.subplots(1, 2, figsize=(8, 3), tight_layout=True)
+
+# autocorrelation function
+axs[0].plot(time, np.real(autocorr), label=r'$\mathcal{Re}[S(t)]$')
+axs[0].plot(time, np.imag(autocorr), label=r'$\mathcal{Im}[S(t)]$')
+axs[0].set_xlabel('Time (a.u.)')
+axs[0].set_ylabel(r'$S(t)$')
+axs[0].set_title('Autocorrelation Function')
+axs[0].legend(frameon=False, labelspacing=0)
+
+# spectrum
+axs[1].plot(hbar*freq, np.abs(spectrum))
+axs[1].set_xlim(0, np.max(hbar*freq[spectrum > np.max(spectrum)/1000]))
+axs[1].set_ylim(0)
+axs[1].set_xlabel('Energy (a.u.)')
+axs[1].set_ylabel(r'$\mathcal{F}^{-1}[S(t)]$')
+axs[1].set_title('Spectrum')
+
+# searching for local maxima of the spectrum
+print(f"\nMaxima of the spectrum:")
+abs_spectrum = np.abs(spectrum)
+loc_max_bool = (abs_spectrum[1:-1] > abs_spectrum[:-2]) & (abs_spectrum[1:-1] > abs_spectrum[2:])
+loc_max_index = np.where(loc_max_bool)[0] + 1
+loc_max_energies = hbar*freq[loc_max_index]
+for index, en in enumerate(loc_max_energies):
+    intensity = abs_spectrum[loc_max_index[index]]
+    print(f" * State {index}: E = {en:.5f} a.u.; I = {intensity:.5e}")
+    axs[1].axvline(en, lw=1, color='black', alpha=0.1)
+    axs[1].scatter(en, intensity, marker='x', color='black', s=20)
+
+plt.show()
+\end{lstlisting}
+

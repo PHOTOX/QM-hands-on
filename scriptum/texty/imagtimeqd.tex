@@ -1,0 +1,54 @@
+Postulates of quantum mechanics state, that observable quantities are given by the eigenvalues of the corresponding quantum-mechanical operator. Thus, most of the quantum calculation reduces to computing the eigenvalues and eigenfunctions of the operator of interest. The central operator we usually try to find the eigenvalues for is the Hamiltonian $\hat{H}$. The eigenvalues of the Hamiltonian are the energy spectrum that can be measured by, for example, spectroscopic techniques. Part~\ref{part:elstruc} of this book dealt with diagonalization of the Hamiltonian for atoms and molecules, using techniques of \acrfull{tise}. This is the standard approach taken in quantum chemistry. In Chapter~\ref{kap:spec}, we have shown that the energy spectrum can be obtained also from the time evolution of a wave function, which may be often more efficient than the full diagonalization of the Hamiltonian. However, this approach based on the autocorrelation function can provide us only with the eigenvalues, not with the eigenfunctions. Yet the eigenfunctions are necessary to calculate observables of other operators and we often need them. In this Chapter, we will show how both the eigenvalues and eigenfunctions can be obtained from time-dependent techniques using propagation in imaginary time. The imaginary-time propagation is less frequent than the autocorrelation approach and much less frequent than the operator diagonalization, yet it is still a useful technique.
+
+\section{Theoretical background}
+
+In Chapter~\ref{kap:spec}, we have derived an expression for the time evolution of a wave function expressed in the eigenstates of the Hamiltonian operator (see Section~\ref{sec:autocorrintro} and Eq.~\eqref{eq:tdpsi1})
+\begin{equation}
+    \psi(x,t) = \sum_k c_k \e^{-\frac{i}{\hbar}E_k t}\phi_k(x) \, ,
+    \label{eq:tdpsi2}
+\end{equation}
+where $E_k$ are the eigenvalues of the Hamiltonian (energies) and $\phi_k(x)$ are its eigenfunctions. The coefficients $c_k$ are time-independent since the Hamiltonian is time-independent and are set at time 0. This equation was obtained by applying the propagator $\hat{U}(t)$ to the initial wave function $\psi(x,0)$. We will start by analyzing the wave function.
+
+Let us now take a look at the norm of the wave function
+\begin{align}
+    \langle\psi(x,t)|\psi(x,t)\rangle &= \sum_k \sum_l c_k^* c_l  \e^{\frac{i}{\hbar}E_k t} \e^{-\frac{i}{\hbar}E_l t} \langle\phi_k(x)|\phi_l(x)\rangle = \sum_k \sum_l c_k^* c_l  \e^{\frac{i}{\hbar}(E_k - E_l) t} \delta_{kl} \notag \\
+    &= \sum_k |c_k|^2  \e^{\frac{i}{\hbar}(E_k - E_k) t} =  \sum_k |c_k|^2 = 1
+\end{align}
+The norm of the wave function will preserve since $c_k$s are constant and will be equal to one as we set the coefficients this way. Where did the time-dependent exponentials of $E_k$ disappeared? Due to the complex conjugation. Thus, the different states $\phi_k$ will contribute to the total wave function the same way for all the times. 
+
+Let us now free our fantasy and imagine that there is also an imaginary time. The imaginary time will be described mathematically as $\tau=it$. The wave function is then no longer a function of time $t$ but becomes a function of the imaginary time $\tau$: $\psi(x,t) \rightarrow \psi(x,\tau)$. The wave function than looks like
+\begin{equation}
+    \psi(x,\tau) = \sum_k c_k \e^{-\frac{E_k}{\hbar}\tau}\phi_k(x) \, ,
+\end{equation}
+where we have taken Eq.~\eqref{eq:tdpsi2} and substituted $it$ with $\tau$.
+How would the norm look like in this case? Then, the exponentials would not disappear since they would no longer get complex conjugate
+\begin{align}
+    \langle\psi(x,\tau)|\psi(x,\tau)\rangle &= \sum_k \sum_l c_k^* c_l  \e^{-\frac{1}{\hbar}(E_k + E_l) \tau} \langle\phi_k(x)|\phi_l(x)\rangle =\sum_k |c_k|^2  \e^{-2\frac{E_k}{\hbar} \tau} \neq 1
+\end{align}
+The norm of the wave function $\psi(x,\tau)$ is definitely not preserved as each contribution $\phi_k$ to the wave function exponentially decays as $\e^{-2\frac{E_k}{\hbar} \tau}$.
+Thus, interestingly, the contribution will change in time. What about the ratios of the contribution? Is it possible that one contribution will get bigger than the others? Let's look at ration of two contributions $k$ and $l$, where $E_l < E_k$ and $E_l - E_k = \Delta E_{lk} > 0$:
+\begin{equation}
+    \frac{|c_k|^2  \e^{-2\frac{E_k}{\hbar}\tau}}{|c_l|^2  \e^{-2\frac{E_l}{\hbar}\tau}} =  \e^{-2\frac{E_k - E_l}{\hbar}\tau} \frac{|c_k|^2}{|c_l|^2}  = \e^{2\frac{\Delta E_{lk}}{\hbar}\tau} \frac{|c_k|^2}{|c_l|^2}
+\end{equation}
+The answer to our previous question is yes, the contribution will change and the smaller energy contribution will be always getting stronger compared to higher energies. The greatest enhancement will be experienced by the ground state. Thus, if we increase the imaginary time parameter $\tau$, the ground state will be getting bigger and bigger contribution, until it will completely dominate the wave function.
+
+This is a powerful result. If we propagate the wave function in imaginary time, the ground state will be getting stronger and stronger contribution, until it becomes dominant. Mathematically speaking
+\begin{equation}
+    \lim_{\tau\to\infty} \psi(x,\tau) = c_k  \e^{-\frac{E_0}{\hbar}\tau} \phi_0(x)
+\end{equation}
+The only problem is that the exponential in $\tau\to\infty$ goes to zero and our norm also goes to zero (if $E_0 > 0$). But nothing prevents us to renormalize at time $\tau$
+\begin{equation}
+    \lim_{\tau\to\infty} \frac{\psi(x,\tau)}{\sqrt{\langle\psi(x,\tau | \psi(x,\tau \rangle}} = \phi_0(x)
+\end{equation}
+
+(Here better define $\Tilde{psi}$ as renormalized wave function)
+
+\vspace{2cm}
+we will define a new operator $\hat{U}_\mathrm{IT}(\tau)$ which takes form
+\begin{equation}
+    \hat{U}_\mathrm{IT}(\tau) = \e^{-\frac{1}{\hbar}\hat{H}(x)\tau} \, .
+\end{equation}
+
+
+\textbf{NOTE ABOUT IT PROPAGATOR}
+Let us stop here and discuss the imaginary time. What is it and how should we image a propagation in imaginary time? The concept of imaginary time seems unreal since noone has ever seen watch measuring imaginary time. However, the concept of imaginary time has already been discussed in physics by ..., yet the concept is definitely not easy to grasp. It the imaginary time creates a confusion in the reader, we recommend to look at it from a different point of view. The propagator in imaginary time can be viewed as new operator which, when acting on the wave function, eats the amplitudes of the different energy states such that the lowest energy state is eaten the least. Think about it rather like acting on the wave function by a new operator devised from the real propagator. Note that the imaginary time propagator is not a real propagator because it is not a unitary operator, i.e., it is not perserving norm. The norm in fact exponentially diverges from 1. Yet we still call it IT propagator.
