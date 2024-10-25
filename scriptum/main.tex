@@ -45,30 +45,37 @@
 %\setcounter{page}{3}
 
 % OBSAH
-\tableofcontents
+{ \hypersetup{hidelinks} \tableofcontents }
 
 \chapter{Introduction}
 \label{kap:uvod}
 \input{scriptum/texty/uvod.tex}
 
+\chapter{Brief introduction to Python}
+\label{kap:python}
+\input{scriptum/texty/python.tex}
+
 \mainmatter
 
 \part{Electronic structure theory}
+\label{part:elstruc}
+
 \input{scriptum/texty/elstructure}
 
 \part{Time-dependent quantum mechanics}
+\label{part:tdqm}
 
 \chapter{Quantum dynamics in real time}
 \label{kap:qd}
 \input{scriptum/texty/qd}
 
-\chapter{Wave packet spectrum and correlation function}
+\chapter{Energy spectrum and autocorrelation function}
 \label{kap:spec}
 \input{scriptum/texty/autocorr}
 
 \chapter{Imaginary-time dynamics and stationary states}
 \label{kap:imqd}
-% \input{scriptum/texty/qd}
+\input{scriptum/texty/imagtimeqd}
 
 \chapter{Nonadiabatic quantum dynamics}
 \label{kap:nonad}
@@ -80,13 +87,12 @@
 
 
 \chapter*{Solutions}
+\addcontentsline{toc}{chapter}{Solutions}
 \label{kap:sol}
 \input{scriptum/texty/solutions}
 
-
-
-
 \chapter*{Literature}
+\addcontentsline{toc}{chapter}{Literature}
 \label{kap:literatura}
 \input{scriptum/texty/literatura.tex}
 
@@ -99,7 +105,6 @@
 \input{scriptum/texty/podekovani}
 
 % Seznam zkratek
-% \printglossary[type=\acronymtype,title=List of acronyms,toctitle=List of acronyms]
 \printnoidxglossary[type=\acronymtype,title=List of acronyms,toctitle=List of acronyms]
 \addcontentsline{toc}{chapter}{List of acronyms}
 

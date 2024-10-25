@@ -13,13 +13,15 @@
 \usepackage{amsmath}
 \usepackage{mathtools}  % Needed for rightcentered pmatrix* in symetrie.tex
 % Math-style ISO turns capital greek letters italic
-\usepackage[math-style=ISO,warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
+% \usepackage[math-style=ISO,warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
 \usepackage{realscripts}
 \usepackage{graphicx}
 \usepackage{csquotes}
 \usepackage{lscape}     % Landscape orientace pro velké tabulky
 \usepackage{braket}
 \usepackage{xcolor}
+\usepackage{bm} % bold greek letters
+\usepackage{mathrsfs}
 
 % library
 \usepackage[style=chem-acs]{biblatex} % bibliography
@@ -34,7 +36,7 @@
 \setmonofont{IBM Plex Mono}
 \setmonofont{Source Code Pro}
 % Needs unicode-math
-\setmathfont{Asana Math}
+% \setmathfont{Asana Math}
 
 
 % http://latexcolor.com/
@@ -55,10 +57,10 @@
 \definecolor{codeorange}{rgb}{1,0.5,0}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
-\lstset{
-  basicstyle=\ttfamily,
-  backgroundcolor=\color{backcolour},   
-}
+%\lstset{
+%  basicstyle=\ttfamily,
+%  backgroundcolor=\color{backcolour},   
+%}
 
 \lstdefinestyle{mystyle}{
     backgroundcolor=\color{backcolour},   
@@ -72,12 +74,14 @@
     captionpos=b,                    
     keepspaces=true,                 
     numbers=left,                    
-    numbersep=5pt,                  
+    numbersep=5pt, 
+    frame=single,  % remove this keyword to remove frame
     showspaces=false,                
     showstringspaces=false,
     showtabs=false,                  
     tabsize=2
 }
+\lstset{style=mystyle}
 
 \lstdefinestyle{mystyle2}{
     backgroundcolor=\color{backcolour},   
@@ -90,8 +94,9 @@
     breaklines=true,                 
     captionpos=b,                    
     keepspaces=true,                 
-    %numbers=false,                    
-    numbersep=5pt,                  
+    numbers=none,                    
+    numbersep=5pt,       
+    frame=single, % remove this keyword to remove frame
     showspaces=false,                
     showstringspaces=false,
     showtabs=false,                  
@@ -261,7 +266,7 @@ group-minimum-digits = 4
 % Stojate pi
 % https://tex.stackexchange.com/questions/219975/how-to-get-non-italic-greek-symbols-with-ams-packages
 % Somehow this does not seem to work, probably because of unicode-math
-\renewcommand{\pi}{\uppi}
+% \renewcommand{\pi}{\uppi}
 
 % Kdyz takto mame exponencialu, tak stejne by mela byt imaginarni jednotka
 % https://tex.stackexchange.com/questions/86128/how-should-imaginary-numbers-be-typeset
@@ -343,7 +348,7 @@ pdfauthor={Jiří Janoš, Tomáš Jíra},
 colorlinks=true,
 bookmarks=true,
 breaklinks=true,
-urlcolor=red,
+urlcolor=blue,
 citecolor=blue,
 linkcolor=blue,
 unicode=true,

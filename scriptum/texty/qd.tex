@@ -11,7 +11,7 @@ The time evolution in quantum mechanics is governed by the \acrfull{tdse},
 where $i$ is the imaginary unit, $\hbar$ is the reduced Planck constant, $\psi$ is the wave function, $\hat{H}$ is the Hamiltonian, $t$ is time and $x$ represents the position of a quantum particle, such as an electron, proton, or any other particle. The solution of the \acrshort{tdse} can be in general written as
 \begin{equation}
     \psi(x,t) = \hat{U}(t)\psi(x,0) \, .
-    \label{eq:U }
+    \label{eq:U}
 \end{equation}
 The operator $\hat{U}$ is called a \textit{propagator} or \textit{time evolution operator}. Application of the propagator to a wave function is equivalent to evolving the wave function from time 0 to time t. The knowledge of the evolution operator is, therefore, elementary for a description of dynamics in quantum systems.
 
@@ -25,9 +25,9 @@ Notice that the result resembles the separation of variables for differential eq
 Comparing equations~\eqref{eq:tdse2} and \eqref{eq:U}, we see that the evolution operator has a simple form of an exponential of the Hamiltonian,
 \begin{equation}
     \hat{U}(t) = \e^{-\frac{i}{\hbar}\hat{H}(x)t} \, .
-    \label{eq:U}
+    \label{eq:U1}
 \end{equation}
-Formally, we now have a propagator containing all information about the time evolution of the system and we can propagate the wave function to an arbitrary time $t$. While this works well on paper, analytical evaluation of the propagator is in practice not a straightforward task for most Hamiltonians. The hindrance lies in the evaluation of the exponential in equation~\eqref{eq:U}.
+Formally, we now have a propagator containing all information about the time evolution of the system and we can propagate the wave function to an arbitrary time $t$. While this works well on paper, analytical evaluation of the propagator is in practice not a straightforward task for most Hamiltonians. The hindrance lies in the evaluation of the exponential in equation~\eqref{eq:U1}.
 
 Let us briefly discuss why analytic evaluation of the exponential of Hamiltonian is a cumbersome task. The exponential of an operator is defined through its Taylor series as
 \begin{equation}
@@ -100,29 +100,29 @@ However, operators that depend on momentum $\hat{p}$ require a more complex trea
 
 % better structure: first show how to transfer between reps and then how we use it to evaluate
 
-To evaluate the action of the kinetic energy operator, or any other operator depending on momentum, it is convenient to switch to a basis where the action of momentum operator $\hat{p}$ is a simple multiplication. Such basis is the basis of the free particle states $\e^{-ikx}$, the so-called $k$-space or momentum space since $p = \hbar k$. The wave function represented in the $k$-space can be obtained by \acrfull{ft} $\mathcal{F}$ as
+To evaluate the action of the kinetic energy operator, or any other operator depending on momentum, it is convenient to switch to a basis where the action of momentum operator $\hat{p}$ is a simple multiplication. Such basis is the basis of the free particle states $\e^{ikx}$, the so-called $k$-space or momentum space since $p = \hbar k$. The wave function represented in the $k$-space can be obtained by \acrfull{ift} $\mathcal{F}^{-1}$ as
 \begin{align}
-    \psi(k,t) = \mathcal{F}[\psi(x,t)] =\int_{-\infty}^\infty \psi(x,t) \e^{-ikx}\dd x \, .
+    \psi(k,t) = \mathcal{F}^{-1}[\psi(x,t)] =\int_{-\infty}^\infty \psi(x,t) \e^{ikx}\dd x \, .
 \end{align}
-Performing the \acrshort{ft} on a computer is a routine task and allows us to easily transfer between the position representation $\psi(x,t)$ and momentum representation $\psi(k,t)$.
+Performing the \acrshort{ift} on a computer is a routine task and allows us to easily transfer between the position representation $\psi(x,t)$ and momentum representation $\psi(k,t)$.
 
-The action of the kinetic operator on the wave function is cumbersome to evaluate numerically in the position space due to the derivatives, but it is simple in the $k$-space using the \acrshort{ft}:
+The action of the kinetic operator on the wave function is cumbersome to evaluate numerically in the position space due to the derivatives, but it is simple in the $k$-space using the \acrshort{ift}:
 \begin{align}
-    \mathcal{F}[\hat{T}\psi(x,t)] &= \mathcal{F}\left[-\frac{\hbar^2}{2m}\frac{\dd^2 \psi(x,t)}{\dd x^2}\right] = -\frac{\hbar^2}{2m} \int_{-\infty}^\infty \frac{\dd^2 \psi(x,t)}{\dd x^2}  \e^{-ikx}\dd x \stackrel{p.p.}{=} -\frac{\hbar^2}{2m} i k \int_{-\infty}^\infty \frac{\dd \psi(x,t)}{\dd x} \e^{-ikx}\dd x \notag \\
-    &\stackrel{p.p.}{=} \frac{\hbar^2}{2m} k^2 \int_{-\infty}^\infty \psi(x,t) \e^{-ikx}\dd x = \frac{\hbar^2 k^2}{2m} \psi(k,t) \, .
+    \mathcal{F}^{-1}[\hat{T}\psi(x,t)] &= \mathcal{F}^{-1}\left[-\frac{\hbar^2}{2m}\frac{\dd^2 \psi(x,t)}{\dd x^2}\right] = -\frac{\hbar^2}{2m} \int_{-\infty}^\infty \frac{\dd^2 \psi(x,t)}{\dd x^2}  \e^{ikx}\dd x \stackrel{p.p.}{=} \frac{\hbar^2}{2m} i k \int_{-\infty}^\infty \frac{\dd \psi(x,t)}{\dd x} \e^{ikx}\dd x \notag \\
+    &\stackrel{p.p.}{=} - i^2 \frac{\hbar^2}{2m} k^2 \int_{-\infty}^\infty \psi(x,t) \e^{ikx}\dd x = \frac{\hbar^2 k^2}{2m} \psi(k,t) \, .
     \label{eq:qdftkspace}
 \end{align}
 where $p.p.$ signifies integration \textit{per partes}. The result of $\hat{T}\psi$ in the $k$-space is very straightforward, just multiply $\psi(k,t)$ by the kinetic energy $\frac{\hbar^2 k^2}{2m}$.
 
-However, we are interested in the action of $\hat{T}$ in the position space since we work on our $x$-grid. This is easily achieved by evaluating the action of $\hat{T}$ in the $k$-space, as we showed in Eq.~\eqref{eq:qdftkspace}, and then transforming the result back to the position representation with the \acrfull{ift} $\mathcal{F}^{-1}$ as
+However, we are interested in the action of $\hat{T}$ in the position space since we work on our $x$-grid. This is easily achieved by evaluating the action of $\hat{T}$ in the $k$-space, as we showed in Eq.~\eqref{eq:qdftkspace}, and then transforming the result back to the position representation with the \acrfull{ft} $\mathcal{F}$ as
 \begin{align}
-    \hat{T}\psi(x,t) &= \mathcal{F}^{-1}\left[\frac{\hbar^2 k^2}{2m} \psi(k,t)\right] \, .
+    \hat{T}\psi(x,t) &= \mathcal{F}\left[\frac{\hbar^2 k^2}{2m} \psi(k,t)\right] \, .
 \end{align}
-Once again, \acrshort{ift} is a routine operation performed on computers.
+Once again, \acrshort{ft} is a routine operation performed on computers.
 
-Let us now summarize the evaluation of $\hat{T}\psi(x,t)$. First, the wave function $\psi(x,t)$ has to be \acrshort{ft} to the momentum representation $\psi(k,t)$. Then, the action of $\hat{T}$ on $\psi(k,t)$ is evaluated by simply multiplying it by $\frac{\hbar^2 k^2}{2m}$. Finally, the \acrshort{ift} is applied to $\frac{\hbar^2 k^2}{2m} \psi(k,t)$ transforming it back to the position space. The whole procedure is depicted in the following scheme:
+Let us now summarize the evaluation of $\hat{T}\psi(x,t)$. First, the wave function $\psi(x,t)$ has to be \acrshort{ift} to the momentum representation $\psi(k,t)$. Then, the action of $\hat{T}$ on $\psi(k,t)$ is evaluated by simply multiplying it by $\frac{\hbar^2 k^2}{2m}$. Finally, the \acrshort{ft} is applied to $\frac{\hbar^2 k^2}{2m} \psi(k,t)$ transforming it back to the position space. The whole procedure is depicted in the following scheme:
 \begin{equation}
-    \psi(x,t) \stackrel{FT}{\longrightarrow} \psi(k,t) \longrightarrow \frac{\hbar^2 k^2}{2m} \psi(k,t) \stackrel{IFT}{\longrightarrow} \hat{T}\psi(x,t) \, .
+    \psi(x,t) \stackrel{\mathrm{IFT}}{\longrightarrow} \psi(k,t) \longrightarrow \frac{\hbar^2 k^2}{2m} \psi(k,t) \stackrel{\mathrm{FT}}{\longrightarrow} \hat{T}\psi(x,t) \, .
 \end{equation}
 
 \subsection{The propagator and the Split-operator technique}
@@ -146,13 +146,9 @@ where we symmetrically factorized the exponential of $\hat{H}$ into separate exp
 
 These exponentials now need to be evaluated. While the exponential of the potential energy is simply evaluated on the grid and multiplied by the wave function, the exponential of the kinetic energy operator must be evaluated using the Fourier method introduced in the previous subsection as
 \begin{equation}
-    \psi(x,t) \stackrel{FT}{\longrightarrow} \psi(k,t) \longrightarrow \e^{\frac{i}{\hbar} \frac{\hbar^2 k^2}{2m} t} \psi(k,t) \stackrel{IFT}{\longrightarrow} \e^{-\frac{i}{\hbar} \hat{T} t}\psi(x,t) \, .
+    \psi(x,t) \stackrel{\mathrm{IFT}}{\longrightarrow} \psi(k,t) \longrightarrow \e^{\frac{i}{\hbar} \frac{\hbar^2 k^2}{2m} t} \psi(k,t) \stackrel{\mathrm{FT}}{\longrightarrow} \e^{-\frac{i}{\hbar} \hat{T} t}\psi(x,t) \, .
 \end{equation}
 The whole propagation is then done in a series of short time steps $\Delta t$. At each time step, the wave function is first propagated by a half step in potential energy, then a full step in kinetic energy and finally again a half step in potential energy. 
-
-% \begin{equation}
-%     \e^{-\frac{i}{\hbar} \hat{T} t} = \sum_{l=0}^\infty \frac{\hat{T}^l}{l!} \left( -\frac{i}{\hbar} t\right)^l = \sum_{l=0}^\infty \frac{(-k^2)^l}{l!} \left( -\frac{i}{\hbar} t\right)^l =  \e^{\frac{i}{\hbar} k^2 t}\, ,
-% \end{equation}
 
 \section{Code}
 
@@ -195,7 +191,7 @@ Gaussian wave packets evolving in harmonic oscillators can be classified into tw
 
 In this exercise, we will explore the properties of \textit{coherent} and \textit{squeezed} states. We define the initial Gaussian wave packet as
 \begin{equation}
-    \psi(x,0) = \left(\frac{2\alpha_0}{\pi}\right)^{-\frac{1}{4}} \e^{-\alpha_t(x-x_0)^2 +\frac{i}{\hbar}p_0(x-x_0)} \, ,
+    \psi(x,0) = \left(\frac{2\alpha_0}{\pi}\right)^{\frac{1}{4}} \e^{-\alpha_0(x-x_0)^2 +\frac{i}{\hbar}p_0(x-x_0)} \, ,
     \label{eq:qdgauss}
 \end{equation}
 where $x_0$ and $p_0$ refer to the initial mean position and momentum of the Gaussian, and $\alpha_0$ is the initial Gaussian width. The potential for harmonic oscillator takes the following form:

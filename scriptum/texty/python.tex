@@ -1,0 +1,112 @@
+Students can learn the basics of Python in online courses like \href{https://www.learnpython.org/}{learnpython.org}.
+
+Python is a modern, general-purpose programming language widely used for scientific computing and numerical simulations. Python's simplicity and readability make it an excellent choice for beginners.
+
+One of the main advantages of Python is the availability of a wide range if libraries such as NumPy or SciPy for scientific purposes or MatPlotLib for plotting.
+
+In this chapter, we will very briefly describe some basics of Python with emphasis on libraries we will need throughout the text. However, this introduction is not intended to explain Python from the beginning, as this is done in multitude of resources, such as \href{https://www.learnpython.org/}{\texttt{learnpython.org}}.
+
+\textbf{We assume that the student is familiar with basic Python and understands loops. Thus we provide just a brief overview how to use python with the NumPy library.}
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+import numpy as np
+\end{lstlisting}
+
+
+Calling functions from a Python library, e.g. number $\pi$, is done as follows:
+\begin{lstlisting}[language=Python, style=mystyle2]
+pi = np.pi
+\end{lstlisting}
+of if we want to take absolute value of a number
+\begin{lstlisting}[language=Python, style=mystyle2]
+number = np.abs(-1)
+\end{lstlisting}
+
+
+
+\section{Installing NumPy}
+To use NumPy, you must first install it. You can do this by running the following command in your terminal or command prompt:
+\begin{lstlisting}[language=Python, style=mystyle2]
+pip install numpy
+\end{lstlisting}
+
+\section{Basic Python Concepts}
+Before diving into NumPy, it is helpful to understand a few basic Python concepts:
+\begin{itemize}
+    \item \textbf{Variables:} Variables in Python are dynamically typed, meaning they do not need explicit declaration.
+    \begin{lstlisting}[language=Python, style=mystyle2]
+x = 5   # An integer
+y = 2.5 # A floating point number
+name = "Simulation" # A string
+    \end{lstlisting}
+    \item \textbf{Loops:} Python uses indentation to define blocks of code, making it simple to write loops.
+    \begin{lstlisting}[language=Python, style=mystyle2]
+for i in range(5):
+    print(i)
+    \end{lstlisting}
+    \item \textbf{Functions:} Python functions are defined using the \texttt{def} keyword.
+    \begin{lstlisting}[language=Python, style=mystyle2]
+def add(a, b):
+    return a + b
+    \end{lstlisting}
+\end{itemize}
+
+\section{NumPy Basics}
+NumPy is the core library for numerical computing in Python. It provides support for large, multi-dimensional arrays and matrices, along with a collection of mathematical functions to operate on these arrays efficiently.
+
+\subsection{Creating Arrays}
+The fundamental object in NumPy is the \texttt{array}. You can create an array using the \texttt{np.array()} function.
+\begin{lstlisting}[language=Python, style=mystyle2]
+import numpy as np
+
+# Creating a 1D array
+a = np.array([1, 2, 3, 4])
+
+# Creating a 2D array (matrix)
+b = np.array([[1, 2], [3, 4]])
+
+print(a)
+print(b)
+\end{lstlisting}
+
+\subsection{Array Operations}
+NumPy allows you to perform element-wise operations on arrays, making it easy to work with large datasets.
+\begin{lstlisting}[language=Python, style=mystyle2]
+# Element-wise operations
+c = a * 2    # Multiply each element of 'a' by 2
+d = a + 10   # Add 10 to each element of 'a'
+
+# Array addition
+e = np.array([1, 2, 3, 4])
+f = a + e    # Add corresponding elements of 'a' and 'e'
+\end{lstlisting}
+
+\subsection{Array Indexing and Slicing}
+You can access elements of a NumPy array using indexing or slicing. This allows for efficient extraction of data from arrays.
+\begin{lstlisting}[language=Python, style=mystyle2]
+# Accessing an element
+x = a[0]     # First element of 'a'
+
+# Slicing an array
+sub_array = a[1:3]  # Elements from index 1 to 2 (excluding 3)
+\end{lstlisting}
+
+\subsection{Useful Functions for Simulations}
+NumPy provides several functions that are useful for numerical simulations, such as:
+\begin{itemize}
+    \item \texttt{np.linspace()}: Generates evenly spaced numbers over a specified range.
+    \item \texttt{np.random.random()}: Generates random numbers.
+    \item \texttt{np.dot()}: Performs matrix multiplication.
+\end{itemize}
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+# Generating an array of 5 numbers between 0 and 10
+x = np.linspace(0, 10, 5)
+
+# Creating a 2x2 matrix of random numbers
+random_matrix = np.random.random((2, 2))
+
+# Matrix multiplication
+result = np.dot(b, random_matrix)
+\end{lstlisting}
+

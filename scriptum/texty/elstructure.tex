@@ -4,41 +4,43 @@ The \acrfull{hf} method stands as a cornerstone in quantum chemistry, offering a
 
 \section{Theoretical Background}
 
-Ultimately, we are interested in solving the Schrödinger equation in the form
+Our primary focus is on solving the Schrödinger equation in the following form:
 
 \begin{equation}
 \hat{\mathbf{H}}\ket{\Psi}=E\ket{\Psi},
 \end{equation}
 
-where \(\hat{H}\) is the molecular Hamiltonian operator, \(\ket{\Psi}\) is the molecular wave function, and \(E\) is the total energy of the system. The \acrshort{hf} method aims to approximate the wave function \(\ket{\Psi}\) by a single Slater determinant, which we will write in the form
+where \(\hat{\mathbf{H}}\) denotes the molecular Hamiltonian operator, \(\ket{\Psi}\) represents the molecular wave function, and \(E\) is the total energy of the system. The \acrshort{hf} method aims to approximate the wave function \(\ket{\Psi}\) using a single Slater determinant, which can be expressed as:
 
 \begin{equation}
 \ket{\Psi}=\ket{\chi_1\chi_2\cdots\chi_N},
 \end{equation}
 
-where \(\chi_i\) represents a \acrfull{ms} and N is the total number of electrons. The \acrshort{hf} method seeks to optimize these molecular orbitals to minimize the total energy of the system, providing a reliable estimate of the electronic structure. However, in the \acrfull{rhf} method, we impose a constraint on the electron spin, and instead of spin orbitals, we work with spatial orbitals, which allows us to write the slater determinant in terms of spatial orbitals in the form
+where \(\chi_i\) indicates a molecular spin orbital and \(N\) is the total number of electrons. The goal of the \acrshort{hf} method is to optimize these molecular orbitals in order to minimize the system's total energy, thereby providing a reliable estimate of the electronic structure.
+
+In the \acrfull{rhf} method, a constraint is placed on the electron spin, allowing us to work with spatial orbitals instead of spin orbitals. This enables us to express the Slater determinant in terms of spatial orbitals as follows:
 
 \begin{equation}
 \ket{\Psi}=\ket{\Phi_1\Phi_2\cdots\Phi_{N/2}},
 \end{equation}
 
-where \(\Phi_i\) represents a molecular spatial orbital. We can see, that for the \acrshort{rhf} method, we need to have an even number of electrons in the system. In practical calculations, it is convenient to expand the molecular orbitals (spin or spatial) in terms of basis functions \(\phi\) (usually sums of Gaussian functions) and work with the expansion coefficients. If we assume that the wavefunction is a single Slater determinant, our molecular orbitals are expanded in terms of basis functions and optimize the energy of such determinant, we arrive at the Roothaan equations in the form
+where \(\Phi_i\) represents a molecular spatial orbital. It is evident that, for the \acrshort{rhf} method, the system must contain an even number of electrons. In practical calculations, it is often convenient to expand the molecular orbitals (whether spin or spatial) in terms of basis functions \(\phi\), typically represented as sums of Gaussian functions, and to work with the corresponding expansion coefficients. Assuming that the wave function can be expressed as a single Slater determinant, we expand our molecular orbitals in terms of these basis functions and optimize the energy of the determinant, leading us to the Roothaan equations given by:
 
 \begin{equation}\label{eq:roothaan}
-\mathbf{FC}=\mathbf{SC\varepsilon},
+\mathbf{FC}=\mathbf{SC}\bm{\varepsilon},
 \end{equation}
 
-where \(\mathbf{F}\) is the Fock matrix (defined later), \(\mathbf{C}\) is a matrix of orbital coefficients, \(\mathbf{S}\) is the overlap matrix (also defined later), and \(\mathbf{\varepsilon}\) represents orbital energies.
+where \(\mathbf{F}\) is the Fock matrix (to be defined later), \(\mathbf{C}\) is a matrix of orbital coefficients, \(\mathbf{S}\) is the overlap matrix (also to be defined later), and \(\bm{\varepsilon}\) represents the orbital energies.
 
 \section{Implementation of the Restricted Hartree--Fock Method}
 
-Let's begin by defining the core Hamiltonian, also known as the one-electron Hamiltonian. The core Hamiltonian represents a part of the full Hamiltonian that excludes electron-electron repulsion. In index notation, it is expressed as
+Let us begin by defining the core Hamiltonian, also referred to as the one-electron Hamiltonian. The core Hamiltonian constitutes a portion of the full Hamiltonian that omits electron-electron repulsion. In index notation, it is expressed as
 
 \begin{equation}\label{eq:hamiltonian}
 H_{\mu\nu}^{core}=T_{\mu\nu}+V_{\mu\nu}
 \end{equation}
 
-where \(\mu\) and \(\nu\) are indices of basis functions, \(T_{\mu\nu}\) is a kinetic energy matrix element and \(V_{\mu\nu}\) is a potential energy matrix element. These matrix elements are given as
+where \(\mu\) and \(\nu\) are indices of basis functions, \(T_{\mu\nu}\) denotes a kinetic energy matrix element and \(V_{\mu\nu}\) denotes a potential energy matrix element. These matrix elements given as
 
 \begin{align}
 T_{\mu\nu}&=\braket{\phi_{\mu}|\hat{T}|\phi_{\nu}} \\
@@ -57,7 +59,7 @@ and the two-electron Coulomb repulsion integrals
 J_{\mu\nu\kappa\lambda}=\braket{\phi_{\mu}\phi_{\mu}|\hat{J}|\phi_{\kappa}\phi_{\lambda}},
 \end{equation}
 
-which play crucial roles in the \acrshort{hf} calculation.\cite{10.1016/S0065-3276!08!60019-2} The \acrshort{hf} method revolves around solving the Roothaan equations \ref{eq:roothaan} iteratively. The Fock matrix is defined as
+which play crucial roles in the \acrshort{hf} calculation.\cite{10.1016/S0065-3276!08!60019-2} The \acrshort{hf} method revolves around solving the Roothaan equations \eqref{eq:roothaan} iteratively. The Fock matrix is defined as
 
 \begin{equation}\label{eq:fock}
 F_{\mu\nu}=H_{\mu\nu}^{core}+D_{\kappa\lambda}(J_{\mu\nu\kappa\lambda}-\frac{1}{2}J_{\mu\lambda\kappa\nu})
@@ -85,7 +87,7 @@ where \(Z_A\) is the nuclear charge of atom A, and \(R_{AB}\) is the distance be
 
 \subsection{Gradient of the Restricted Hartree--Fock Method}
 
-If we perform the calculation as described above and get the density matrix \(\mathbf{D}\) we can evaluate the nuclear energy gradient as
+If we perform the calculation as described above and get the density matrix \(\mathbf{D}\) we can evaluate the nuclear energy gradient as\cite{10.1002/9780470749593.hrs006}
 
 \begin{equation}
 \frac{\partial E}{\partial X_{A,i}}=D_{\mu\nu}\frac{\partial H_{\mu\nu}^{core}}{\partial X_{A,i}}+2D_{\mu\nu}D_{\kappa\lambda}\frac{\partial J_{\mu\nu\kappa\lambda}}{\partial X_{A,i}}-2W_{\mu\nu}\frac{\partial S_{\mu\nu}}{\partial X_{A,i}}
@@ -99,9 +101,9 @@ W_{\mu\nu}=2C_{\mu i}C_{\nu i}\varepsilon_i
 
 \section{\texorpdfstring{Integral Transforms to the Basis of Molecular Spinorbitals\label{sec:integral_transform}}{Integral Transforms to the Basis of Molecular Spinorbitals}}
 
-To perform most of the \acrfull{post-hf} calculations, we usually need to transform the integrals to the \acrshort{ms} basis. We will describe it here and refer to it in the \acrshort{post-hf} methods sections. We will also present the \acrshort{post-hf} methods using the integrals in the \acrshort{ms} basis (and its antisymmetrized form in case of the Coulomb integrals), since it is more general.
+To perform most of the \acrfull{post-hf} calculations, we usually need to transform the integrals to the \acrfull{ms} basis. We will describe it here and refer to it in the \acrshort{post-hf} methods sections. We will also present the \acrshort{post-hf} methods using the integrals in the \acrshort{ms} basis (and its antisymmetrized form in case of the Coulomb integrals), since it is more general.
 
-All the integrals defined in the equations \ref{eq:hamiltonian}, \ref{eq:overlap}, and \ref{eq:coulomb} and even the Fock matrix in the equation \ref{eq:fock} are defined in the basis of atomic orbitals. To transform these integrals to the \acrshort{ms} basis, we need to use the coefficient matrix \(\mathbf{C}\) obtained from the solution of the Roothaan equations \ref{eq:roothaan}. The coefficient matrix \(\mathbf{C}\), which is obtained from the \acrshort{rhf} calculation, is calculated in the spatial molecular orbital basis. The first step is to expand the coefficient matrix \(\mathbf{C}\) to the \acrshort{ms} basis. This can be done mathematically using the tiling matrix \(\mathbf{P}_{n\times 2n}\), defined as
+All the integrals defined in the equations \eqref{eq:hamiltonian}, \eqref{eq:overlap}, and \eqref{eq:coulomb} and even the Fock matrix in the equation \eqref{eq:fock} are defined in the basis of atomic orbitals. To transform these integrals to the \acrshort{ms} basis, we need to use the coefficient matrix \(\mathbf{C}\) obtained from the solution of the Roothaan equations \eqref{eq:roothaan}. The coefficient matrix \(\mathbf{C}\), which is obtained from the \acrshort{rhf} calculation, is calculated in the spatial molecular orbital basis. The first step is to expand the coefficient matrix \(\mathbf{C}\) to the \acrshort{ms} basis. This can be done mathematically using the tiling matrix \(\mathbf{P}_{n\times 2n}\), defined as
 
 \begin{equation}
 \mathbf{P}=
@@ -154,23 +156,20 @@ A_{pq}^{MS}=C_{\mu p}^{MS}(\mathbf{I}_{2}\otimes_K\mathbf{A})_{\mu\nu}C_{\nu q}^
 where \(\mathbf{A}\) is an arbitrary one-electron integral. Since a lot of the \acrshort{post-hf} methods also use differences of orbital energies in the denominator, it is practical to define the tensors
 
 \begin{align}
-\Delta\varepsilon^{a}_{i}&=\frac{1}{\varepsilon_i-\varepsilon_a} \\
-\Delta\varepsilon^{ab}_{ij}&=\frac{1}{\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b} \\
-\Delta\varepsilon^{abc}_{ijk}&=\frac{1}{\varepsilon_i+\varepsilon_j+\varepsilon_k-\varepsilon_a-\varepsilon_b-\varepsilon_c},
+\varepsilon^{a}_{i}&=\varepsilon_i-\varepsilon_a \\
+\varepsilon^{ab}_{ij}&=\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b \\
+\varepsilon^{abc}_{ijk}&=\varepsilon_i+\varepsilon_j+\varepsilon_k-\varepsilon_a-\varepsilon_b-\varepsilon_c,
 \end{align}
 
 where \(a\), \(b\), \(c\) are virtual orbitals and \(i\), \(j\), \(k\) are occupied orbitals. These tensors make the code more readable, easier to understand and also more efficient.
 
-\section{\texorpdfstring{Hartree--Fock Method and Integral Transform Code Example\label{sec:hf_code_examples}}{Hartree--Fock Method and Integral Transform Code Example}}
+\section{\texorpdfstring{Hartree--Fock Method and Integral Transform Coding Exercise\label{sec:hf_int_code_exercise}}{Hartree--Fock Method and Integral Transform Coding Exercise}}
 
-This section provides code snippets for the \acrshort{hf} method and the integral transforms to the \acrshort{ms} basis. The code snippets are written in Python and use the NumPy package for numerical calculations. The exercises are designed to help you understand the implementation of the \acrshort{hf} method and the transformation of integrals to the \acrshort{ms} basis. The solutions are provided to guide you through the implementation process and ensure that you can verify your results.
+This section provides code snippets for the \acrshort{hf} method and the integral transforms to the \acrshort{ms} basis. The code snippets are written in Python and use the NumPy package for numerical calculations. The exercises are designed to help you understand the implementation of the \acrshort{hf} method and the transformation of integrals to the \acrshort{ms} basis. The solutions are provided in Section \ref{sec:code_solutions} to guide you through the implementation process and ensure that you can verify your results.
 
-\subsection{Exercise}
+The exercise codes are designed to be self-contained and can be run in any Python environment. They contain placeholders that you need to fill in to complete the implementation. The exercises assume that you have defined the \texttt{\lstinline!atoms!}, \texttt{\lstinline!coords!}, \texttt{\lstinline!S!}, \texttt{\lstinline!H!}, and \texttt{\lstinline!J!} variables, which represent the list of atomic numbers, atomic coordinates, overlap matrix, core Hamiltonian, and Coulomb integral tensor, respectively. These variables can be generaly obtained from a .xyz molecule file and the output of a quantum chemistry software. If you want to just get to the coding part, you can save the \textattachfile[color=0 0 1]{molecule.xyz}{molecule.xyz}, \textattachfile[color=0 0 1]{S_AO.mat}{S\_AO.mat}, \textattachfile[color=0 0 1]{H_AO.mat}{H\_AO.mat}, and \textattachfile[color=0 0 1]{J_AO.mat}{J\_AO.mat} files to the same directory as the exercise codes and load the variables using the Listing \ref{code:load_exercise} below. The \texttt{\lstinline!ATOM!} variable is a dictionary that maps the atomic symbols to atomic numbers.
 
-The exercise codes are designed to be self-contained and can be run in any Python environment. They contain placeholders that you need to fill in to complete the implementation. The exercises assume that you have defined the \texttt{\lstinline!atoms!}, \texttt{\lstinline!coords!}, \texttt{\lstinline!S!}, \texttt{\lstinline!H!}, and \texttt{\lstinline!J!} variables, which represent the list of atomic numbers, atomic coordinates, overlap matrix, core Hamiltonian, and Coulomb integral tensor, respectively. These variables can be generaly obtained from a .xyz molecule file and the output of a quantum chemistry software. If you want to just get to the coding part, you can save the \textattachfile[color=0 0 1]{../python/molecule.xyz}{molecule.xyz}, \textattachfile[color=0 0 1]{../python/S_AO.mat}{S\_AO.mat}, \textattachfile[color=0 0 1]{../python/H_AO.mat}{H\_AO.mat}, and \textattachfile[color=0 0 1]{../python/J_AO.mat}{J\_AO.mat} files to the same directory as the exercise codes and and load the variables using the Listing below. The \texttt{\lstinline!ATOM!} variable is a dictionary that maps the atomic symbols to atomic numbers.
-
-\lstset{style=mystyle}
-\raggedbottom\begin{lstlisting}[language=Python]
+\raggedbottom\begin{lstlisting}[language=Python, caption={Example loading of molecule and integrals over atomic basis functions into variables used throughout exercises.}, label=code:load_exercise]
 # get the atomic numbers and coordinates of all atoms
 atoms = np.array([ATOM[line.split()[0]] for line in open("molecule.xyz").readlines()[2:]], dtype=int)
 coords = np.array([line.split()[1:] for line in open("molecule.xyz").readlines()[2:]], dtype=float)
@@ -210,7 +209,7 @@ VNN = 0
 print("RHF ENERGY: {:.8f}".format(E_HF + VNN))
 \end{lstlisting}
 
-Now is a good time to check your results with the provided solution. If you are satisfied with the results, you can proceed to the next exercise in the Listing \ref{code:int_exercise} below, which involves transforming the integrals to the molecular spinorbital basis.
+If you are satisfied with the results, you can proceed to the next exercise in the Listing \ref{code:int_exercise} below, which involves transforming the integrals to the molecular spinorbital basis.
 
 \raggedbottom\begin{lstlisting}[language=Python, caption={Integral transform exercise code.}, label=code:int_exercise]
 """
@@ -249,72 +248,7 @@ As mentioned in the materials, it is also practical to define the tensors of rec
 Emss, Emsd = np.array([]), np.array([])
 \end{lstlisting}
 
-If you successfully completed the exercise, you can compare your results with the provided solution. If you are satisfied with the results, you are now set for the post-HF methods exercises.
-
-\subsection{Solution}
-
-The solutions provided below are complete implementations of the \acrshort{hf} method (Listing \ref{code:hf_solution}) and the integral transforms (Listing \ref{code:int_solution}) to the \acrshort{ms} basis. The solutions are written in Python and use the NumPy package for numerical calculations. The solutions are designed to guide you through the implementation process and ensure that you can verify your results.
-
-\raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{hf} method exercise code solution.}, label=code:hf_solution]
-# define energies, number of occupied and virtual orbitals and the number of basis functions
-E_HF, E_HF_P, VNN, nocc, nvirt, nbf = 0, 1, 0, sum(atoms) // 2, S.shape[0] - sum(atoms) // 2, S.shape[0]
-
-# define some matrices and tensors
-K, F, D, C, eps = J.transpose(0, 3, 2, 1), np.zeros_like(S), np.zeros_like(S), np.zeros_like(S), np.array(nbf * [0])
-
-# calculate the X matrix which is the inverse of the square root of the overlap matrix
-SEP = np.linalg.eigh(S); X = SEP[1] @ np.diag(1 / np.sqrt(SEP[0])) @ SEP[1].T
-
-# the scf loop
-while abs(E_HF - E_HF_P) > args.threshold:
-
-    # build the Fock matrix
-    F = H + np.einsum("ijkl,ij->kl", J - 0.5 * K, D, optimize=True)
-
-    # solve the Fock equations
-    eps, C = np.linalg.eigh(X @ F @ X); C = X @ C
-
-    # build the density from coefficients
-    D = 2 * np.einsum("ij,kj->ik", C[:, :nocc], C[:, :nocc])
-
-    # save the previous energy and calculate the current electron energy
-    E_HF_P, E_HF = E_HF, 0.5 * np.einsum("ij,ij", D, H + F, optimize=True)
-
-# calculate nuclear-nuclear repulsion
-for i, j in it.product(range(len(atoms)), range(len(atoms))):
-    VNN += 0.5 * atoms[i] * atoms[j] / np.linalg.norm(coords[i, :] - coords[j, :]) if i != j else 0
-
-# print the results
-print("    RHF ENERGY: {:.8f}".format(E_HF + VNN))
-\end{lstlisting}
-
-\raggedbottom\begin{lstlisting}[language=Python, caption={Integral transform exercise code solution.}, label=code:int_solution]
-# define the occ and virt spinorbital slices shorthand
-o, v = slice(0, 2 * nocc), slice(2 * nocc, 2 * nbf)
-
-# define the tiling matrix for the Jmsa coefficients and energy placeholders
-P = np.array([np.eye(nbf)[:, i // 2] for i in range(2 * nbf)]).T
-
-# define the spin masks
-M = np.repeat([1 - np.arange(2 * nbf, dtype=int) % 2], nbf, axis=0)
-N = np.repeat([    np.arange(2 * nbf, dtype=int) % 2], nbf, axis=0)
-
-# tile the coefficient matrix, apply the spin mask and tile the orbital energies
-Cms, epsms = np.block([[C @ P], [C @ P]]) * np.block([[M], [N]]), np.repeat(eps, 2)
-
-# transform the core Hamiltonian and Fock matrix to the molecular spinorbital basis
-Hms = np.einsum("ip,ij,jq->pq", Cms, np.kron(np.eye(2), H), Cms, optimize=True)
-Fms = np.einsum("ip,ij,jq->pq", Cms, np.kron(np.eye(2), F), Cms, optimize=True)
-
-# transform the coulomb integrals to the MS basis in chemist's notation
-Jms = np.einsum("ip,jq,ijkl,kr,ls->pqrs", Cms, Cms, np.kron(np.eye(2), np.kron(np.eye(2), J).T), Cms, Cms, optimize=True);
-
-# antisymmetrized two-electron integrals in physicist's notation
-Jmsa = (Jms - Jms.swapaxes(1, 3)).transpose(0, 2, 1, 3)
-
-# create the tensors of reciprocal differences of orbital energies in MS basis used in post-HF methods
-Emss, Emsd = 1 / (epsms[o].reshape(-1) - epsms[v].reshape(-1, 1)), 1 / (epsms[o].reshape(-1) + epsms[o].reshape(-1, 1) - epsms[v].reshape(-1, 1, 1) - epsms[v].reshape(-1, 1, 1, 1))
-\end{lstlisting}
+If you successfully completed the exercise, you can compare your results with the provided solutions. Solution to the \acrshort{rhf} method can be found in Section \ref{sec:hf_code_solution} and the solution to integral transform in Section \ref{sec:int_code_solution}. If you are satisfied with the results, you are now set for the post-HF methods exercises.
 \chapter{Møller--Plesset Perturbation Theory}
 
 \acrfull{mppt} is a quantum mechanical method used to improve the accuracy of electronic structure calculations within the framework of \acrshort{hf} theory. It involves treating electron-electron correlation effects as a perturbation to the reference \acrshort{hf} wave function. The method is named after its developers, physicists C. Møller and M. S. Plesset. By systematically including higher-order corrections, \acrshort{mppt} provides more accurate predictions of molecular properties compared to the initial \acrshort{hf} approximation.
@@ -350,29 +284,27 @@ where \(s\) runs over all doubly excited determinants, \(H_{0s}^{'}\) is the mat
 
 \section{Implementation of 2nd and 3rd Order Corrections}
 
-Having the antisymmetrized Coulomb integrals in the MS basis and physicists' notation defined in section \ref{sec:integral_transform}, we can now proceed with the calculation of the correlation energy. We wil use the convention, that the indices \(i\), \(j\), \(k\), and \(l\) run over occupied spinorbitals, while the indices \(a\), \(b\), \(c\), and \(d\) run over virtual spinorbitals. The 2nd order and 3rd
+Having the antisymmetrized Coulomb integrals in the MS basis and physicists' notation defined in Section \ref{sec:integral_transform}, we can now proceed with the calculation of the correlation energy. We wil use the convention, that the indices \(i\), \(j\), \(k\), and \(l\) run over occupied spinorbitals, while the indices \(a\), \(b\), \(c\), and \(d\) run over virtual spinorbitals. The 2nd order and 3rd
 
 \begin{equation}
-E_{corr}^{MP2}=\frac{1}{4}\sum_{ijab}\frac{\braket{ab||ij}\braket{ij||ab}}{\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b}
+E_{corr}^{MP2}=\frac{1}{4}\sum_{ijab}\frac{\braket{ab||ij}\braket{ij||ab}}{\varepsilon_{ij}^{ab}}
 \end{equation}
 
 The 3rd order correlation energy:
 
 \begin{align}
-E_{corr}^{MP3}=&\frac{1}{8}\sum_{ijab}\frac{\braket{ab||ij}\braket{cd||ab}\braket{ij||cd}}{(\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b)(\varepsilon_i+\varepsilon_j-\varepsilon_c-\varepsilon_d)}+\nonumber \\
-&+\frac{1}{8}\sum_{ijab}\frac{\braket{ab||ij}\braket{ij||kl}\braket{kl||ab}}{(\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b)(\varepsilon_k+\varepsilon_l-\varepsilon_a-\varepsilon_b)}+\nonumber \\
-&+\sum_{ijab}\frac{\braket{ab||ij}\braket{cj||kb}\braket{ik||ac}}{(\varepsilon_i+\varepsilon_j-\varepsilon_a-\varepsilon_b)(\varepsilon_i+\varepsilon_k-\varepsilon_a-\varepsilon_c)}
+E_{corr}^{MP3}=&\frac{1}{8}\sum_{ijab}\frac{\braket{ab||ij}\braket{cd||ab}\braket{ij||cd}}{\varepsilon_{ij}^{ab}\varepsilon_{ij}^{cd}}+\nonumber \\
+&+\frac{1}{8}\sum_{ijab}\frac{\braket{ab||ij}\braket{ij||kl}\braket{kl||ab}}{\varepsilon_{ij}^{ab}\varepsilon_{kl}^{ab}}+\nonumber \\
+&+\sum_{ijab}\frac{\braket{ab||ij}\braket{cj||kb}\braket{ik||ac}}{\varepsilon_{ij}^{ab}\varepsilon_{ik}^{ac}}
 \end{align}
 
 To calculate the 4th order correction, we would need to write 39 terms, which is not practical. Higher-order corrections are usually not programmed this way, instead, the diagrammatic approach is used.\cite{1014569052,10.1016/0010-4655!73!90016-7,10.1016/0010-4655!73!90017-9}
 
-\section{2nd and 3rd Order Corrections Code Example}
+\section{2nd and 3rd Order Corrections Code Exercise}
 
-In a similar fashion to the \acrshort{hf} method, we can implement the Møller--Plesset perturbation theory in Python. The code below first proposes a self-contained exercise to calculate the \acrfull{mp2} and \acrfull{mp3} correlation energies. The solution is then provided in the following code snippet. You should append the code after your \acrshort{hf} implementation, since the \acrshort{mp2} and \acrshort{mp3} methods are built on top of the \acrshort{hf} method so should have already completed the \acrshort{hf} calculations in section \ref{sec:hf_code_examples}.
+In a similar fashion to the \acrshort{hf} method, we can implement the Møller--Plesset perturbation theory in Python. The code below proposes a self-contained exercise to calculate the \acrfull{mp2} and \acrfull{mp3} correlation energies. You should append the code after your \acrshort{hf} implementation, since the \acrshort{mp2} and \acrshort{mp3} methods are built on top of the \acrshort{hf} method in Section \ref{sec:hf_int_code_exercise}.
 
-\subsection{Exercise}
-
-In the exercise, you are expected to calculate the \acrshort{mp2} and \acrshort{mp3} correlation energies. The exercise is provided in the Listing \ref{code:mp_exercise} below.
+In this exercise, you are expected to calculate the \acrshort{mp2} and \acrshort{mp3} correlation energies. The exercise is provided in the Listing \ref{code:mp_exercise} below.
 
 \raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{mp2} and \acrshort{mp3} exercise code.}, label=code:mp_exercise]
 """
@@ -390,26 +322,7 @@ print("MP2 ENERGY: {:.8f}".format(E_HF + E_MP2 +       + VNN))
 print("MP3 ENERGY: {:.8f}".format(E_HF + E_MP2 + E_MP3 + VNN))
 \end{lstlisting}
 
-\subsection{Solution}
-
-The solutions provided in the Listing \ref{code:mp_solution} below are complete implementations of the \acrshort{mp2} and \acrshort{mp3} correlation energies. The code should be appended after the \acrshort{hf} implementation. The code calculates the \acrshort{mp2} and \acrshort{mp3} correlation energies and prints the results.
-
-\raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{mp2} and \acrshort{mp3} exercise code solution.}, label=code:mp_solution]
-# energy containers
-E_MP2, E_MP3 = 0, 0
-
-# calculate the MP2 correlation energy
-if args.mp2 or args.mp3:
-    E_MP2 += 0.25 * np.einsum("abij,ijab,abij", Jmsa[v, v, o, o], Jmsa[o, o, v, v], Emsd, optimize=True)
-    print("    MP2 ENERGY: {:.8f}".format(E_HF + E_MP2 + VNN))
-
-# calculate the MP3 correlation energy
-if args.mp3:
-    E_MP3 += 0.125 * np.einsum("abij,cdab,ijcd,abij,cdij", Jmsa[v, v, o, o], Jmsa[v, v, v, v], Jmsa[o, o, v, v], Emsd, Emsd, optimize=True)
-    E_MP3 += 0.125 * np.einsum("abij,ijkl,klab,abij,abkl", Jmsa[v, v, o, o], Jmsa[o, o, o, o], Jmsa[o, o, v, v], Emsd, Emsd, optimize=True)
-    E_MP3 += 1.000 * np.einsum("abij,cjkb,ikac,abij,acik", Jmsa[v, v, o, o], Jmsa[v, o, o, v], Jmsa[o, o, v, v], Emsd, Emsd, optimize=True)
-    print("    MP3 ENERGY: {:.8f}".format(E_HF + E_MP2 + E_MP3 + VNN))
-\end{lstlisting}
+Solution to this exercise can be found in Section \ref{sec:mp_code_solution}.
 \chapter{Configuration Interaction}
 
 \acrfull{ci} is a \acrshort{post-hf}, utilizing a linear variational approach to address the nonrelativistic Schrödinger equation under the Born--Oppenheimer approximation for multi-electron quantum systems. \acrshort{ci} mathematically represents the wave function as a linear combination of Slater determinants. The term ``configuration'' refers to different ways electrons can occupy orbitals, while ``interaction'' denotes the mixing of these electronic configurations or states. \acrshort{ci} computations, however, are resource-intensive, requiring significant CPU time and memory, limiting their application to smaller molecular systems. While \acrfull{fci} considers all possible electronic configurations, making it computationally prohibitive for larger systems, truncated versions like \acrfull{cisd} or \acrfull{cisdt} are more feasible and commonly employed in quantum chemistry studies.
@@ -437,10 +350,10 @@ and we would like to know the coefficients \(c\) that minimize the energy. To do
 and solving the eigenvalue problem
 
 \begin{equation}\label{eq:ci-eigenvalue-problem}
-\mathbf{H}^{CI}\mathbf{C}^{CI}=\mathbf{C}^{CI}\mathbf{\varepsilon}^{CI}
+\mathbf{H}^{CI}\mathbf{C}^{CI}=\mathbf{C}^{CI}\bm{\varepsilon}^{CI}
 \end{equation}
 
-where \(\mathbf{C}^{CI}\) is a matrix of coefficients and \(\mathbf{\varepsilon}^{CI}\) is a diagonal matrix of eigenvalues. The lowest eigenvalue corresponds to the ground state energy, while the eigenvector corresponding to the lowest eigenvalue gives the coefficients that minimize the energy. The matrix elements of the \acrshort{ci} Hamiltonian are calculated using the Slater-Condon rules in the form
+where \(\mathbf{C}^{CI}\) is a matrix of coefficients and \(\bm{\varepsilon}^{CI}\) is a diagonal matrix of eigenvalues. The lowest eigenvalue corresponds to the ground state energy, while the eigenvector corresponding to the lowest eigenvalue gives the coefficients that minimize the energy. The matrix elements of the \acrshort{ci} Hamiltonian are calculated using the Slater-Condon rules in the form
 
 \begin{equation}\label{eq:slater-condon-rules}
 \mathbf{H}_{ij}^{CI}=
@@ -452,7 +365,7 @@ where \(\mathbf{C}^{CI}\) is a matrix of coefficients and \(\mathbf{\varepsilon}
 \end{cases}
 \end{equation}
 
-where \(D_i\) and \(D_j\) are Slater determinants, \(\mathbf{H}^{core,MS}\) is the core Hamiltonian in the basis of molecular spinorbitals, and \(\braket{pk||lk}\) are the antisymmetrized Coulomb repulsion integrals in the basis of molecular spinorbitals and physicists' notation. The sums extend over all spinorbitals common between the two determinants. All the integrals in the MS basis are already explained in section \ref{sec:integral_transform}. Keep in mind, that to apply the Slater-Condon rules, the determinants must be aligned, and the sign of the matrix elements must be adjusted accordingly, based on the number of permutations needed to align the determinants.
+where \(D_i\) and \(D_j\) are Slater determinants, \(\mathbf{H}^{core,MS}\) is the core Hamiltonian in the basis of molecular spinorbitals, and \(\braket{pk||lk}\) are the antisymmetrized Coulomb repulsion integrals in the basis of molecular spinorbitals and physicists' notation. The sums extend over all spinorbitals common between the two determinants. All the integrals in the MS basis are already explained in Section \ref{sec:integral_transform}. Keep in mind, that to apply the Slater-Condon rules, the determinants must be aligned, and the sign of the matrix elements must be adjusted accordingly, based on the number of permutations needed to align the determinants.
 
 The problem with \acrshort{ci} is that it is not size-extensive, meaning that the energy does not scale linearly with the number of electrons. This is because the \acrshort{ci} wavefunction is not size-consistent, and the energy of a system is not the sum of the energies of its parts. This is a significant drawback of \acrshort{ci}, as it limits its application to small systems.
 
@@ -466,15 +379,13 @@ The only thing that is needed, besides the general \acrshort{ci} equations, are 
 N_D=\binom{n}{k}
 \end{equation}
 
-assuming \(k\) is the total number of electrons, and \(n\) is the total number of spinorbitals. Each determinant is formed by permuting the electrons between spinorbitals. For practical representation, it's useful to describe determinants as arrays of numbers, where each number corresponds to the index of an occupied orbitals. For example, the ground state determinant for a system with 6 electrons and 10 spinorbitals can be represented as \(\left\lbrace 0,1,2,3,4,5\right\rbrace\), whereas the determinant \(\left\lbrace 0,1,2,3,4,6\right\rbrace\) represents an excited state with one electron excited from orbital 5 to orbital 6. Using the determinants, the \acrshort{ci} Hamiltonian matrix \ref{eq:ci-hamiltonian} can be constructed, and the eigenvalue problem \ref{eq:ci-eigenvalue-problem} can be solved to obtain the ground and excited state energies.
+assuming \(k\) is the total number of electrons, and \(n\) is the total number of spinorbitals. Each determinant is formed by permuting the electrons between spinorbitals. For practical representation, it's useful to describe determinants as arrays of numbers, where each number corresponds to the index of an occupied orbitals. For example, the ground state determinant for a system with 6 electrons and 10 spinorbitals can be represented as \(\left\lbrace 0,1,2,3,4,5\right\rbrace\), whereas the determinant \(\left\lbrace 0,1,2,3,4,6\right\rbrace\) represents an excited state with one electron excited from orbital 5 to orbital 6. Using the determinants, the \acrshort{ci} Hamiltonian matrix \eqref{eq:ci-hamiltonian} can be constructed, and the eigenvalue problem \eqref{eq:ci-eigenvalue-problem} can be solved to obtain the ground and excited state energies.
 
-\section{Full Configuration Interaction Implementation Code Example}
+\section{Full Configuration Interaction Code Exercise}
 
-This section provides a simple example of a \acrshort{fci} implementation. The code snippets are, as the previous coding examples, written in Python and use the NumPy library for numerical operations. The example demonstrates the generation of determinants, the construction of the \acrshort{ci} Hamiltonian matrix, and the solution of the eigenvalue problem to obtain the ground state energy. The code is designed for educational purposes and may require modifications for practical applications, such as the inclusion of truncation schemes for larger systems. You are expected to have the \acrshort{hf} calculations in section \ref{sec:hf_code_examples} completed before proceeding with the \acrshort{ci} implementation, as the \acrshort{ci} method builds on the \acrshort{hf} method.
+This section provides a simple example of a \acrshort{fci} implementation. The code snippets are, as the previous coding examples, written in Python and use the NumPy library for numerical operations. The example demonstrates the generation of determinants, the construction of the \acrshort{ci} Hamiltonian matrix, and the solution of the eigenvalue problem to obtain the ground state energy. The code is designed for educational purposes and may require modifications for practical applications, such as the inclusion of truncation schemes for larger systems. You are expected to have the \acrshort{hf} exercise in Section \ref{sec:hf_int_code_exercise} completed before proceeding with the \acrshort{ci} implementation, as the \acrshort{ci} method builds on the \acrshort{hf} method.
 
-\subsection{Exercise}
-
-In the exercise, you are expected to calculate the \acrshort{fci} energy for a simple system. The exercise is provided in the Listing \ref{code:ci_exercise} below.
+In this exercise, you are expected to calculate the \acrshort{fci} energy for a simple system. The exercise is provided in the Listing \ref{code:ci_exercise} below.
 
 \raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{ci} exercise code.}, label=code:ci_exercise]
 """
@@ -526,52 +437,7 @@ You can finally solve the eigenvalue problem. Please, assign the correlation ene
 E_FCI = 0
 \end{lstlisting}
 
-\subsection{Solution}
-
-The solution to the exercise is provided in the Listing \ref{code:ci_solution} below. It includes the generation of determinants, the construction of the \acrshort{ci} Hamiltonian matrix, and the solution of the eigenvalue problem to obtain the ground state energy.
-
-\raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{ci} exercise code solution.}, label=code:ci_solution]
-# generate the determiants
-dets = [np.array(det) for det in it.combinations(range(2 * nbf), 2 * nocc)]
-
-# define the CI Hamiltonian
-Hci = np.zeros([len(dets), len(dets)])
-
-# define the Slater-Condon rules, "so" is an array of unique and common spinorbitals [unique, common]
-slater0 = lambda so: sum([Hms[m, m] for m in so]) + sum([0.5 * Jmsa[m, n, m, n] for m, n in it.product(so, so)])
-slater1 = lambda so: Hms[so[0], so[1]] + sum([Jmsa[so[0], m, so[1], m] for m in so[2:]])
-slater2 = lambda so: Jmsa[so[0], so[1], so[2], so[3]]
-
-# filling of the CI Hamiltonian
-for i in range(0, Hci.shape[0]):
-    for j in range(i, Hci.shape[1]):
-
-        # aligned determinant and the sign
-        aligned, sign = dets[j].copy(), 1
-
-        # align the determinant "j" to "i" and calculate the sign
-        for k in (k for k in range(len(aligned)) if aligned[k] != dets[i][k]):
-            while len(l := np.where(dets[i] == aligned[k])[0]) and l[0] != k:
-                aligned[[k, l[0]]] = aligned[[l[0], k]]; sign *= -1
-
-        # find the unique and common spinorbitals
-        so = np.block([
-            np.array([aligned[k] for k in range(len(aligned)) if aligned[k] not in dets[i]]),
-            np.array([dets[i][k] for k in range(len(dets[j])) if dets[i][k] not in aligned]),
-            np.array([aligned[k] for k in range(len(aligned)) if aligned[k] in dets[i]])
-        ]).astype(int)
-
-        # apply the Slater-Condon rules and multiply by the sign
-        if ((aligned - dets[i]) != 0).sum() == 0: Hci[i, j] = slater0(so) * sign
-        if ((aligned - dets[i]) != 0).sum() == 1: Hci[i, j] = slater1(so) * sign
-        if ((aligned - dets[i]) != 0).sum() == 2: Hci[i, j] = slater2(so) * sign
-
-        # fill the lower triangle
-        Hci[j, i] = Hci[i, j]
-
-# solve the eigensystem and assign energy
-eci, Cci = np.linalg.eigh(Hci); E_FCI = eci[0] - E_HF
-\end{lstlisting}
+Solution to this exercise can be found in Section \ref{sec:ci_code_solution}.
 \chapter{Coupled Cluster Theory}
 
 \acrfull{cc} theory is a \acrshort{post-hf} method used in quantum chemistry to achieve highly accurate solutions to the electronic Schrödinger equation, particularly for ground states and certain excited states. It improves upon \acrshort{hf} by incorporating electron correlation effects through a systematic inclusion of excitations (singles, doubles, triples, etc.) from a reference wavefunction, usually the \acrshort{hf} wavefunction. The method uses an exponential ansatz to account for these excitations, leading to a size-consistent and size-extensive approach, making it one of the most accurate methods available for small to medium-sized molecular systems.
@@ -620,7 +486,7 @@ taking advantage of the exponential form of the wavefunction. We could then proc
 
 \section{Implementation of Truncated Coupled Cluster Methods}
 
-The derivation of the equations that are actually used to perform the calculations is quite lengthy and involves a lot of algebra. We will not go into the details here, but we will provide the final expressions for the \acrshort{ccd} and \acrshort{ccsd} methods.\cite{10.1063/1.460620} The \acrshort{ccd} and \acrshort{ccsd} methods are the most commonly used \acrshort{cc} methods, and they are often used as benchmarks for other methods. All we need for the evaluation of the expressions below are the Coulomb integrals in the MS basis and physicists' notation, Fock matrix in the MS basis and the orbital energies obtained from the \acrshort{hf} calculation. All these transformations are already explained in section \ref{sec:integral_transform} in the \acrshort{hf} section. The expressions for the \acrshort{ccd} can be written as
+The derivation of the equations that are actually used to perform the calculations is quite lengthy and involves a lot of algebra. We will not go into the details here, but we will provide the final expressions for the \acrshort{ccd} and \acrshort{ccsd} methods.\cite{10.1063/1.460620} The \acrshort{ccd} and \acrshort{ccsd} methods are the most commonly used \acrshort{cc} methods, and they are often used as benchmarks for other methods. All we need for the evaluation of the expressions below are the Coulomb integrals in the MS basis and physicists' notation, Fock matrix in the MS basis and the orbital energies obtained from the \acrshort{hf} calculation. All these transformations are already explained in Section \ref{sec:integral_transform} in the \acrshort{hf} section. The expressions for the \acrshort{ccd} can be written as
 
 \begin{equation}
 E_{\text{CCD}}=\frac{1}{4}\braket{ij||ab}t_{ij}^{ab}
@@ -677,13 +543,11 @@ t_{ij}^{ab}=&\braket{ab||ij}+\hat{P}_{(a/b)}\sum_et_{ij}^{ae}\left(\mathscr{F}_{
 
 The \acrshort{ccsd} amplitude equations are, again, nonlinear and require iterative solution methods to obtain the final amplitudes. The initial guess for the amplitudes is often set to zero, and the equations are solved iteratively until convergence is achieved.
 
-\section{Coupled Cluster Singles and Doubles Code Example}
+\section{Coupled Cluster Singles and Doubles Code Exercise}
 
-If you have completed the \acrshort{hf} implementation in section \ref{sec:hf_code_examples}, you can now proceed with the implementation of the \acrshort{ccsd} methods. The code below first proposes a self-contained exercise to calculate the \acrshort{ccsd} correlation energies. The solution is then provided in the following code snippet. You should append the code after your \acrshort{hf} implementation, since the \acrshort{ccsd} method is built on top of the \acrshort{hf} method.
+If you have completed the \acrshort{hf} implementation in Section \ref{sec:hf_int_code_exercise}, you can now proceed with the implementation of the \acrshort{ccsd} methods. The code below proposes a self-contained exercise to calculate the \acrshort{ccsd} correlation energies. You should append the code after your \acrshort{hf} implementation, since the \acrshort{ccsd} method is built on top of the \acrshort{hf} method.
 
-\subsection{Exercise}
-
-In the exercise, you are expected to calculate the \acrshort{ccsd} correlation energy. The exercise is provided in the Listing \ref{code:cc_exercise} below.
+In this exercise, you are expected to calculate the \acrshort{ccsd} correlation energy. The exercise is provided in the Listing \ref{code:cc_exercise} below.
 
 \raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{ccsd} exercise code.}, label=code:cc_exercise]
 """
@@ -704,111 +568,4 @@ while abs(E_CCSD - E_CCSD_P) > thresh:
 
 # print the CCSD energy
 print("CCSD ENERGY: {:.8f}".format(E_HF + E_CCSD + VNN))
-\end{lstlisting}
-
-\subsection{Solution}
-
-The solutions provided in the Listing \ref{code:cc_solution} below are complete implementations of the \acrshort{ccd} and \acrshort{ccsd} correlation energies. The code should be appended after the \acrshort{hf} implementation. The code calculates the \acrshort{ccd} and \acrshort{ccsd} correlation energies and prints the results. The variable \texttt{\lstinline!args!} is an argument parser that allows you to choose which method you want to calculate. Since the variable is not defined in this snippet (but is defined in the complete code), you can ignore it for now and remove the conditionals.
-
-\raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{ccd} and \acrshort{ccsd} method exercise code solution.}, label=code:cc_solution]
-# energy containers for all the CC methods
-E_CCD, E_CCD_P, E_CCSD, E_CCSD_P = 0, 1, 0, 1
-
-# initialize the first guess for the t-amplitudes as zeros
-t1, t2 = np.zeros((2 * nvirt, 2 * nocc)), np.zeros((2 * nvirt, 2 * nvirt, 2 * nocc, 2 * nocc))
-
-# CCD loop
-if args.ccd:
-    while abs(E_CCD - E_CCD_P) > args.threshold:
-
-        # collect all the distinct LCCD terms
-        lccd1 = 0.5 * np.einsum("abcd,cdij->abij", Jmsa[v, v, v, v], t2, optimize=True)
-        lccd2 = 0.5 * np.einsum("klij,abkl->abij", Jmsa[o, o, o, o], t2, optimize=True)
-        lccd3 =       np.einsum("akic,bcjk->abij", Jmsa[v, o, o, v], t2, optimize=True)
-
-        # apply the permuation operator and add it to the corresponding LCCD terms
-        lccd3 = lccd3 + lccd3.transpose(1, 0, 3, 2) - lccd3.transpose(1, 0, 2, 3) - lccd3.transpose(0, 1, 3, 2)
-
-        # collect all the distinct first CCD terms
-        ccd1 = -0.50 * np.einsum("klcd,acij,bdkl->abij", Jmsa[o, o, v, v], t2, t2, optimize=True)
-        ccd2 = -0.50 * np.einsum("klcd,abik,cdjl->abij", Jmsa[o, o, v, v], t2, t2, optimize=True)
-        ccd3 =  0.25 * np.einsum("klcd,cdij,abkl->abij", Jmsa[o, o, v, v], t2, t2, optimize=True)
-        ccd4 =         np.einsum("klcd,acik,bdjl->abij", Jmsa[o, o, v, v], t2, t2, optimize=True)
-
-        # apply the permuation operator and add it to the corresponding CCD terms
-        ccd1, ccd2, ccd4 = ccd1 - ccd1.transpose(1, 0, 2, 3), ccd2 - ccd2.transpose(0, 1, 3, 2), ccd4 - ccd4.transpose(0, 1, 3, 2)
-
-        # update the t-amplitudes
-        t2 = Emsd * (Jmsa[v, v, o, o] + lccd1 + lccd2 + lccd3 + ccd1 + ccd2 + ccd3 + ccd4)
-
-        # evaluate the energy
-        E_CCD_P, E_CCD = E_CCD, 0.25 * np.einsum("ijab,abij", Jmsa[o, o, v, v], t2, optimize=True)
-
-    # print the CCD energy
-    print("    CCD ENERGY: {:.8f}".format(E_HF + E_CCD + VNN))
-
-# CCSD loop
-if args.ccsd:
-    while abs(E_CCSD - E_CCSD_P) > args.threshold:
-
-        # calculate the effective two-particle excitation operators
-        ttau = t2 + 0.5 * np.einsum("ai,bj->abij", t1, t1, optimize=True) - 0.5 * np.einsum("ai,bj->abij", t1, t1, optimize=True).swapaxes(2, 3)
-        tau  = t2 +       np.einsum("ai,bj->abij", t1, t1, optimize=True) -       np.einsum("ai,bj->abij", t1, t1, optimize=True).swapaxes(2, 3)
-
-        # calculate the 2D two-particle intermediates
-        Fae = (1 - np.eye(2 * nvirt)) * Fms[v, v] - 0.5 * np.einsum("me,am->ae",     Fms[o, v],        t1,   optimize=True)                                                   +       np.einsum("mafe,fm->ae",   Jmsa[o, v, v, v], t1,   optimize=True)                                                   - 0.5 * np.einsum("mnef,afmn->ae", Jmsa[o, o, v, v], ttau, optimize=True)
-        Fmi = (1 - np.eye(2 * nocc )) * Fms[o, o] + 0.5 * np.einsum("me,ei->mi",     Fms[o, v],        t1,   optimize=True)                                                   +       np.einsum("mnie,en->mi",   Jmsa[o, o, o, v], t1,   optimize=True)                                                   + 0.5 * np.einsum("mnef,efin->mi", Jmsa[o, o, v, v], ttau, optimize=True)
-        Fme =                           Fms[o, v] +       np.einsum("mnef,fn->me",   Jmsa[o, o, v, v], t1,   optimize=True)
-
-        # define some complementary variables used in the following expressions
-        Fmea =            np.einsum("bm,me->be",   t1, Fme, optimize=True)
-        Fmeb =            np.einsum("ej,me->mj",   t1, Fme, optimize=True)
-        t12  = 0.5 * t2 + np.einsum("fj,bn->fbjn", t1, t1,  optimize=True)
-
-        # define the permutation arguments for all terms the W intermediates
-        P1 = np.einsum("ej,mnie->mnij", t1, Jmsa[o, o, o, v], optimize=True)
-        P2 = np.einsum("bm,amef->abef", t1, Jmsa[v, o, v, v], optimize=True)
-
-        # calculate the 4D two-particle intermediates
-        Wmnij = Jmsa[o, o, o, o] + 0.25 * np.einsum("efij,mnef->mnij", tau, Jmsa[o, o, v, v], optimize=True) + P1 - P1.swapaxes(2, 3)
-        Wabef = Jmsa[v, v, v, v] + 0.25 * np.einsum("abmn,mnef->abef", tau, Jmsa[o, o, v, v], optimize=True) - P2 + P2.swapaxes(0, 1)
-        Wmbej = Jmsa[o, v, v, o] +        np.einsum("fj,mbef->mbej",   t1,  Jmsa[o, v, v, v], optimize=True)                                  -        np.einsum("bn,mnej->mbej",   t1,  Jmsa[o, o, v, o], optimize=True)                                  -        np.einsum("fbjn,mnef->mbej", t12, Jmsa[o, o, v, v], optimize=True)
-
-        # define the right hand side of the T1 and T2 amplitude equations
-        rhs_T1, rhs_T2 = Fms[v, o].copy(), Jmsa[v, v, o, o].copy()
-
-        # calculate the right hand side of the CCSD equation for T1
-        rhs_T1 +=       np.einsum("ei,ae->ai",     t1, Fae,              optimize=True)
-        rhs_T1 -=       np.einsum("am,mi->ai",     t1, Fmi,              optimize=True)
-        rhs_T1 +=       np.einsum("aeim,me->ai",   t2, Fme,              optimize=True)
-        rhs_T1 -=       np.einsum("fn,naif->ai",   t1, Jmsa[o, v, o, v], optimize=True)
-        rhs_T1 -= 0.5 * np.einsum("efim,maef->ai", t2, Jmsa[o, v, v, v], optimize=True)
-        rhs_T1 -= 0.5 * np.einsum("aemn,nmei->ai", t2, Jmsa[o, o, v, o], optimize=True)
-
-        # define the permutation arguments for all terms in the equation for T2
-        P1  = np.einsum("aeij,be->abij",    t2,     Fae - 0.5 * Fmea, optimize=True)
-        P2  = np.einsum("abim,mj->abij",    t2,     Fmi + 0.5 * Fmeb, optimize=True)
-        P3  = np.einsum("aeim,mbej->abij",  t2,     Wmbej,            optimize=True)
-        P3 -= np.einsum("ei,am,mbej->abij", t1, t1, Jmsa[o, v, v, o], optimize=True)
-        P4  = np.einsum("ei,abej->abij",    t1,     Jmsa[v, v, v, o], optimize=True)
-        P5  = np.einsum("am,mbij->abij",    t1,     Jmsa[o, v, o, o], optimize=True)
-
-        # calculate the right hand side of the CCSD equation for T2
-        rhs_T2 += 0.5 * np.einsum("abmn,mnij->abij", tau, Wmnij, optimize=True)
-        rhs_T2 += 0.5 * np.einsum("efij,abef->abij", tau, Wabef, optimize=True)
-        rhs_T2 += P1.transpose(0, 1, 2, 3) - P1.transpose(1, 0, 2, 3)
-        rhs_T2 -= P2.transpose(0, 1, 2, 3) - P2.transpose(0, 1, 3, 2)
-        rhs_T2 += P3.transpose(0, 1, 2, 3) - P3.transpose(0, 1, 3, 2)
-        rhs_T2 -= P3.transpose(1, 0, 2, 3) - P3.transpose(1, 0, 3, 2)
-        rhs_T2 += P4.transpose(0, 1, 2, 3) - P4.transpose(0, 1, 3, 2)
-        rhs_T2 -= P5.transpose(0, 1, 2, 3) - P5.transpose(1, 0, 2, 3)
-
-        # Update T1 and T2 amplitudes
-        t1, t2 = rhs_T1 * Emss, rhs_T2 * Emsd
-
-        # evaluate the energy
-        E_CCSD_P, E_CCSD = E_CCSD, np.einsum("ia,ai", Fms[o, v], t1) + 0.25 * np.einsum("ijab,abij", Jmsa[o, o, v, v], t2) + 0.5 * np.einsum("ijab,ai,bj", Jmsa[o, o, v, v], t1, t1)
-
-    # print the CCSD energy
-    print("   CCSD ENERGY: {:.8f}".format(E_HF + E_CCSD + VNN))
 \end{lstlisting}
