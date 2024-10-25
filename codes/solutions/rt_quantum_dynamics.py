@@ -6,7 +6,7 @@ import numpy as np  # numerical python
 
 # parameters of the simulation
 ngrid = 500  # number of grid points
-xmin, xmax = -15, 15  # minimum and maximum of x
+xmin, xmax = -15, 15  # minimum and maximum of x (necessary to set for each simulation)
 simtime = 100.0  # simulation time in atomic time units
 dt = 0.2  # time step in atomic time units
 m = 1.0  # mass in atomic units
