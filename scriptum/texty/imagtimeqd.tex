@@ -34,7 +34,7 @@ The answer to our previous question is yes, the contribution will change and the
 
 This is a powerful result. If we propagate the wave function in imaginary time, the ground state will be getting stronger and stronger contribution, until it becomes dominant. Mathematically speaking
 \begin{equation}
-    \lim_{\tau\to\infty} \psi(x,\tau) = c_k  \e^{-\frac{E_0}{\hbar}\tau} \phi_0(x)
+    \lim_{\tau\to\infty} \psi(x,\tau) = c_0 \e^{-\frac{E_0}{\hbar}\tau} \phi_0(x)
 \end{equation}
 The only problem is that the exponential in $\tau\to\infty$ goes to zero and our norm also goes to zero (if $E_0 > 0$). But nothing prevents us to renormalize at time $\tau$
 \begin{equation}
@@ -52,3 +52,59 @@ we will define a new operator $\hat{U}_\mathrm{IT}(\tau)$ which takes form
 
 \textbf{NOTE ABOUT IT PROPAGATOR}
 Let us stop here and discuss the imaginary time. What is it and how should we image a propagation in imaginary time? The concept of imaginary time seems unreal since noone has ever seen watch measuring imaginary time. However, the concept of imaginary time has already been discussed in physics by ..., yet the concept is definitely not easy to grasp. It the imaginary time creates a confusion in the reader, we recommend to look at it from a different point of view. The propagator in imaginary time can be viewed as new operator which, when acting on the wave function, eats the amplitudes of the different energy states such that the lowest energy state is eaten the least. Think about it rather like acting on the wave function by a new operator devised from the real propagator. Note that the imaginary time propagator is not a real propagator because it is not a unitary operator, i.e., it is not perserving norm. The norm in fact exponentially diverges from 1. Yet we still call it IT propagator.
+
+\textbf{next step}
+
+What if we want  different state than the ground state? We have shown previously that the imaginary-time dynamics  converge to the lowest energy state of the initial wave function $\psi(x,0)$.
+Thus, the recipe is obvious, we need to project out the lowest energy contribution from the initial wave function, which makes the second lowest state the lowest state.
+
+\begin{equation}
+    \Tilde{\psi}(x,0) = \psi(x,0) - c_0 \phi_0(x) = \sum_{k=0}^\infty c_k \phi_k(x) - c_0 \phi_0(x) = \sum_{k=1}^\infty c_k \phi_k(x)
+\end{equation}
+then
+\begin{equation}
+    \lim_{\tau\to\infty} \Tilde{\psi}(x,\tau) = c_1  \e^{-\frac{E_1}{\hbar}\tau} \phi_1(x)
+\end{equation}
+
+From this, it is obvious, we build the eigenstate from bottom. If we want state m, we need to first obtain all the previous states so that we can project them out. 
+
+Note that we always need to set up the initial wave function $\psi(x,0)$ such that the coefficient of the desired state $k$ is not zero. Then we would not be able to optimize the wave function. Thus, it is usually desirable to construct the wave function such that it breaks the symmetry of the system and contains contributions of all the system. We can always add some random noise.
+
+\section{Numerical implementation}
+
+
+
+\section{Code}
+
+\lstset{style=mystyle}
+\lstinputlisting[caption=Incomplete code for imaginary-time quantum dynamics.,language=Python]{codes/exercises/it_quantum_dynamics.py}
+
+\section{Applications}
+
+\subsection*{Exercise: Harmonic oscillator}
+
+\begin{equation*}
+    V(x) = \frac{1}{2}m\omega^2x^2 \, .
+\end{equation*}
+
+\paragraph{Assignment:} Text
+
+
+\subsection*{Exercise: Double-well potential}
+
+\begin{equation*}
+    V(x) = \frac{1}{2}m\omega^2(x^4 - x^2) + \xi x \, .
+\end{equation*}
+
+Vary $\xi$ between 0 and 1.
+
+\paragraph{Assignment:} Prepare a double well potential with parameters $m=20$~a.u. and $\omega=2$~a.u. First, initialize the dynamics with a wave function in form of Eq.~\eqref{eq:qdgauss} with parameters $x_0=-0.90$~a.u., $p_0=0$~a.u. and $\alpha_0 = 2m\omega$~a.u. (the energy of the wave packet should be below the barrier). 
+
+
+\subsection*{Exercise: Morse potential}
+
+\begin{equation*}
+    V(x) = D_e \left(1 - \e^{-a(x-x_e)}\right)^2 \, .
+\end{equation*}
+
+\paragraph{Assignment:} Text

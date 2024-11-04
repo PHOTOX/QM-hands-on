@@ -1,73 +1,109 @@
-In the previous Chapter, we discussed the time evolution of a wave function governed by the evolution operator $\hat{U}(t)$ and introduced a simple technique for propagating the wave function numerically. This gives us a powerful tool to play with quantum dynamics as we tested in the exercises. Moreover, the wave packet's time evolution contains the operator's energy spectrum. This allows us not only to calculate the energy spectrum of the system but also to construct absorption spectra using time-dependent formulation.
+In the previous Chapter, we explored the time evolution of a wave function governed by the evolution operator, $\hat{U}(t)$, and introduced a simple numerical technique for propagating the wave function. This way we can study dynamical processes governed by quantum mechanics and explore intricacies of the quantum world like interference or tunnelling. However, the time evolution of a wave function offers more than just insight into the system's dynamics -- it also encodes the energy spectrum of the system. Although counter-intuitive, we can obtain the energy spectrum, a time-independent quantity usually calculated by solving the \acrfull{tise}, by performing a dynamical simulation. This time-dependent perspective is widely used in theoretical spectroscopy where both the energy spectrum and intensities are calculated from quantum or semiclassical dynamics.
 
-\section{Motivation}
+\section{*Theoretical background}
 \label{sec:autocorrintro}
 
+To get insight into how the energy spectrum is encoded in the wave function propagation, we examine the exact solution of the \acrlong{tdse}. Assume that we could solve the \acrshort{tise}
 \begin{equation}
-    \psi(x,0) = \sum_k c_k \phi_k(x)
+    \hat{H}(x) \phi_k(x) = E_k \phi_k(x)
+    \label{eq:tise0}
 \end{equation}
-where we determine the coefficients $c_k$ as 
+and obtain a full set of eigenfunctions $\phi_k(x)$.\footnote{Note that in practical applications, this is the hindering step for the given approach as we are typically unable to calculate the eigenfunctions $\phi_k$. Hence, this outlined procedure is useful mostly for derivations of equations and phenomena, not practical calculations as described in Chapter~\ref{kap:qd}.} This set forms a complete orthonormal basis; thus, we can expand any wave function as a linear combination of $\phi_k$. Let us now expand the initial wave function in this basis as
 \begin{equation}
-    c_k = \langle \phi_k(x) | \psi(x,0) \rangle = \int_{-\infty}^\infty \phi_k^*(x) \psi(x,0) \dd x
+    \psi(x,0) = \sum_k c_k \phi_k(x) \, ,
+\end{equation}
+where $c_k$ are the expansion coefficients determined as 
+\begin{equation}
+    c_k = \langle \phi_k(x) | \psi(x,0) \rangle = \int_{-\infty}^\infty \phi_k^*(x) \psi(x,0) \dd x \, .
+    \label{eq:psi0v1}
 \end{equation}
 
-the propagation is then governed by equation the propagator, see Eq.~\eqref{eq:U}
+The solution of the \acrshort{tdse}, $\psi(x,t)$, can be calculated by applying the propagator $\hat{U}(t)$ on the initial wave function (Eqs.~\eqref{eq:U} and~\eqref{eq:U1}):
 \begin{equation}
     \psi(x,t) = \hat{U}(t)\psi(x,0) = \e^{-\frac{i}{\hbar}\hat{H}(x)t} \psi(x,0) = \sum_k c_k \e^{-\frac{i}{\hbar}\hat{H}(x)t} \phi_k(x) \, .
 \end{equation}
-where we have taken the propagation from Eq.~\eqref{eq:U1}.
-
-The action of the propagator on a given eigenstate $\phi_k$ can be evaluate using the Taylor expansion of the exponential (Eq.~\eqref{eq:U2}):
+The action of the propagator on a given eigenstate $\phi_k$ can be evaluated using the Taylor expansion of the exponential (Eq.~\eqref{eq:U2}):
 \begin{equation}
-    \e^{-\frac{i}{\hbar}\hat{H}(x)t} \phi_k(x) = \sum_{l=0}^\infty \left( -\frac{i}{\hbar} t\right)^l \frac{\hat{H}^l}{l!} \phi_k(x) = \sum_{l=0}^\infty \left( -\frac{i}{\hbar} t\right)^l \frac{E_k^l}{l!}  \phi_k(x) = \e^{-\frac{i}{\hbar}E_k t} \phi_k(x)
+    \e^{-\frac{i}{\hbar}\hat{H}(x)t} \phi_k(x) = \sum_{l=0}^\infty \left( -\frac{i}{\hbar} t\right)^l \frac{\hat{H}^l}{l!} \phi_k(x) = \sum_{l=0}^\infty \left( -\frac{i}{\hbar} t\right)^l \frac{E_k^l}{l!}  \phi_k(x) = \e^{-\frac{i}{\hbar}E_k t} \phi_k(x),
 \end{equation}
-using the fact that $\hat{H}(x)t \phi_k(x) = E_k \phi_k(x)$. The result is then
+where we used the fact that $\phi_k$ are eigenfunctions of the Hamiltonian $\hat{H}$, see Eq.~\eqref{eq:tise0}. The time-dependent wave function then takes the following form:
 \begin{equation}
     \psi(x,t) = \sum_k c_k \e^{-\frac{i}{\hbar}E_k t}\phi_k(x) \, .
     \label{eq:tdpsi1}
 \end{equation}
+Eq.~\eqref{eq:tdpsi1} is the exact solution of \acrshort{tdse} in the basis of Hamiltonian eigenstates. Note that for Hamiltonians independent of time, i.e. $\hat{H} \neq \hat{H}(t)$, the coefficients $c_k$ are \textit{time-independent} and the only time-dependent terms in the expression~\eqref{eq:tdpsi1} are the exponentials $\e^{-\frac{i}{\hbar}E_k t}$, which fully govern the evolution.
 
-Note that for $\hat{H} \neq \hat{H}(t)$, the coefficients $c_k$ are time independent.
-
-Thus, if we know the complete set of eigenfunction of the Hamiltonian, we can very easily calculate the time evolution of the wave function. However, it is rarely the case that we know the full set of eigenfunctions and for time propagation, we usual need to use techniques shown in Chapter~\ref{kap:qd}. This treatment allows us to theoretical study and derive the spectrum relation.
-
-We will now introduce the autocorrelation function
+Having the exact solution of \acrshort{tdse} in the form of Eq.~\eqref{eq:tdpsi1}, we can demonstrate how the energy spectrum can be extracted using an \textit{autocorrelation function}. The autocorrelation function is defined as an overlap of the wave function at time $t$ with the initial wave function at time 0:
 \begin{equation}
-    S(t) = \langle \psi(x,0) | \psi(x,t) \rangle =\int_{-\infty}^{\infty}\psi^*(x,0) \psi(x,t) \dd x\, ,
+    S(t) = \langle \psi(x,0) | \psi(x,t) \rangle =\int_{-\infty}^{\infty}\psi^*(x,0) \psi(x,t) \dd x\, .
 \end{equation}
-% \begin{equation}
-%     S(t) = \int \langle \psi(x,0) | \psi(x,t) \rangle \dd t =\int \left(\int_{-\infty}^{\infty}\psi^*(x,0) \psi(x,t) \dd x\right)\dd t \, ,
-% \end{equation}
-which equals to
+It measures the probability amplitude of $\psi(x,t)$ being the initial wave function. Taking the exact solution of \acrshort{tdse} \eqref{eq:tdpsi1}, the autocorrelation function reads
 \begin{align}
     S(t) &= \int_{-\infty}^{\infty} \sum_l \sum_k c_l^* \phi_l^*(x) c_k \e^{-\frac{i}{\hbar}E_k t}\phi_k(x) \dd x \notag\\
     &= \sum_l \sum_k c^*_l c_k \e^{-\frac{i}{\hbar}E_k t} \int_{-\infty}^{\infty}  \phi_l^*(x) \phi_k(x) \dd x \notag\\
     &= \sum_l \sum_k c^*_l c_k \e^{-\frac{i}{\hbar}E_k t} \delta_{kl} \notag\\
-    &= \sum_k |c_k|^2 \e^{-\frac{i}{\hbar}E_k t}
+    &= \sum_k |c_k|^2 \e^{-\frac{i}{\hbar}E_k t} \, .
 \end{align}
-Thus, the composition of the autocorrelation function is..
-
-Now taking the integral and multiplying with $\e^{i\omega t} = \e^{\frac{i}{\hbar}Et}$, i.e. taking the \acrlong{ift}
+Apparently, the autocorrelation function is a sum over all states $k$. The energy spectrum $\sigma$ is then obtained from \acrshort{ift} of the autocorrelation function
 \begin{equation}
-    \sigma(E) = \int_{-\infty}^{\infty} S(t) \e^{i\omega t} \dd t = \sum_k |c_k|^2 \int_{-\infty}^{\infty} \e^{\frac{i}{\hbar}(E-E_k)t} \dd t = \sum_k |c_k|^2 \delta(E-E_k)
+    \sigma(E) = \int_{-\infty}^{\infty} S(t) \e^{\frac{i}{\hbar}(E)t} \dd t  = \sum_k |c_k|^2 \int_{-\infty}^{\infty} \e^{\frac{i}{\hbar}(E-E_k)t} \dd t = \sum_k |c_k|^2 \delta(E-E_k) \, ,
+    \label{eq:autocorr1}
 \end{equation}
+where we used the conversion between energy and frequency $\e^{i\omega t} = \e^{\frac{i}{\hbar}Et}$.
 
-\section{Numerical application}
+We can see that the energy spectrum $\sigma$ is a sum of Dirac $\delta$-distributions centred at the energies $E_k$ with intensities $|c_k|^2$. Thus, if we prepare the initial wave function $\psi(x,0)$ such that $c_k\neq 0$ for all $k$s, the energy spectrum will contain peaks at all the eigenvalues $E_k$.
 
+While the treatment above was based on the exact solution of the \acrshort{tdse} using the full set of eigenfunctions $\phi_k$, the derived equations for the autocorrelation function $S(t)$ and energy spectrum $\sigma(E)$ are general and can be calculated from any wave function propagation. 
+
+\section{*Numerical application}
+
+The numerical implementation of the outlined procedure is straightforward in this case. We need to \acrlong{ift} the autocorrelation function $S(t)$, which is a simple overlap between $\psi(x,t)$ and $\psi(x,0)$. As we have shown in Chapter~\ref{kap:qd}, there are readily available numerical techniques to calculate \acrlong{ift} and overlaps. However, we face another difficulty in this case. Typically, we propagate the wave function for time 0 to some finite time $t$ in our simulation. However, the integral in the \acrlong{ift} in Eq.~\eqref{eq:autocorr1} runs from time $-\infty$ to $\infty$ which requires the knowledge of the autocorrelation function from time $-\infty$ to $\infty$. Thus, we have two problems: we have no information about $S(t)$ in the negative times and we have information about $S(t)$ in the positive times only to some maximum time $t_\mathrm{max}$.
+
+The first problem can be addressed but exploring the properties of the autocorrelation function:
+\begin{align}
+    S^*(t) &= \langle \psi(x,0) | \psi(x,t) \rangle^* = \langle \psi(x,0) | \e^{-\frac{i}{\hbar}\hat{H}(x)t} |\psi(x,0) \rangle^* = \langle \psi(x,0) | \e^{\frac{i}{\hbar}\hat{H}(x)t} |\psi(x,0) \rangle \notag \\
+    &= \langle \psi(x,0) | \e^{-\frac{i}{\hbar}\hat{H}(x)(-t)} |\psi(x,0) \rangle = S(-t) \, ,
+    \label{eq:autocorrsym2}
+\end{align}
+where we have complex conjugated $S(t)$ and noticed we can compensate for the complex conjugation by taking the time negative. This leads to a fundamental symmetry of the autocorrelation function,
+\begin{align}
+    S(-t) = S^*(t) \, ,
+    \label{eq:autocorrsym1}
+\end{align}
+which allows us to obtain the autocorrelation in negative times by taking it complex conjugate in the positive times. Hence, we need to propagate only from time 0 and we automatically have $S(t)$ also for the negative times. 
+
+The second problem lies in the finite propagation time $t_\mathrm{max}$. Ideally, we would like the autocorrelation function to decay to zero at $t_\mathrm{max}$. Then, the integral beyond $t_\mathrm{max}$ is zero and we can formally integrate only in limits $[-t_\mathrm{max}, t_\mathrm{max}]$. Thus, we always need the autocorrelation function to decay within some reasonable simulation time. A lot of systems decay naturally in processes such as photochemistry, luminescence or Auger processes. In such cases, we have to propagate until the autocorrelation function is attenuated.
+
+Nevertheless, the autocorrelation function does not decay with time in many simulations. It can be either by the nature of the process or by the construction of our Hamiltonian. For example, the fluorescence would require adding extra terms to the Hamiltonian so that it could be describe properly. The autocorrelation function is then periodic and extends to infinity. In such cases, we need to attenuate the wave function artificially such that it decays within our simulation time. This can be achieved by introducing a damping function $\xi$ which attenuates the autocorrelation function to 0 within our simulation time $t_\mathrm{max}$:
+\begin{equation}
+    \sigma(E) = \int_{-\infty}^{\infty} \xi(t) S(t) \e^{\frac{i}{\hbar}(E)t}  \dd t =  \int_{-t_\mathrm{max}}^{t_\mathrm{max}} \xi(t) S(t) \e^{\frac{i}{\hbar}(E)t}\, .
+\end{equation}
+The selection of the damping function can be motivated by the process we simulate or by numerical convenience.
+Typical damping functions are an exponential, 
+\begin{equation}
+    \xi(t) = \e^{-\gamma t} \, ,
+\end{equation}
+which is suitable for simulations of fluorescence or Auger decay, or a  Gaussian function,
+\begin{equation}
+    \xi(t) = \e^{-\gamma t^2} \, ,
+\end{equation}
+which is more convenient for artificial damping. The damping parameter $\gamma$ governs the strength of the attenuation. The damping has a profound effect on the spectra. In an ideal case, the spectrum would be a sum of Dirac $\delta$-distributions, infinitely narrow peaks, with intensity corresponding to $|c_k|^2$. However, the damping introduces broadening of the peaks proportional to the factor $\gamma$. Thus, applying the damping function artificially broadens our peaks. 
+
+\textbf{JJ ended here}
+
+
+
+\hline
+Note that we could in principle calculate $S(t)$ only from time 0 to $t_\mathrm{max}$ and use discrete \acrshort{ift} on that. The discrete \acrshort{ift} functions would not prevent us from doing it, we would still get a spectrum in the energy domain. However, the spectrum would be plagued with some artefacts of such an incorrect procedure. Without deriving it, we just state that in the discrete \acrshort{ft} (or \acrshort{ift}), the signal obtained in the region of $[0, t_\mathrm{max}]$ is copied to $[t_\mathrm{max}0, 2t_\mathrm{max}]$ and $[-t_\mathrm{max}, 0]$ and so on. This, first of all, breaks the symmetry of the autocorrelation function derive in Eq.~\eqref{eq:autocorrsym2} and, secondly, creates discontinuities in $S(t)$. The former causes an incorrect shape of the peaks in the spectrum while the latter causes so-called \textit{ringing} in the spectrum. Both of these effects will be explored in the exercise.
+
+\hline
 The maximum energy resolution is determined by the length of the signal. Using the time-energy uncertainty principle, we can derive
 \begin{equation}
     \Delta E \approx \frac{\hbar}{T}
 \end{equation}
 
-We calculate only the time evolution for time zero, but what do we do with the integral, which need to start at time $-\infty$? Let us first explore the properties of the autocorrelation function.
 
-\begin{align}
-    S(t) &= \langle \psi(x,0) | \psi(x,t) \rangle = \langle \psi(x,0) | \e^{-\frac{i}{\hbar}\hat{H}(x)t} |\psi(x,0) \rangle = \langle \psi(x,0) | \e^{\frac{i}{\hbar}\hat{H}(x)t} |\psi(x,0) \rangle^* \notag \\
-    &= \langle \psi(x,0) | \e^{-\frac{i}{\hbar}\hat{H}(x)(-t)} |\psi(x,0) \rangle^* = S^*(-t) \, .
-\end{align}
-
-
-\section{Code}
+\section{*Code}
 
 We will reuse the code from the previous section and just improve it.
 
@@ -145,3 +181,12 @@ for index, en in enumerate(loc_max_energies):
 plt.show()
 \end{lstlisting}
 
+\section{*Applications}
+
+\subsection*{Exercise: Text}
+
+\paragraph{Assignment:} Text
+
+\section{*Connection to spectroscopy}
+
+First-order perturbation formula. Broadening of the spectrum. What we can obtain from the spectrum.
