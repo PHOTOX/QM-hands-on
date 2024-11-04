@@ -10,7 +10,7 @@ xmin, xmax = -25, 25  # minimum and maximum of x
 simtime = 10000.0  # simulation time in atomic time units
 dt = 0.2  # time step in atomic time units
 m = 1.0  # mass in atomic units
-kappa = 1/200  # damping factor for autocorrelation function [exp(-kappa*t)]
+gamma = 1/200  # damping factor for autocorrelation function [exp(-kappa*t)]
 
 # physical constants in atomic units
 hbar = 1.0
@@ -97,7 +97,7 @@ autocorr = np.array(autocorr) # converting the autocorrelation function to a num
 time = np.array(time) # converting the time to a numpy array
 
 # apply the damping to the autocorrelation function in form of exp(-kappa*time)
-autocorr *= np.exp(-kappa*time)
+autocorr *= np.exp(-gamma*time)
 
 # extend the autocorrelation function to negative times assuming that S(t) = S^*(-t)
 time = np.concatenate([-time[::-1], time])  # new time array in range [-t_max, t_max]
