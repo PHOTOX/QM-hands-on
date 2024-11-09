@@ -60,12 +60,12 @@ where the Dirac $\delta$-distributions are centred at energies $E_k$ with magnit
 
 Although this analysis is based on the exact TDSE solution and the full set of eigenfunctions $\phi_k$, the derived autocorrelation function $S(t)$ and energy spectrum $\sigma(E)$ apply to any wave function evolution. This method provides a powerful tool for calculating the spectrum of any Hamiltonian by time-propagating a wave function, which is often computationally more feasible than directly diagonalizing the Hamiltonian.
 
-\section{*Numerical application}
+\section{*Numerical implementation}
 \label{sec:autocorr_numap}
 
-The numerical implementation of the outlined procedure is straightforward in this case. We need to \acrlong{ift} the autocorrelation function $S(t)$, which is a simple overlap between $\psi(x,t)$ and $\psi(x,0)$. As we have shown in Chapter~\ref{kap:qd}, there are readily available numerical techniques to calculate \acrlong{ift} and overlaps. However, we face another difficulty in this case. Typically, we propagate the wave function for time 0 to some finite time $t$ in our simulation. However, the integral in the \acrlong{ift} in Eq.~\eqref{eq:autocorr1} runs from time $-\infty$ to $\infty$ which requires the knowledge of the autocorrelation function from time $-\infty$ to $\infty$. Thus, we have two problems: we have no information about $S(t)$ in the negative times and we have information about $S(t)$ in the positive times only to some maximum time $t_\mathrm{max}$.
+The numerical implementation of the outlined procedure for calculating the energy spectrum from the autocorrelation function is straightforward. We need to perform a quantum dynamical simulation as described in Chapter~\ref{kap:qd} and calculate the overlap between $\psi(x,t)$ and $\psi(x,0)$ at each step. The overlaps form the autocorrelation function $S(t)$ which is then converted into the energy spectrum by the \acrlong{ift} after the simulation. However, the integral in the \acrlong{ift} in Eq.~\eqref{eq:autocorr1} runs from time $-\infty$ to $\infty$ requiring the knowledge of the autocorrelation function from $-\infty$ to $\infty$, which is usually unavailable since a typical simulation runs only from time 0 to some finite time $t_\mathrm{max}$. Thus, we have only truncated information about $S(t)$ in the positive times and lack the information about negative times.
 
-The first problem can be addressed but exploring the properties of the autocorrelation function:
+The lack of information about $S(t)$ in negative times can be addressed by exploring the properties of the autocorrelation function.
 \begin{align}
     S^*(t) &= \langle \psi(x,0) | \psi(x,t) \rangle^* = \langle \psi(x,0) | \e^{-\frac{i}{\hbar}\hat{H}(x)t} |\psi(x,0) \rangle^* = \langle \psi(x,0) | \e^{\frac{i}{\hbar}\hat{H}(x)t} |\psi(x,0) \rangle \notag \\
     &= \langle \psi(x,0) | \e^{-\frac{i}{\hbar}\hat{H}(x)(-t)} |\psi(x,0) \rangle = S(-t) \, ,
@@ -76,9 +76,9 @@ where we have complex conjugated $S(t)$ and noticed we can compensate for the co
     S(-t) = S^*(t) \, ,
     \label{eq:autocorrsym1}
 \end{align}
-which allows us to obtain the autocorrelation in negative times by taking it complex conjugate in the positive times. Hence, we need to propagate only from time 0 and we automatically have $S(t)$ also for the negative times. 
+which allows us to obtain the autocorrelation in negative times by taking it complex conjugate in the positive times. The symmetry of the autocorrelation function in Eq.~\eqref{eq:autocorrsym1} resolves our problems with the lack of information about negative times and saves us from propagating the wave function also back in time.
 
-The second problem lies in the finite propagation time $t_\mathrm{max}$. Ideally, we would like the autocorrelation function to decay to zero at $t_\mathrm{max}$. Then, the integral beyond $t_\mathrm{max}$ is zero and we can formally integrate only in limits $[-t_\mathrm{max}, t_\mathrm{max}]$. Thus, we always need the autocorrelation function to decay within some reasonable simulation time. A lot of systems decay naturally in processes such as photochemistry, luminescence or Auger processes. In such cases, we have to propagate until the autocorrelation function is attenuated.
+Although resolving the negative-time issue, we still have a problem with the truncated autocorrelation function at some time $t_\mathrm{max}$ due to a finite propagation of the wave function. Ideally, we would like the autocorrelation function to decay to zero at $t_\mathrm{max}$. Then, the integral beyond $t_\mathrm{max}$ is zero and we can formally integrate only in limits $[-t_\mathrm{max}, t_\mathrm{max}]$. Thus, we always need the autocorrelation function to decay within some reasonable simulation time. A lot of systems decay naturally in processes such as photochemistry, luminescence or Auger processes. In such cases, we have to propagate until the autocorrelation function is attenuated.
 
 Nevertheless, the autocorrelation function does not decay with time in many simulations. It can be either by the nature of the process or by the construction of our Hamiltonian. For example, the fluorescence would require adding extra terms to the Hamiltonian so that it could be describe properly. The autocorrelation function is then periodic and extends to infinity. In such cases, we need to attenuate the wave function artificially such that it decays within our simulation time. This can be achieved by introducing a damping function $\xi$ which attenuates the autocorrelation function to 0 within our simulation time $t_\mathrm{max}$:
 \begin{equation}
@@ -192,7 +192,7 @@ plt.show()
 
 \section{*Applications}
 
-\subsection*{Exercise: Energy spectrum of a harmonic oscillator}
+\subsection*{*Exercise: Energy spectrum of a harmonic oscillator}
 
 The spectrum of a harmonic oscillator (Eq.~\eqref{eq:qdho} is derived in literally all introductory courses to quantum mechanics and takes a very simple form:
 \begin{equation*}
@@ -200,19 +200,25 @@ The spectrum of a harmonic oscillator (Eq.~\eqref{eq:qdho} is derived in literal
 \end{equation*}
 The derivation of the spectrum is a typical example of the Hamiltonian diagonalization, which is the time-independent approach. In this exercise, we will contrast the exact spectrum with the spectrum calculated by the time-dependent approach presented in this Chapter.
 
-\paragraph{Assignment:} Set up a harmonic oscillator from Eq.~\eqref{eq:qdho} and initial Gaussian wave packet from Eq~\eqref{eq:qdgauss} with the following parameters: $m=2$~a.u., $\omega=0.1$~a.u., $x_0=6$~a.u.,$p_0=0$~a.u. and $\alpha_0 = 0.3$. Propagate the wave packet for at least 10000~a.u. Don't forget to set a corresponding grid and time step! Then, apply the Gaussian damping function \eqref{eq:gaussdamping} with the parameter $\gamma = 0.005$. Do the peak positions correspond to the energies of the harmonic oscillator $E_n^\mathrm{HO}$? Try also values of $\gamma=0.02$, 0.05 and 0.1. Can you still distinguish all the peaks in the spectrum? Try to find the limit of $\gamma$ where we can still distinguish the peaks and calculate the energies. 
+\paragraph{Assignment:} Set up a harmonic oscillator from Eq.~\eqref{eq:qdho} and initial Gaussian wave packet from Eq~\eqref{eq:qdgauss} with the following parameters: $m=1$~a.u., $\omega=0.1$~a.u., $x_0=6$~a.u.,$p_0=0$~a.u. and $\alpha_0 = 0.3$. Propagate the wave packet for at least 10000~a.u. Don't forget to set a corresponding grid and time step! Then, apply the Gaussian damping function \eqref{eq:gaussdamping} with the parameter $\gamma = 0.005$. Do the peak positions correspond to the energies of the harmonic oscillator $E_n^\mathrm{HO}$? Try also values of $\gamma=0.02$, 0.05 and 0.1. Can you still distinguish all the peaks in the spectrum? Try to find the limit of $\gamma$ where we can still distinguish the peaks and calculate the energies. 
 
-\subsection*{Exercise: Damping of the autocorrelation function (Auger decay)}
+\subsection*{*Exercise: Initial wave function effect on the spectrum}
 
-As we discussed earlier, the damping of the autocorrelation function broadens the peaks in the energy spectrum
+The spectrum calculated from the autocorrelation function depends on the initial wave function, namely on the magnitude of the expansion coefficients $c_k$. Thus, if $c_k = 0$ for some state, there will be no peak at $E_k$ in the spectrum and we will be blind to this eigenvalue of the Hamiltonian. Since the spectrum depends on the initial wave function through its expansion coefficients $c_k$, we can modify the initial wave function and test, if the spectrum changes. In this exercise, we will try to optimize the initial guess of our wave function such that we can clearly identify as many energies in the spectrum as possible. 
 
-\paragraph{Assignment:} Set up a harmonic oscillator from Eq.~\eqref{eq:qdho} and initial Gaussian wave packet from Eq~\eqref{eq:qdgauss} with the following parameters: $m=2$~a.u., $\omega=0.1$~a.u., $x_0=6$~a.u.,$p_0=0$~a.u. and $\alpha_0 = 0.3$. Propagate the wave packet for at least 10000~a.u. Don't forget to set a corresponding grid and time step! Then, apply the Gaussian damping function \eqref{eq:gaussdamping} with the parameter $\gamma = 0.005$. Do the peak positions correspond to the energies of the harmonic oscillation $E_n^\mathrm{HO}$?
-
-$\gamma = 0.05$, 0.005 and 0.002.
+\paragraph{Assignment:} Use the potential from the previous Exercise with the damping parameter $\gamma = 0.005$ and modify the initial wave function parameters such that you obtain a maximum number of clearly identifiable peaks in the spectrum. Change also wave function forms.
 
 
 
-\subsection*{Exercise: Spectrum of Auger decay)}
+\subsection*{*Exercise: Degeneracies in the spectrum}
+
+Use double-well potential..
+
+
+\paragraph{Assignment:} 
+
+
+\subsection*{*Exercise: Spectrum of Auger decay}
 
 
 \paragraph{Assignment:} 
