@@ -1,4 +1,4 @@
-Up to this point, we have taken the time-independent perspective on quantum mechanics, focusing on methods for calculating stationary states of electrons in molecules. In this chapter, we shift to time-dependent quantum mechanics and look at the time evolution of quantum systems. We will focus on simple low-dimensional models and introduce a simple numerical scheme suitable for wave function propagation. The power of simple low-dimensional models resides in the conceptual understanding of time evolution in quantum mechanics: they allow us to examine dynamics such as interference of two wave packets, tunnelling through energy barriers, or reflection of the wave packet on boundaries.
+Up to this point, we have taken the time-independent perspective on quantum mechanics, focusing on methods for calculating stationary states of electrons in molecules. In this chapter, we shift to time-dependent quantum mechanics and look at the time evolution of quantum systems. We will focus on simple low-dimensional models and introduce a simple numerical scheme suitable for wave function propagation. The power of low-dimensional models resides in the conceptual understanding of time evolution in quantum mechanics: they allow us to examine dynamics such as interference of two wave packets, tunnelling through energy barriers, or reflection of the wave packet on boundaries.
 
 \section{Theoretical background}
 \label{sec:qdtheoback}
@@ -13,14 +13,14 @@ where $i$ is the imaginary unit, $\hbar$ is the reduced Planck constant, $\psi$ 
     \psi(x,t) = \hat{U}(t)\psi(x,0) \, .
     \label{eq:U}
 \end{equation}
-The operator $\hat{U}$ is called a \textit{propagator} or \textit{time evolution operator}. Application of the propagator to a wave function is equivalent to evolving the wave function from time 0 to time t. The knowledge of the evolution operator is, therefore, elementary for a description of dynamics in quantum systems.
+The operator $\hat{U}$ is called a \textit{propagator} or \textit{time evolution operator}. Application of the propagator to a wave function is equivalent to evolving the wave function from time 0 to time $t$. The knowledge of the evolution operator is, therefore, critical for a description of dynamics in quantum systems.
 
 The propagator is easy to find if the Hamiltonian $\hat{H}$ does not depend on time. Then, we can formally write a solution of equation~\eqref{eq:tdse} in the following form:
 \begin{equation}
     \psi(x,t) = \e^{-\frac{i}{\hbar}\hat{H}(x)t} \psi(x,0)\, .
     \label{eq:tdse2}
 \end{equation}
-Notice that the result resembles the separation of variables for differential equations, only for a equation with operators. Considering the Hamiltonian to be time-independent restricts the validity of equation~\eqref{eq:tdse2} only for systems without any time-dependent interaction such as oscillating electromagnetic field (radiation), collisions between particles, etc. The solution for time-dependent Hamiltonian is somewhat more complicated and will be omitted here.
+Notice that the result resembles the separation of variables for differential equations, only for an equation with operators. Considering the Hamiltonian to be time-independent restricts the validity of equation~\eqref{eq:tdse2} only for systems without any time-dependent interaction such as oscillating electromagnetic field (radiation), collisions between particles, interaction with the environment, etc. The solution for a time-dependent Hamiltonian is somewhat more complicated and will not be considered here.
 
 Comparing equations~\eqref{eq:tdse2} and \eqref{eq:U}, we see that the evolution operator has a simple form of an exponential of the Hamiltonian,
 \begin{equation}
@@ -43,12 +43,12 @@ Considering the Hamiltonian in the standard form,
     \hat{H}(x) = \hat{T} + \hat{V}(x) = -\frac{\hbar^2}{2m}\frac{\dd^2}{\dd x^2} + V(x)\, ,
     \label{eq:Ham1}
 \end{equation}
-where $\hat{T}$ represents the kinetic energy operator, $\hat{V}$ stands for the potential energy operator and $m$ is the particle mass, the propagator becomes:
+where $\hat{T}$ represents the kinetic energy operator, $\hat{V}$ stands for the potential energy operator and $m$ is the particle mass, the propagator becomes
 \begin{equation}
     \hat{U}(t) = \sum_{l=0}^\infty \frac{(\hat{T}+\hat{V})^l}{l!} \left( -\frac{i}{\hbar} t\right)^l \, .
     \label{eq:U3}
 \end{equation}
-Calculating this propagator requires computing an infinite series of powers of the Hamiltonian, further complicated by the fact that $\hat{T}$ and $\hat{V}$ do not commute and the exponential cannot be factorized. This makes direct evaluation infeasible for most of the potential.
+Calculating this propagator requires computing an infinite series of powers of the Hamiltonian, further complicated by the fact that $\hat{T}$ and $\hat{V}$ do not commute and the exponential cannot be factorized. This makes direct evaluation infeasible for most of the potentials.
 
 Thus, analytical solutions of the \acrshort{tdse} are used only in model systems, usually when the complete basis of the respective Hilbert space is known. Instead, most time-dependent problems are solved numerically where arbitrary Hamiltonians are possible. 
 
@@ -125,7 +125,9 @@ Let us now summarize the evaluation of $\hat{T}\psi(x,t)$. First, the wave funct
     \psi(x,t) \stackrel{\mathrm{IFT}}{\longrightarrow} \psi(k,t) \longrightarrow \frac{\hbar^2 k^2}{2m} \psi(k,t) \stackrel{\mathrm{FT}}{\longrightarrow} \hat{T}\psi(x,t) \, .
 \end{equation}
 
-\subsection{The propagator and the Split-operator technique}
+Finally, we note that the Fourier method is not the only way how to evaluate the action of the kinetic energy operator. The most straightforward way would be to calculate the second derivative numerically using finite differences. However, the finite differences are a local method converging polynomial, while the Fourier method is global and converges exponentially.
+
+\subsection{The propagator and the split-operator technique}
 
 As we discussed in section~\ref{sec:qdtheoback}, evaluating the propagator is strenuous due to its exponential structure and the non-commutativity of the potential and kinetic operators. The non-commutativity is the major issue for us as it prevents us from factorizing the propagator as
 \begin{equation}
