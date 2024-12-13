@@ -1,4 +1,4 @@
-\section{\texorpdfstring{Hartree--Fock Method\label{sec:hf_code_solution}}{Hartree--Fock Method}}
+\section*{\texorpdfstring{Hartree--Fock Method\label{sec:hf_code_solution}}{Hartree--Fock Method}}
 
 \raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{hf} method exercise code solution.}, label=code:hf_solution]
 # energies, number of occupied and virtual orbitals and the number of basis functions
@@ -36,7 +36,7 @@ for i, j in ((i, j) for i, j in it.product(range(natoms), range(natoms)) if i !=
 print("    RHF ENERGY: {:.8f}".format(E_HF + VNN))
 \end{lstlisting}
 
-\section{\texorpdfstring{Integral Transform\label{sec:int_code_solution}}{Integral Transform}}
+\section*{\texorpdfstring{Integral Transform\label{sec:int_code_solution}}{Integral Transform}}
 
 \raggedbottom\begin{lstlisting}[language=Python, caption={Integral transform exercise code solution.}, label=code:int_solution]
 # define the occ and virt spinorbital slices shorthand
@@ -71,7 +71,7 @@ Emss = epsms[o] - epsms[v, None]
 Emsd = epsms[o] + epsms[o, None] - epsms[v, None, None] - epsms[v, None, None, None]
 \end{lstlisting}
 
-\section{\texorpdfstring{2nd and 3rd Order Perturbative Corrections\label{sec:mp_code_solution}}{2nd and 3rd Order Perturbative Corrections}}
+\section*{\texorpdfstring{2nd and 3rd Order Perturbative Corrections\label{sec:mp_code_solution}}{2nd and 3rd Order Perturbative Corrections}}
 
 \raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{mp2} and \acrshort{mp3} exercise code solution.}, label=code:mp_solution]
 # energy containers
@@ -101,7 +101,7 @@ if args.mp3:
     print("    MP3 ENERGY: {:.8f}".format(E_HF + E_MP2 + E_MP3 + VNN))
 \end{lstlisting}
 
-\section{\texorpdfstring{Full Configuration Interaction\label{sec:ci_code_solution}}{Full Configuration Interaction}}
+\section*{\texorpdfstring{Full Configuration Interaction\label{sec:ci_code_solution}}{Full Configuration Interaction}}
 
 \raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{ci} exercise code solution.}, label=code:ci_solution]
 # generate the determiants
@@ -155,7 +155,7 @@ eci, Cci = np.linalg.eigh(Hci); E_FCI = eci[0] - E_HF
 print("    FCI ENERGY: {:.8f}".format(E_HF + E_FCI + VNN))
 \end{lstlisting}
 
-\section{\texorpdfstring{Coupled Cluster Singles and Doubles\label{sec:cc_code_solution}}{Coupled Cluster Singles and Doubles}}
+\section*{\texorpdfstring{Coupled Cluster Singles and Doubles\label{sec:cc_code_solution}}{Coupled Cluster Singles and Doubles}}
 
 \raggedbottom\begin{lstlisting}[language=Python, caption={\acrshort{ccd} and \acrshort{ccsd} method exercise code solution.}, label=code:cc_solution]
 # energy containers for all the CC methods
