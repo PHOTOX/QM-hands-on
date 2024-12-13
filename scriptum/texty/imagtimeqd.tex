@@ -43,27 +43,26 @@ We have now created a propagator which has state contributions varying in time b
 \begin{equation}
     \frac{|c_k|^2  \e^{-2\frac{E_k}{\hbar}\tau}}{|c_l|^2  \e^{-2\frac{E_l}{\hbar}\tau}} =  \e^{-2\frac{E_k - E_l}{\hbar}\tau} \frac{|c_k|^2}{|c_l|^2}  = \e^{2\frac{\Delta E_{lk}}{\hbar}\tau} \frac{|c_k|^2}{|c_l|^2} \, .
 \end{equation}
-and shows that the state of lower energy ($k$ in our case) has exponentially increasing contribution compared to the higher energy state $l$. Since this holds for an arbitrary pair of states, the contribution of the lowest energy state to the norm and wave function will be exponentially increasing compared to the other states. As a consequence, the wave function $\psi(x,\tau)$ will converge in the limit of infinite imaginary time to the lowest energy eigenstate $\phi_0$, 
+and shows that the state of lower energy ($k$ in our case) has exponentially increasing contribution compared to the higher energy state $l$. Since this holds for an arbitrary pair of states, the contribution of the lowest energy state to the norm and wave function will be exponentially increasing compared to the other states. As a consequence, the wave function $\psi(x,\tau)$ will converge in the limit of $\tau\to\infty$ to the lowest energy eigenstate $\phi_0$, 
 \begin{equation}
     \lim_{\tau\to\infty} \psi(x,\tau) = c_0 \e^{-\frac{E_0}{\hbar}\tau} \phi_0(x) \, ,
 \end{equation}
 multiplied by $c_0 \e^{-\frac{E_0}{\hbar}\tau}$.
 
-As we have discussed before, the wave function is not normalized but nothing prevents us to renormalize at time $\tau$. We will define a normalized wave function as
+As we have discussed before, the wave function is not normalized but nothing prevents us to renormalize at every time $\tau$. We will define a normalized wave function as
 \begin{equation}
-    \Tilde{\psi} = \frac{\psi(x,\tau)}{\sqrt{\langle\psi(x,\tau | \psi(x,\tau \rangle}}
+    \Tilde{\psi} = \frac{\psi(x,\tau)}{\sqrt{\langle\psi(x,\tau) | \psi(x,\tau) \rangle}} \, ,
 \end{equation}
-
-
- that the exponential in $\tau\to\infty$ goes to zero and our norm also goes to zero (if $E_0 > 0$). 
+which allows us to write 
 \begin{equation}
-    \lim_{\tau\to\infty} \frac{\psi(x,\tau)}{\sqrt{\langle\psi(x,\tau | \psi(x,\tau \rangle}} = \phi_0(x)
+    \lim_{\tau\to\infty} \Tilde{\psi}(x,\tau) = \phi_0(x) \, .
 \end{equation}
+The normalized wave function limits in long imaginary times to the lowest-energy eigenstate as we wanted. Thus, our imaginary-time propagator allows us to calculate the ground-state wave function in terms of dynamics instead of the standard diagonalization of the Hamiltonian. The convergence of the imaginary-time dynamics to the lowest-energy eignestate is demonstrated in Fig.~\ref{fig:itqd1}.
 
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.9\linewidth]{scriptum/obrazky/itqd/itqd1.png}
-    \caption{The imaginary-time evolution of the expansion coefficients $c_i$}
+    \caption{The time-dependent expansion coefficients of the wave function $\zeta_k(\tau) = \langle \phi_k | \psi(\tau) \rangle$ (left) and expansion coefficients of its normalized counterpart $\Tilde{\zeta}_k(\tau) = \langle \phi_k | \Tilde{\psi}(\tau) \rangle$ (right) for a harmonic oscillator.}
     \label{fig:itqd1}
 \end{figure}
 
