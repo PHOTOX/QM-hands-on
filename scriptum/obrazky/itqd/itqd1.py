@@ -36,8 +36,8 @@ for state in range(nstates):
     axs[1].plot(t, c[state]/norm, color=colors[state], ls='-', label=r"$\tilde{c}$" + f"$_{state:d}$")
 
 axs[0].set_title(r"Coefficients")
-axs[0].set_xlabel(r"$t$")
-axs[0].set_ylabel(r"$c_i(t)$")
+axs[0].set_xlabel(r"$\tau$")
+axs[0].set_ylabel(r"$c_k(\tau)$")
 
 axs[0].set_xlim(0, tplot)
 axs[0].set_ylim(0)
@@ -47,8 +47,8 @@ axs[0].minorticks_on()
 axs[0].legend(frameon=False, labelspacing=0, loc='upper right')
 
 axs[1].set_title(r"Normalized coefficients")
-axs[1].set_xlabel(r"$t$")
-axs[1].set_ylabel(r"$\tilde{c}_i(t)$")
+axs[1].set_xlabel(r"$\tau$")
+axs[1].set_ylabel(r"$\tilde{c}_k(\tau)$")
 
 axs[1].set_xlim(0, tplot)
 axs[1].set_ylim(0)
