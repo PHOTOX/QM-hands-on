@@ -49,25 +49,30 @@ and shows that the state of lower energy ($k$ in our case) has exponentially inc
 \end{equation}
 multiplied by $c_0 \e^{-\frac{E_0}{\hbar}\tau}$.
 
-As we have discussed before, the wave function is not normalized
-\textbf{end}
-
-This is a powerful result. If we propagate the wave function in imaginary time, the ground state will be getting stronger and stronger contribution, until it becomes dominant. Mathematically speaking
+As we have discussed before, the wave function is not normalized but nothing prevents us to renormalize at time $\tau$. We will define a normalized wave function as
 \begin{equation}
-    \lim_{\tau\to\infty} \psi(x,\tau) = c_0 \e^{-\frac{E_0}{\hbar}\tau} \phi_0(x)
+    \Tilde{\psi} = \frac{\psi(x,\tau)}{\sqrt{\langle\psi(x,\tau | \psi(x,\tau \rangle}}
 \end{equation}
-The only problem is that the exponential in $\tau\to\infty$ goes to zero and our norm also goes to zero (if $E_0 > 0$). But nothing prevents us to renormalize at time $\tau$
+
+
+ that the exponential in $\tau\to\infty$ goes to zero and our norm also goes to zero (if $E_0 > 0$). 
 \begin{equation}
     \lim_{\tau\to\infty} \frac{\psi(x,\tau)}{\sqrt{\langle\psi(x,\tau | \psi(x,\tau \rangle}} = \phi_0(x)
 \end{equation}
 
-(Here better define $\Tilde{psi}$ as renormalized wave function)
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.9\linewidth]{scriptum/obrazky/itqd/itqd1.png}
+    \caption{The imaginary-time evolution of the expansion coefficients $c_i$}
+    \label{fig:itqd1}
+\end{figure}
+
+
+
+
+\textbf{end}
 
 \vspace{2cm}
-we will define a new operator $\hat{U}_\mathrm{IT}(\tau)$ which takes form
-\begin{equation}
-    \hat{U}_\mathrm{IT}(\tau) = \e^{-\frac{1}{\hbar}\hat{H}(x)\tau} \, .
-\end{equation}
 
 
 \textbf{NOTE ABOUT IT PROPAGATOR}
