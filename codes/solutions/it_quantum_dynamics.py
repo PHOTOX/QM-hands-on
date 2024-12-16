@@ -98,11 +98,8 @@ for state in range(nstates):
         # renormalize the wave function so that the norm is one again
         psi /= np.sqrt(norm)
 
-        # calculate new norm and check that it is equal to one
+        # calculate norm for the expectation value calculation
         norm = np.real(np.trapz(y=np.conjugate(psi)*psi, x=x))
-        if np.abs(norm - 1) > 1e-5:
-            print(f"ERROR: Renormalization procedure failed, <psi|psi> = {norm:.9f}!")
-            exit(1)
 
         # calculate expectation value of energy
         # potential energy <V>

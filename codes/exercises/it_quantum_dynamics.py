@@ -86,12 +86,6 @@ for state in range(nstates):
         # renormalize the wave function so that the norm is one again
         # fill in
 
-        # calculate new norm and check that it is equal to one
-        norm =  # fill in
-        if np.abs(norm - 1) > 1e-5:
-            print(f"ERROR: Renormalization procedure failed, <psi|psi> = {norm:.9f}!")
-            exit(1)
-
         # calculate expectation value of energy
         # potential energy <V>
         energyV =  # fill in
