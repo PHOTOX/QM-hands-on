@@ -51,64 +51,56 @@ multiplied by $c_0 \e^{-\frac{E_0}{\hbar}\tau}$.
 
 As we have discussed before, the wave function is not normalized but nothing prevents us to renormalize at every time $\tau$. We will define a normalized wave function as
 \begin{equation}
-    \Tilde{\psi} = \frac{\psi(x,\tau)}{\sqrt{\langle\psi(x,\tau) | \psi(x,\tau) \rangle}} \, ,
+    \Tilde{\psi}(x,\tau) = \frac{\psi(x,\tau)}{\sqrt{\langle\psi(x,\tau) | \psi(x,\tau) \rangle}} \, ,
 \end{equation}
 which allows us to write 
 \begin{equation}
     \lim_{\tau\to\infty} \Tilde{\psi}(x,\tau) = \phi_0(x) \, .
 \end{equation}
-The normalized wave function limits in long imaginary times to the lowest-energy eigenstate as we wanted. Thus, our imaginary-time propagator allows us to calculate the ground-state wave function in terms of dynamics instead of the standard diagonalization of the Hamiltonian. The convergence of the imaginary-time dynamics to the lowest-energy eignestate is demonstrated in Fig.~\ref{fig:itqd1}.
+The normalized wave function limits in long imaginary times to the lowest-energy eigenstate as we wanted. Thus, our imaginary-time propagator allows us to calculate the ground-state wave function in terms of dynamics instead of the standard diagonalization of the Hamiltonian. The convergence of the imaginary-time dynamics to the lowest-energy eigenstate is demonstrated in Fig.~\ref{fig:itqd1}.
 
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=0.9\linewidth]{scriptum/obrazky/itqd/itqd1.png}
-    \caption{The time-dependent expansion coefficients of the wave function $\zeta_k(\tau) = \langle \phi_k | \psi(\tau) \rangle$ (left) and expansion coefficients of its normalized counterpart $\Tilde{\zeta}_k(\tau) = \langle \phi_k | \Tilde{\psi}(\tau) \rangle$ (right) for a harmonic oscillator.}
+    \caption{The time-dependent expansion coefficients of the wave function $\zeta_k(\tau) = \langle \phi_k | \psi(\tau) \rangle$ (left) and expansion coefficients of its normalized counterpart $\Tilde{\zeta}_k(\tau) = \langle \phi_k | \Tilde{\psi}(\tau) \rangle$ (right) for a harmonic oscillator. All the coefficients $\zeta_k$ decay exponentially, yet some faster and some slower depending on their energy $E_k$. The normalized expansion coefficients $\Tilde{\zeta}_k$ show that the lowest-state contribution is increasing while the other states contribute less in time. The initial increase in $\Tilde{\zeta}_1$ is given by the other higer-energy states which decay much faster but once they decay, $\Tilde{\zeta}_1$ also starts decreasing.}
     \label{fig:itqd1}
 \end{figure}
 
 
+So far we have shown that the imaginary-time dynamics can help us to optimize the lowest-energy state, but what if we also want higher states? In principle, we can optimize an arbitrary state with imaginary quantum dynamics. The correct statement of what we have derive would rather be that the imaginary-time dynamics converges to the lowest-energy state that contributes to the initial wave function $\psi(x,0)$. If the ground state expansion coefficient $c_0$ is equal to 0, the ground-state contribution will be zero for all times and we will never acquire the ground state wave function. We can only acquire a wave function of the lowest-energy state contributing to the initial wave function, i.e., with a nonzero expansion coefficient at the beginning of the dynamics.
 
-
-\textbf{end}
-
-\vspace{2cm}
-
-
-\textbf{NOTE ABOUT IT PROPAGATOR}
-Let us stop here and discuss the imaginary time. What is it and how should we image a propagation in imaginary time? The concept of imaginary time seems unreal since noone has ever seen watch measuring imaginary time. However, the concept of imaginary time has already been discussed in physics by ..., yet the concept is definitely not easy to grasp. It the imaginary time creates a confusion in the reader, we recommend to look at it from a different point of view. The propagator in imaginary time can be viewed as new operator which, when acting on the wave function, eats the amplitudes of the different energy states such that the lowest energy state is eaten the least. Think about it rather like acting on the wave function by a new operator devised from the real propagator. Note that the imaginary time propagator is not a real propagator because it is not a unitary operator, i.e., it is not perserving norm. The norm in fact exponentially diverges from 1. Yet we still call it IT propagator.
-
-\textbf{next step}
-
-What if we want  different state than the ground state? We have shown previously that the imaginary-time dynamics  converge to the lowest energy state of the initial wave function $\psi(x,0)$.
-Thus, the recipe is obvious, we need to project out the lowest energy contribution from the initial wave function, which makes the second lowest state the lowest state.
-
+This realization gives us a recipe to calculate higher-energy states: we need to construct the initial wave function such that it has zero contribution from all the lower-energy states. Thus, we must project out these states from the initial wave function. Taking the example of the first excited state, we need to first run the imaginary time dynamics and optimize $\phi_0$. Then, we need to project out this ground state from the initial wave function $\psi(x,0)$, creating a new initial wave function
 \begin{equation}
-    \Tilde{\psi}(x,0) = \psi(x,0) - c_0 \phi_0(x) = \sum_{k=0}^\infty c_k \phi_k(x) - c_0 \phi_0(x) = \sum_{k=1}^\infty c_k \phi_k(x)
+    \psi_1(x,0) = \psi(x,0) - c_0 \phi_0(x) = \sum_{k=0}^\infty c_k \phi_k(x) - c_0 \phi_0(x) = \sum_{k=1}^\infty c_k \phi_k(x) \, ,
 \end{equation}
-then
+which needs to be renormalized such that $\sum_{k=1}^\infty |c_k|^2 = 1$. Applying $\hat{U}_\mathrm{IT}$ to $\psi_1(x,0)$ then leads to $\phi_1(x)$ we wanted to optimize:
 \begin{equation}
-    \lim_{\tau\to\infty} \Tilde{\psi}(x,\tau) = c_1  \e^{-\frac{E_1}{\hbar}\tau} \phi_1(x)
+    \lim_{\tau\to\infty} \Tilde{\psi_1}(x,\tau) = \phi_1(x) \, .
 \end{equation}
+Hence, if we want to optimize an arbitrary eigenstate, we first need to optimize all the lower-energy states and project them out from the initial wave function. In this manner, we gradually acquire the eigenstates from the bottom.
 
-From this, it is obvious, we build the eigenstate from bottom. If we want state m, we need to first obtain all the previous states so that we can project them out. 
+In the end, let us return and comment on the imaginary time. What is it and how should we image a propagation in imaginary time? The concept of imaginary time seems elusive since no one has ever seen a watch measuring imaginary time. Still, the concept of imaginary time is not new in physics and appears, for example, in general relativity and cosmology, yet the concept is definitely not easy to grasp. The imaginary time often appears in equations as a mathematical 'trick' that allows us to reformulate equations into a better form. Although there are attempts to interpret the imaginary time, they still remain in the realm of speculations. If the imaginary time creates confusion in the reader, we recommend to view it rather as a mathematical construct that allows us to create a new operator with desired properties. The operator serves as a tool to obtain eigenstates and we do not need to attribute it any physical meaning, despite having a clear connection to dynamics
 
-Note that we always need to set up the initial wave function $\psi(x,0)$ such that the coefficient of the desired state $k$ is not zero. Then we would not be able to optimize the wave function. Thus, it is usually desirable to construct the wave function such that it breaks the symmetry of the system and contains contributions of all the systems. We can always add some random noise.
 
 \section{*Numerical implementation}
 
 Numerical implementation of the imaginary-time quantum dynamics builds on the real-time quantum dynamics, where the imaginary unit needs to be removed from the exponentials in the propagator. The propagation in time is otherwise the same except for two minor additions to the code.
 
-First, we need to renormalize the propagated wave function $\psi(x,\tau)$ at every time step since we are interested in the normalized $\Tilde{\psi}(x,t)$. The normalization is also important to make the calculation numerically stable. We could propagate $\psi$ without normalization and normalize it at the end, yet we would run into numerical issue soon with the exponential decay or increase of the norm. Plus we still need the norm to evaluate the energy at every step. The renormalization is a simple one-line modification after the propagation step. We can then omit the part of the code checking the norm.
+First, we need to renormalize the propagated wave function $\psi(x,\tau)$ at every time step since we are interested in the normalized $\Tilde{\psi}(x,t)$. Normalization is also important to make the calculation numerically stable. We could propagate $\psi$ without normalization and normalize it at the end, yet we would soon run into numerical issues with the exponential decay or increase in the norm. Plus we still need the norm to evaluate the energy at every step. The renormalization is a simple one-line modification after the propagation step.
 
-The second addition to the code concerns calculation of excited states (states above the ground state). As we have shown in the previous section, the imaginary-time dynamics converge to the lowest state in the expansion of $\psi(x,0)$. Thus, calculation of an arbitrary state $l$ requires to project out all the states $j$ below $l$ from the initial wave function. Note that the renormalization is necessary after removal of the lower states. Therefore, the renormalization described in the previous paragraph is convenient after this step. The procedure is schematically highlighted in the following scheme:
-\begin{equation}
-    \psi(x,0) \rightarrow \psi^\prime_l(x,0) = \psi(x,0) - \sum_{j<l}\langle \phi_j | \psi(x,0) \rangle \rightarrow \psi_l(x,0) = \frac{\psi^\prime_l(x,0)}{\langle \psi^\prime_l(x,0) | \psi^\prime_l(x,0) \rangle^2} 
-\end{equation}
-\textbf{Consider splitting in to equations.}
+The second addition to the code concerns the calculation of excited states (states above the ground state). As we have shown in the previous section, the imaginary-time dynamics converge to the lowest state in the expansion of $\psi(x,0)$. Thus, the calculation of an arbitrary state $l$ requires projecting out all states $j$ below $l$ from the initial wave function. Note that renormalization is necessary after the removal of the lower states. Therefore, the renormalization described in the previous paragraph is convenient after this step. 
+% The procedure is schematically highlighted in the following scheme:
+% \begin{equation}
+    % \psi(x,0) \rightarrow \psi^\prime_l(x,0) = \psi(x,0) - \sum_{j<l}\langle \phi_j | \psi(x,0) \rangle \rightarrow \psi_l(x,0) = \frac{\psi^\prime_l(x,0)}{\langle \psi^\prime_l(x,0) | \psi^\prime_l(x,0) \rangle^2} 
+% \end{equation}
+% \textbf{Consider splitting in to equations.}
 
 While this projection of the initial wave function would be in theory sufficient only at the beginning, the numerical precision of a computer alter the wave function a bit at every step which can create a tiny contribution of the lower states. These contributions are at the order of a computer precision, i.e., very small, but they can become important at longer dynamics since they are enhanced exponentially. Hence, the projecting out should be done also during the dynamics. The simplest is to project out at every time step but it is possible to optimize the algorithm and project out with some frequency.
 
 A special  we just need to select the initial wave function such that all the coefficients of the states of interest are non-zero. If the eigenstate we are seeking has $c_k=0$, we will not be able to optimize it with imaginary-time dynamics. This is similar to the previous chapter about the autocorrelation function and we can use the same principles. Contrarily to the real-time quantum dynamics, we need to add two more features.
+
+\textbf{ Maybe:}
+Note that we always need to set up the initial wave function $\psi(x,0)$ such that the coefficient of the desired state $k$ is not zero. Then we would not be able to optimize the wave function. Thus, it is usually desirable to construct the wave function such that it breaks the symmetry of the system and contains contributions of all the systems. We can always add some random noise.
 
 \section{Code}
 
