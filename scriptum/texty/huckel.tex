@@ -1,107 +1,92 @@
+\acrfull{ht} is one of the first and probably also the simplest methods to solve the electronic structure of molecules. It ranks among semiempirical quantum chemical methods as it contains empirical parameters parametrized to experiments or high-level calculations. The strength of \acrshort{ht} lies in its simplicity because it allows to solve the secular equations using a pen-and-paper approach, which makes it excellent for education purposes. The downside of \acrshort{ht} is, on the contrary, its applicability to only frontier molecular orbitals. The most famous applications of \acrshort{ht} are unsaturated polyens such as buta-1,3-diene or benzene. Although these small molecules can be solved with only a pen and paper, \acrshort{ht} is applicable also to larger systems such as molecular rotors or porphyrins. In this Chapter, we will use \acrshort{ht} as a warm-up for the next more advanced electronic structure chapters and show how to calculate \acrshort{ht} for an arbitrary conjugated planar system.
+
+\section{*Theoretical background}
+
+The \acrshort{ht} is a one-particle theory (mean-field such as \acrlong{hf}) and considers the electronic Hamiltonian to be approximated as a sum of effective one-particle hamiltonians $\hat{h}_{i, \mathrm{eff}}$:
+\begin{equation}
+\hat{H}_{\mathrm{HT}}= \sum \hat{h}_{i, \mathrm{eff}} \, .
+\label{eq:huckel1}
+\end{equation}
+The one-particle Hamiltonian is defined with an effective potential as
+\begin{equation}
+\hat{h}_{i, \mathrm{eff}}  = -\frac{1}{2}\nabla_i^2  - \sum_j \frac{Z_j}{|\Vec{r}_i - \Vec{R}_j|} + V(\Vec{r}_{i, \mathrm{eff}})  \, ,
+\label{eq:huckel2}
+\end{equation}
+where $j$ is the index of the nuclei, $Z_j$ is the charge of a nucleus and $\Vec{r}_i$ and $\Vec{R}_j$ are the positions of the electrons and nuclei respectively.
+
+The electronic wave function in \acrshort{ht} is expressed as a linear combination of atomic orbitals $\phi_\nu$,
+\begin{equation}
+\psi= \sum_\nu c_\nu \phi_\nu \, ,
+\label{eq:huckel3}
+\end{equation}
+where the index $\nu$ runs over all the basis functions. The spirit of the \acrshort{ht} lies in the selection of the basis, which comprises only a selected set of the frontier atomic orbitals. For describing conjugated systems, only the $p$ orbitals perpendicular to the conjugation plane are taken. This truncation is the core limitation of the theory as it cannot go beyond the selected set of frontier orbitals but it is also what greatly simplifies the working equations. Applying the variational principle to the wave function leads to secular equations, written in a matrix as
+\begin{equation}
+\mathbf{H}\Vec{c}=\varepsilon \mathbf{S}\Vec{c} \, ,
+\label{eq:huckel4}
+\end{equation}
+where $\varepsilon$ is the energy corresponding to the molecular orbital, $\mathbf{H}$ is the Hamiltoninan matrix with elements defined as expectation vlues of the one-electron Hamiltonian and the basis functions
+\begin{equation}
+H_{\nu\mu} = \langle \phi_\nu | \hat{h}_{i, \mathrm{eff}} | \phi_\mu \rangle \, ,
+\label{eq:huckel5}
+\end{equation}
+$\mathbf{S}$ is the overlap matrix,
+\begin{equation}
+S_{\nu\mu} = \langle \phi_\nu | \phi_\mu \rangle \, ,
+\label{eq:huckel6}
+\end{equation}
+and $\Vec{c}$ is the vector of the expansion coefficients.
+
+The second series of approximations in \acrshort{ht} (the first is the truncation of the basis set) is on the elements of the Hamiltonian and overlap matrices:
+\begin{itemize}
+    \item The basis set is considered orthonormal. Thus, the overlap matrix is unitary, that is, $S_{\nu\mu} = \delta_{\nu\mu}$.
+    \item The diagonal terms of the Hamiltonian matrix are equal to a predefined parameter,  $H_{\nu\nu} = \alpha$.
+    \item If the basis functions $\phi_\nu$ and $\phi_\mu$ reside in neighboring atoms, that is, atoms linked by a chemical bond, the Hamiltonian matrix element is set to another predefined parameter, $H_{\nu\mu} = \beta$.
+    \item If the basis functions $\phi_\nu$ and $\phi_\mu$ reside in atoms that are not linked by a chemical bond, the Hamiltonian matrix element is zero, $H_{\nu\mu} = 0$.
+\end{itemize}
+The parameters $\alpha$ and $\beta$ are usually parameterized from experiments. The value of $\alpha$ is $\SI{-11{,}4}{\ev}$ which is the carbon ionization energy. The parameter $\beta$ can acquire quite different values based on the parametrization. Using spectroscopic data gives $\beta = \SI{-3{,}48}{\eV}$, while thermochemistry yields $\beta = \SI{-0{,}78}{\ev}$. The parameterization depends on the purpose of our calculations. If we intend to calculate energy gaps between HOMO and LUMO orbitals, we will rather take the value obtained from spectroscopy and vice versa.
+
+Taking all the approximations on the matrix elements together, the final working equations of the \acrlong{ht} are 
+\begin{equation}
+\mathbf{H}\Vec{c}=\varepsilon\Vec{c}\, ,
+\label{eq:huckel7}
+\end{equation}
+We can recognize this as an eigenvalue equation which is solve by diagonalization of the Hamiltonian matrix. The energies $\varepsilon$ are the eigenvalues and the expansion coefficients $\Vec{c}$ are their corresponding eigenvectors. The Hamiltonian matrix has the parameter $\alpha$ on the diagonal and the parameter $\beta$ at the place corresponding to the neighboring atoms. 
+
+To illustrate the form of $\mathbf{H}$ on a simple example, we will use the famous textbook case: buta-1,3-diene. If we label the atoms as \ce{C_1=C_2-C_3=C_4}, the Hamiltonian matrix reads
+\begin{equation}
+\mathbf{H} = 
+\begin{pmatrix}
+\alpha & \beta & 0 & 0  \\
+\beta &\alpha & \beta & 0  \\
+0 &\beta &\alpha & \beta  \\
+0 & 0 & \beta &\alpha  
+\end{pmatrix}
+\label{eq:huckel8}
+\end{equation}
+It is a common trick to make a substitution $\varepsilon = \alpha - \beta x$ and divide the both sides of the equation by $\beta$ which leads to
+\begin{equation}
+\begin{pmatrix}
+0 & 1 & 0 & 0  \\
+1 & 0 & 1 & 0  \\
+0 & 1 & 0 & 1  \\
+0 & 0 & 1 & 0  
+\end{pmatrix}\Vec{c}=x\Vec{c}\, .
+\label{eq:huckel9}
+\end{equation}
+The new matrix is then diagonalized with the eigenvalues corresponding to $x$ and the eigenvectors still being the same expansion coefficients. The energies are recovered from $\varepsilon = \alpha - \beta x$. The main advantage is that this procedure does not require specifying $\alpha$ and $\beta$ a priori. We calculate the energy levels in terms of parameters $\alpha$ and $\beta$ for any system, and then we can try to parameterize them. 
+Construction of the new matrix is even simpler than constructing the Hamiltonian matrix. The diagonal contains all zeros and all the elements corresponding to the neighbouring atoms are 1 instead of $\beta$.
+
+\section{Numerical implementation}
+
+
+\textbf{JJ ENDED HERE}
+
 
 
 
 \vspace{5cm}
 \section*{SKRIPTA}
-H\"{u}ckelova metoda (dále jen HMO, z~angl. \textit{H\"{u}ckel Molecular Orbitals}) je historicky první a nejjednodušší semiempirická metoda. Pro menší molekuly je pro použití této metody potřeba doslova jen tužka a papír. Soustředíme se pouze na určitou skupinu elektronů, energeticky dobře oddělenou od ostatních elektronů. Typickým příkladem jsou vazebné elektrony $\pi$ v~konjugovaných uhlovodících, tedy elektrony v~molekulových orbitalech složených z~atomových orbitalů p -- tento případ budeme nadále uvažovat. HMO ale také dobře popisuje elektronovou strukturu ve valenčním pásu alkalických kovů. 
- 
- 
-Předpokládáme, že geometrii studované molekuly známe. Hamiltonián v H\"{u}ckelově metodě má tvar
-\begin{equation}
-\hat{H}_{\mathrm{HMO}}= \sum \hat{h}_{i, \mathrm{eff}}^\pi
-\label{rov:semiemp:ham}
-\end{equation}
-kde $\hat{h}_{i, \mathrm{eff}}^\pi$ je jednoelektronový operátor elektronu $\pi$, který v~sobě obsahuje jak kinetickou energii, tak interakci s~ostatními elektrony.
-Z~tvaru hamiltoniánu coby součtu jednoelektronových členů je zřejmé, že elektrony jsou zde považovány za nezávislé (to je rozdíl oproti metodě HF, ve které je nezávislost elektronů vyjádřena pouze tvarem vlnové funkce). 
-Konkrétní tvar těchto efektivních elektronových hamiltoniánů není specifikován, neboť, jak uvidíme dále, vlastně ani není potřeba -- v~teorii nakonec vystupují pouze integrály, kterým dáváme konkrétní číselnou hodnotu. 
 
-Dalším krokem je výběr báze. V~případě metody HMO to budou orbitaly p$_z$ všech uhlíkových atomů. Molekulový orbital pak hledáme v~běžném rozvoji typu MO-LCAO
-\begin{equation}
-\phi= \sum_i c_i \chi_i
-\label{rov:HM_MO}
-\end{equation}
-Konkrétní matematický tvar těchto orbitalů nás ale opět nezajímá. Rozvojem do báze převedeme problém nalezení vlnové funkce na jednodušší problém nalezení rozvojových koeficientů $c_i$. Pokud rozvoj \eqref{rov:HM_MO} dosadíme do Schr\"{o}dingerovy rovnici s~hamiltoniánem \eqref{rov:semiemp:ham} a aplikujeme variační princip, dostaneme soustavu sekulárních rovnic, např. pro čtyři elektrony $\pi$ v~butadienu.
-\begin{equation}
-\begin{split}
-\left(H_{11}-\varepsilon S_{11}\right)c_1 + \left(H_{12}-\varepsilon S_{12}\right)c_2 + \left(H_{13}-\varepsilon S_{13}\right)c_3 + \left(H_{14}-\varepsilon S_{14}\right)c_4 = 0 \\ 
-\left(H_{21}-\varepsilon S_{21}\right)c_1 + \left(H_{22}-\varepsilon S_{22}\right)c_2 + \left(H_{22}-\varepsilon S_{22}\right)c_3 + \left(H_{24}-\varepsilon S_{24}\right)c_4 = 0 \\ 
-\left(H_{31}-\varepsilon S_{31}\right)c_1 + \left(H_{32}-\varepsilon S_{32}\right)c_2 + \left(H_{33}-\varepsilon S_{33}\right)c_3 + \left(H_{34}-\varepsilon S_{34}\right)c_4 = 0 \\ 
-\left(H_{41}-\varepsilon S_{41}\right)c_1 + \left(H_{42}-\varepsilon S_{42}\right)c_2 + \left(H_{43}-\varepsilon S_{43}\right)c_3 + \left(H_{44}-\varepsilon S_{44}\right)c_4 = 0 \\  
-\end{split}
-\label{rov:sekularni}
-\end{equation}
-%
-Z~podmínky pro netriviální řešení této soustavy pak platí
-\begin{equation}
-|\mathbb{H}-\varepsilon \mathbb{S}|=0 
-\label{rov:HM_det}
-\end{equation}
-
-Pro molekulu butadienu se elektronová báze skládá ze čtyř orbitalů p$_z$ (viz obrázek \ref{obr:HMbutadien} ukazující možné kombinace orbitalů p na čtyřech atomech uhlíku) a sekulární determinant má tvar
-\begin{equation}
-\begin{vmatrix}
-H_{11}-\varepsilon S_{11} & H_{21}-\varepsilon S_{21} & H_{31}-\varepsilon S_{31} & H_{41}-\varepsilon S_{41}  \\
-H_{12}-\varepsilon S_{12} & H_{22}-\varepsilon S_{22} & H_{32}-\varepsilon S_{32} & H_{42}-\varepsilon S_{42}  \\
-H_{13}-\varepsilon S_{13} & H_{23}-\varepsilon S_{23} & H_{33}-\varepsilon S_{33} & H_{43}-\varepsilon S_{43}  \\
-H_{14}-\varepsilon S_{14} & H_{24}-\varepsilon S_{24} & H_{34}-\varepsilon S_{34} & H_{44}-\varepsilon S_{44}
-\end{vmatrix}
-= 0
-\end{equation}
-
-
-
-Nyní bychom měli spočítat integrály $H_{ij}$ a $S_{ij}$, které v~principu závisí na geometrii systému.
-V~rámci H\"{u}ckelovy aproximace na ně ale pohlížíme jako na parametry metody
-a naložíme s~nimi takto
-\begin{itemize}
-\item Zanedbáme překryvové integrály mezi AO na různých atomech, tj. $S_{ij}=\delta_{ij}$.
-\item Integrály $H_{ii}$ položíme rovny parametru $\alpha$, těmto integrálům říkáme coulombovské integrály.
-\item Integrály $H_{ij}$ položíme rovny nule, pokud orbitaly nepatří sousedním atomům.
-Nenulové integrály mezi sousedními atomy položíme rovny parametru $\beta$. Nazýváme je rezonančními integrály.
-\end{itemize}
-Takto zjednodušené rovnice poté vyřešíme. Nejprve najdeme vlastní čísla přes sekulární determinant a následně určíme koeficienty $c_i$. V~případě butadienu vypadá H\"{u}ckelův sekulární determinant takto
-\begin{equation}
-\begin{vmatrix}
-\alpha-\varepsilon & \beta & 0 & 0  \\
-\beta &\alpha-\varepsilon & \beta & 0  \\
-0 &\beta &\alpha-\varepsilon & \beta  \\
-0 & 0 & \beta &\alpha-\varepsilon  
-\end{vmatrix}
-= 
-\begin{vmatrix}
-x & 1 & 0 & 0  \\
-1 & x & 1 & 0  \\
-0 & 1 & x & 1  \\
-0 & 0 & 1 & x  
-\end{vmatrix}
-\end{equation}
-Determinant jsme vydělili $\beta$ a zavedli substituci $x=\frac{\alpha-\varepsilon}{\beta}$.
-Nyní rozvojem determinantu podle prvního řádku dostaneme
-\begin{equation}
-x
-\begin{vmatrix}
-x & 1 & 0 \\
-1 & x & 1 \\
-0 & 1 & x \\
-\end{vmatrix}
--
-\begin{vmatrix}
-x & 1 & 0 \\
-1 & x & 1 \\
-0 & 1 & x \\
-\end{vmatrix}
-=x^4-3x^2+1=0  
-\end{equation}
-Tuto kvartickou rovnici lze naštěstí převést na kvadratickou pomocí substituce $y=x^2$
-\begin{equation}
-y^2-3y+1=0,\quad y_1=2{,}62,\quad y_2=0{,}382 
-\end{equation}
-a tedy
-\begin{equation}
-x_{1,2}=\pm 1{,}62 \quad
-x_{3,4}=\pm 0{,}62
-\end{equation}
-Z~toho vyplývají následující hodnoty energií
 \begin{equation}
 \begin{split}
 \varepsilon_1 &= \alpha+1{,}62\beta \\
@@ -112,57 +97,13 @@ Z~toho vyplývají následující hodnoty energií
 \label{rov:HM2}
 \end{equation}
 
-Celkovou energii můžeme vypočítat jako součet orbitálních energií (na rozdíl od metody HF!).
-Jak ale získáme parametry $\alpha$ a $\beta$? Vyjdeme z~experimentálních dat. Parametr $\alpha$ má jednoduchou fyzikální interpretaci -- jedná se o~ionizační energii atomového orbitalu $p_z$, která je experimentálně známá. Důležitější je parametr $\beta$, který určuje energetické rozdíly mezi molekulovými orbitaly. Můžeme jej získat v~zásadě dvěma způsoby
-\begin{enumerate}
-\item \textbf{Ze spektroskopických dat.} Parametr zvolíme tak, aby nám seděly zvolené elektronové přechody (podrobnosti viz níže), $\beta = \SI{-3{,}48}{\eV}$.
-\item \textbf{Z~termochemických dat.} K~tomu se využívá konceptu delokalizační energie dvojných vazeb. Tuto energii můžeme experimentálně naměřit například pomocí hydrogenačního tepla. Její teoretický výpočet v~rámci HMO si ukážeme níže. Pro tyto účely se typicky používá hodnota $\beta = \SI{-0{,}78}{\ev} = \SI{-75}{\kJ\per\mol}$. Je to podstatně odlišné číslo, což ukazuje na omezení HMO.
-\end{enumerate}
-
-\subsection{Vlnové funkce v~rámci HMO}
-Abychom získali vlnovou funkci orbitalu s~nejnižší energií, musíme dosadit hodnoty energií ze vztahu \eqref{rov:HM2} zpět do sekulárních rovnic. Pro butadien bychom řešili sadu čtyř rovnic
-\begin{equation}
-\begin{split}
-c_1(\alpha -E)+c_2\beta +0 +0 &=0 \\ 
-c_1\beta + c_2(\alpha-E)+c_3\beta + 0 &= 0 \\
-0 + c_2\beta + c_3(\alpha-E)_+ c_4\beta &= 0 \\
-0 + 0 + c_3\beta+ c_4(\alpha -E) &= 0
-\end{split}
-\end{equation}
-Všechny rovnice můžeme vydělit $\beta$ a můžeme použít substituci
-$x = \frac{\alpha-E}{\beta}.$
-Rovnice se zjednoduší na
-\begin{equation}
-\begin{split}
-c_1x+c_2 &= 0 \\
-c_1+c_2x+c_3 &= 0 \\
-c_2 + c_3x+c_4 &= 0 \\
-c_3 + c_4x &= 0
-\end{split}
-\end{equation}
-Po několika matematických úpravách dostaneme následující vztahy mezi koeficienty
-\begin{equation}
-\begin{split}
-c_2 &= c_3 \\
-c_1 &= c_4 \\
-c_2 &= 1{,}62c_1
-\end{split}
-\end{equation}
-Abychom získali numerické hodnoty jednotlivých koeficientů, musíme použít normalizační podmínku
-\begin{equation}
-c_1^2 + c_2^2 + c_3^2 + c_4^2 = c_1^2+(1{,}62c_1)^2+(1{,}62c_1)^2+c_1^2 = 1
-\end{equation}
-Řešením je $c_1=0{,}37$ a výsledná vlnová funkce má tvar
-\begin{equation}
-\phi_1 = 0{,}37\chi_1+0{,}60\chi_2+0{,}60\chi_3+0{,}37\chi_4 
-\end{equation}
-
 Vlnovou funkci orbitalu s~nejnižší energií pak můžeme schematicky znázornit následujícím způsobem
 
 
 Úplně analogicky bychom postupovali pro další orbitaly. Jejich vlnové funkce můžeme napsat jako
 \begin{equation}
 \begin{split}
+\phi_1 = 0{,}37\chi_1+0{,}60\chi_2+0{,}60\chi_3+0{,}37\chi_4 \\
 \phi_2 = 0{,}60\chi_1+0{,}37\chi_2-0{,}37\chi_3-0{,}60\chi_4 \\
 \phi_3 = 0{,}60\chi_1-0{,}37\chi_2-0{,}37\chi_3+0{,}60\chi_4 \\
 \phi_4 = 0{,}37\chi_1-0{,}60\chi_2+0{,}60\chi_3-0{,}37\chi_4 
@@ -223,23 +164,3 @@ E_{\mathrm{D}}^{\mathrm{exp}}=2\cdot136{,}94-240{,}0 = \SI{33{,}88}{\kJ\per\mol}
 \end{equation}
 \noindent což je v~dobrém souladu s~námi vypočtenou hodnotou.
 
-\subsection{Stabilita konjugovaných cyklů  a aromaticita}
-
-Asi největším úspěchem HMO bylo vysvětlení aromaticity cyklických molekul. Na obrázku \ref{obr:HMcykly} jsou znázorněny energetické hladiny cyklických systémů typu C$_n$H$_n$. Parametr $\alpha$ představuje energii elektronu v~samostatném atomu uhlíku. Jestliže má elektron energii nižší než  $\alpha$, interakce s~okolními atomy vede k~poklesu energie. Jinými slovy, dochází ke vzniku chemické vazby. Energie větší než $\alpha$ indikuje destabilizaci. Pohled na diagram přitom pěkně ukazuje, odkud se vzalo známé  H\"{u}ckelovo pravidlo $4n+2$. Je totiž hned patrné, že
-
-\begin{itemize}
-\item molekuly s~4$n$+2 elektrony jsou stabilní,
-\item molekuly s~4$n$+1 elektrony představují radikály,
-\item molekuly s~4$n$ elektrony představují biradikály.
-\end{itemize}
-
-
-
-\textbf{Řešení:} Cyklopropenyl má tři elektrony v~orbitalech p$_z$. Jednoduché H\"{u}ckelovo pravidlo $4n+2$ by bylo splněno pouze pro $n=\frac{1}{4}$, není to tedy celé číslo, a proto molekula není aromatická. U~cyklopropenylového kationtu je naopak pravidlo splněno, protože molekula má jen 2 elektrony $\pi$. V~tomto případě je $n=0$ a molekula je aromatická a stabilní. Naopak cyklopropenylový anion má počet $\pi$ elektronů roven 4, proto aromatický ani stabilní není. 
-
-\begin{ourbox}{Příběh ferrocenu}
-Podle HMO by měl být stabilní pětičlenný cyklus se záporným nábojem, tj. měl by existovat cyklopentadienylový anion. Ve třicátých letech, kdy Erich H\"{u}ckel (ponoukán svým bratrem Walterem, který byl organickým chemikem) vytvořil svou teorii, žádný takový anion znám nebyl. Teprve v~padesátých letech se podařilo syntetizovat ferrocen, sandwichový komplex železnatých iontů a cyklopentadienylových aniontů. 
-
-
-Takže tento anion existuje a je dokonce velmi stabilní. Ferrocen má dnes svou roli mimo jiné v~elektrochemii, kde se používá jako jedna z~referenčních elektrod. 
-\end{ourbox}
