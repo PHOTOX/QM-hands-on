@@ -1,112 +1,340 @@
-Students can learn the basics of Python in online courses like \href{https://www.learnpython.org/}{learnpython.org}.
+Python is a modern, general-purpose programming language widely used for scientific computing and numerical simulations. While it is not as fast as compiled languages like C++ or Fortran, its user-friendliness and vast ecosystem of libraries make it a popular choice, especially for beginners. In this text, we use Python to introduce numerical methods because it requires minimal prior programming experience and is easily understandable even for nonexperts. We assume a basic understanding of programming concepts such as conditions, loops and variables from the reader and discuss only more advanced concepts necessary for finishing the codes. If Python is new to the reader, we recommend exploring online tutorials like \href{https://www.learnpython.org/}{learnpython.org} or taking beginner-friendly courses like \href{https://www.youtube.com/watch?v=_uQrJ0TkZlc}{Python Full Course for Beginners}. AI tools like ChatGPT can also be valuable resources for generating code snippets and explaining unknown parts of codes.
+Below, we introduce the essentials needed to complete coding exercises, focusing on libraries, numerical computations, and data visualization.
 
-Python is a modern, general-purpose programming language widely used for scientific computing and numerical simulations. Python's simplicity and readability make it an excellent choice for beginners.
+% \raggedbottom
 
-One of the main advantages of Python is the availability of a wide range if libraries such as NumPy or SciPy for scientific purposes or MatPlotLib for plotting.
 
-In this chapter, we will very briefly describe some basics of Python with emphasis on libraries we will need throughout the text. However, this introduction is not intended to explain Python from the beginning, as this is done in multitude of resources, such as \href{https://www.learnpython.org/}{\texttt{learnpython.org}}.
+\section*{Downloading and Importing Libraries}
 
-\textbf{We assume that the student is familiar with basic Python and understands loops. Thus we provide just a brief overview how to use python with the NumPy library.}
+One of Python's greatest strengths is its extensive library ecosystem. Libraries can be easily installed using the \python{pip} package manager. For example, to install the NumPy library, type the following command in a terminal:
+
+\begin{lstlisting}[language=bash, style=mystyle2]
+$ pip install numpy
+\end{lstlisting}
+
+To use a library in your Python code, import it at the beginning of your script. Here, we import the NumPy library and give it the alias \python{np} for convenience:
 
 \begin{lstlisting}[language=Python, style=mystyle2]
 import numpy as np
 \end{lstlisting}
 
+The alias is then used to access the library and its functions. A whole list of functions of a given library can always be found online or printed with the \python{dir()} function:
 
-Calling functions from a Python library, e.g. number $\pi$, is done as follows:
 \begin{lstlisting}[language=Python, style=mystyle2]
-pi = np.pi
-\end{lstlisting}
-of if we want to take absolute value of a number
-\begin{lstlisting}[language=Python, style=mystyle2]
-number = np.abs(-1)
+print(dir(np))
 \end{lstlisting}
 
+Functions within a library can then be accessed using dot notation. For instance, the absolute value function in NumPy can be used as follows:
 
-
-\section{Installing NumPy}
-To use NumPy, you must first install it. You can do this by running the following command in your terminal or command prompt:
 \begin{lstlisting}[language=Python, style=mystyle2]
-pip install numpy
+abs_value = np.abs(a)
 \end{lstlisting}
 
-\section{Basic Python Concepts}
-Before diving into NumPy, it is helpful to understand a few basic Python concepts:
-\begin{itemize}
-    \item \textbf{Variables:} Variables in Python are dynamically typed, meaning they do not need explicit declaration.
-    \begin{lstlisting}[language=Python, style=mystyle2]
-x = 5   # An integer
-y = 2.5 # A floating point number
-name = "Simulation" # A string
-    \end{lstlisting}
-    \item \textbf{Loops:} Python uses indentation to define blocks of code, making it simple to write loops.
-    \begin{lstlisting}[language=Python, style=mystyle2]
+We first specified the NumPy library using its alias \python{np}, the used the dot to access its functions and from those functions called the \python{abs} function.
+You can also refer to the library documentation for more details on its functions and capabilities.
+
+\section*{Basic Python Syntax and Concepts}
+
+Before diving into numerical computations, let us revisit some basic Python concepts.
+
+Data in Python are stored in variables. Python supports various data types like integers, floats, strings, and booleans. Here are some examples:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+x = 10          # Integer
+pi = 3.14159    # Float
+name = "Python" # String
+is_fun = True   # Boolean
+\end{lstlisting}
+
+Use the \python{type()} function to check the type of a variable:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+print(type(x))  # Output: <class 'int'>
+\end{lstlisting}
+
+\paragraph*{Control Structures}
+
+Python uses control structures like \python{if}, \python{for}, and \python{while} for decision-making and iteration:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+# If-else statement
+if x > 5:
+    print("x is greater than 5")
+else:
+    print("x is 5 or less")
+
+# For loop
 for i in range(5):
-    print(i)
-    \end{lstlisting}
-    \item \textbf{Functions:} Python functions are defined using the \texttt{def} keyword.
-    \begin{lstlisting}[language=Python, style=mystyle2]
-def add(a, b):
-    return a + b
-    \end{lstlisting}
-\end{itemize}
+    print(i)  # Outputs 0, 1, 2, 3, 4
 
-\section{NumPy Basics}
-NumPy is the core library for numerical computing in Python. It provides support for large, multi-dimensional arrays and matrices, along with a collection of mathematical functions to operate on these arrays efficiently.
+# While loop
+count = 0
+while count < 5:
+    print(count)
+    count += 1
+\end{lstlisting}
 
-\subsection{Creating Arrays}
-The fundamental object in NumPy is the \texttt{array}. You can create an array using the \texttt{np.array()} function.
+\paragraph*{Functions}
+
+Functions allow you to reuse code. Define a function using the \python{def} keyword:
+
 \begin{lstlisting}[language=Python, style=mystyle2]
-import numpy as np
+def square(x):
+    return x ** 2
 
-# Creating a 1D array
-a = np.array([1, 2, 3, 4])
+# Call the function
+result = square(4)  # Output: 16
+\end{lstlisting}
+
+\section*{NumPy}
+
+NumPy, short for \textit{Numerical Python}, is a powerful library for numerical computations. It simplifies the implementation of mathematical operations, making it ideal for working with vectors, matrices, and arrays. Below, we demonstrate key features of NumPy.
+
+\paragraph*{Creating Arrays}
+
+Arrays are the primary data structure in NumPy and can be created from Python lists:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+# Creating a 1D array (vector)
+vector = np.array([1, 2, 3, 4, 5, 6])
 
 # Creating a 2D array (matrix)
-b = np.array([[1, 2], [3, 4]])
-
-print(a)
-print(b)
+matrix = np.array([[1, 2, 3], [4, 5, 6]])
 \end{lstlisting}
 
-\subsection{Array Operations}
-NumPy allows you to perform element-wise operations on arrays, making it easy to work with large datasets.
-\begin{lstlisting}[language=Python, style=mystyle2]
-# Element-wise operations
-c = a * 2    # Multiply each element of 'a' by 2
-d = a + 10   # Add 10 to each element of 'a'
-
-# Array addition
-e = np.array([1, 2, 3, 4])
-f = a + e    # Add corresponding elements of 'a' and 'e'
-\end{lstlisting}
-
-\subsection{Array Indexing and Slicing}
-You can access elements of a NumPy array using indexing or slicing. This allows for efficient extraction of data from arrays.
-\begin{lstlisting}[language=Python, style=mystyle2]
-# Accessing an element
-x = a[0]     # First element of 'a'
-
-# Slicing an array
-sub_array = a[1:3]  # Elements from index 1 to 2 (excluding 3)
-\end{lstlisting}
-
-\subsection{Useful Functions for Simulations}
-NumPy provides several functions that are useful for numerical simulations, such as:
-\begin{itemize}
-    \item \texttt{np.linspace()}: Generates evenly spaced numbers over a specified range.
-    \item \texttt{np.random.random()}: Generates random numbers.
-    \item \texttt{np.dot()}: Performs matrix multiplication.
-\end{itemize}
+You can create arrays with predefined values using helper functions like \python{np.zeros}, \python{np.ones}, and \python{np.arange}:
 
 \begin{lstlisting}[language=Python, style=mystyle2]
-# Generating an array of 5 numbers between 0 and 10
-x = np.linspace(0, 10, 5)
-
-# Creating a 2x2 matrix of random numbers
-random_matrix = np.random.random((2, 2))
-
-# Matrix multiplication
-result = np.dot(b, random_matrix)
+zeros = np.zeros(5)       # Array of five zeros
+ones = np.ones((2, 3))    # 2x3 array of ones
+sequence = np.arange(0, 10, 2)  # Array: [0, 2, 4, 6, 8]
 \end{lstlisting}
+
+\paragraph*{Element-wise Operations}
+
+Operations like addition, subtraction, multiplication, and division are performed element-wise on arrays:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+c = vector * 2    # Multiply each element by 2
+b = vector + 10   # Add 10 to each element
+\end{lstlisting}
+
+Array operations can also involve multiple arrays of the same size:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+# Add corresponding elements of two arrays
+sum_array = a + b
+\end{lstlisting}
+
+\paragraph*{Dot and Cross Products}
+
+To compute the \textit{dot product} or \textit{cross product} of two arrays, use the respective NumPy functions:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+# Compute dot product
+dot_product = np.dot(a, b)  # Result: 1*4 + 2*5 + 3*6 = 32
+
+# Compute cross product
+cross_product = np.cross(a, b)  # Result: [-3, 6, -3]
+\end{lstlisting}
+
+\paragraph*{Mathematical Functions}
+
+NumPy provides a wide range of mathematical functions, such as \python{sin}, \python{cos}, \python{exp}, and \python{sqrt}. These functions operate element-wise on arrays:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+x = np.array([1, 2, 3])
+square = x ** 2          # Square each element
+sqrt_values = np.sqrt(x) # Compute square root of each element
+\end{lstlisting}
+
+\section*{Matplotlib}
+
+Matplotlib is a comprehensive library for creating static, animated, and interactive plots in Python. It is widely used for visualizing data.
+
+\paragraph*{Plotting a Simple Dataset}
+
+Here is an example of how to create line and scatter plots:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+import matplotlib.pyplot as plt
+
+# Example data
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+# Plot a line
+plt.plot(a, b, color='blue', linestyle='dashed', label='Line')
+
+# Plot points
+plt.scatter(a, b, color='red', label='Points')
+
+# Add legend and show plot
+plt.legend()
+plt.show()
+\end{lstlisting}
+
+This script creates a plot with both a dashed line and red scatter points.
+
+\paragraph*{Customizing Plots}
+
+You can enhance your plots by adding titles, axis labels, and gridlines:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+plt.plot(a, b, color='green', label='Line')
+plt.title("Example Plot")
+plt.xlabel("X-axis")
+plt.ylabel("Y-axis")
+plt.grid(True)
+plt.legend()
+plt.show()
+\end{lstlisting}
+
+\section*{Complex Numbers}
+
+Python natively supports complex numbers. The imaginary unit is represented as \python{j}. You can create complex numbers as follows:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+c = 1 + 2j
+\end{lstlisting}
+
+Python automatically recognizes \python{c} as a complex number. NumPy extends support for complex arithmetic, offering functions like \python{np.real} and \python{np.imag} to extract the real and imaginary parts, respectively:
+
+\begin{lstlisting}[language=Python, style=mystyle2]
+real_part = np.real(c)  # Extract real part (1)
+imag_part = np.imag(c)  # Extract imaginary part (2)
+\end{lstlisting}
+
+
+
+% Python is a modern, general-purpose programming language widely used for scientific computing and numerical simulations. While it is not as fast and efficient as other programming languages like C++ or Fortran, it is user-friendly and suitable for programming beginners. Thus, we use Python throughout this text for the introductions as it requires very little prior knowledge and can be easily read also by nonexperts. In this brief introduction, we will introduce some basics of coding in Python but we will assume some basic knowledge of Python and coding (for example if conditions or for and while loops) in advance. We recommend students who have not seen Python before to search for tutorials and courses online, such as \href{https://www.learnpython.org/}{learnpython.org}. Another useful tool for coding are AI tools like ChatGPT which can suggest code snippets based on the assignments or explain a code. We will introduce only the necessary stuff for passing the coding exercises and assume some basic knowledge of Python.
+
+% \subsection*{Downloading and importing libraries}
+
+% One of the main advantage of python are its libraries which can be easily downloaded with the \bash{pip} tool as
+% \begin{lstlisting}[language=bash, style=mystyle2]
+% $ pip install numpy
+% \end{lstlisting}
+% The library can then be imported into the code at the beginning as
+% \begin{lstlisting}[language=Python, style=mystyle2]
+% import numpy as np
+% \end{lstlisting}
+% where we imported the \python{numpy} library and named it \python{np}. Thus, if we want to access NumPy, we can call \python{np}. Accessing function in a library is then done using dots. For example, if we want to access the absolute value function implemented in NumPy, we type
+% \begin{lstlisting}[language=Python, style=mystyle2]
+% abs_value = np.abs(a)
+% \end{lstlisting}
+% To print all the function available, on can do
+% \begin{lstlisting}[language=Python, style=mystyle2]
+% print(dir(np))
+% \end{lstlisting}
+
+% \subsection*{NumPy}
+
+% NumPy is a Numerical Python library which contains loads of useful numerical functions that simplify implementation of any numeric calculation, which is the scope of this text. We will usually work with vectors and matrices which are regarded as arrays in Python.
+% \begin{lstlisting}[language=Python, style=mystyle2]
+% vector = np.array([1, 2, 3, 4, 5, 6])
+% matrix = np.array([[1, 2, 3], [4, 5, 6]])
+% \end{lstlisting}
+% Multiplying arrays in python is a piecewise operation, i.e., the result is also a vector with the same dimension. If we want to make a dot or vector product, we can invoke NumPy functions \python{dot} and \python{cross}
+% \begin{lstlisting}[language=Python, style=mystyle2]
+% a = np.array([1, 2, 3])
+% b = np.array([4, 5, 6])
+
+% # Compute dot product
+% dot_product = np.dot(a, b)
+
+% # Compute cross product
+% cross_product = np.cross(a, b)
+% \end{lstlisting}
+
+% Numpy also contains mathematical functions such as \python{cos}, \python{sin}, \python{exp} or \python{sqrt}. $x^2$ is coded as \python{x**2}. All these operation are also elementwise, i.e., they act on each element separately.
+
+
+% \subsection*{Matplotlib}
+% Matplotlib is a mathematical plotting library which can help us to plot data. A simple dataset can be plotted as
+% \begin{lstlisting}[language=Python, style=mystyle2]
+% import matplotlib.pyplot as plt
+
+% a = np.array([1, 2, 3])
+% b = np.array([4, 5, 6])\
+
+% # plot line
+% plt.plot(x=a, y=b, color='blue', linestyle='dashed', label='line'
+
+% # plotting just points
+% plt.plot(x=a, y=b, color='red', label='points'
+
+% plt.legend()
+% plt.show()
+
+% \end{lstlisting}
+
+
+
+
+% \subsection*{Complex numbers}
+
+% The complex unit in python is denoted as \python{j}. Creating a complex number cal be simply done by using \python{j} as
+% \begin{lstlisting}[language=Python, style=mystyle2]
+% c = 1+0j
+% \end{lstlisting}
+% and Python will automatically recognize a complex number.
+
+
+
+
+% % Calling functions from a Python library, e.g. number $\pi$, is done as follows:
+% % \begin{lstlisting}[language=Python, style=mystyle2]
+% % pi = np.pi
+% % \end{lstlisting}
+% % of if we want to take absolute value of a number
+% % \begin{lstlisting}[language=Python, style=mystyle2]
+% % number = np.abs(-1)
+% % \end{lstlisting}
+
+
+
+
+% % \section{Basic Python Concepts}
+% % Before diving into NumPy, it is helpful to understand a few basic Python concepts:
+% % \begin{itemize}
+% %     \item \textbf{Variables:} Variables in Python are dynamically typed, meaning they do not need explicit declaration.
+% %     \begin{lstlisting}[language=Python, style=mystyle2]
+% % x = 5   # An integer
+% % y = 2.5 # A floating point number
+% % name = "Simulation" # A string
+% %     \end{lstlisting}
+% %     \item \textbf{Loops:} Python uses indentation to define blocks of code, making it simple to write loops.
+% %     \begin{lstlisting}[language=Python, style=mystyle2]
+% % for i in range(5):
+% %     print(i)
+% %     \end{lstlisting}
+% %     \item \textbf{Functions:} Python functions are defined using the \python{def} keyword.
+% %     \begin{lstlisting}[language=Python, style=mystyle2]
+% % def add(a, b):
+% %     return a + b
+% %     \end{lstlisting}
+% % \end{itemize}
+
+% % \section{NumPy Basics}
+% % NumPy is the core library for numerical computing in Python. It provides support for large, multi-dimensional arrays and matrices, along with a collection of mathematical functions to operate on these arrays efficiently.
+
+% % \subsection{Creating Arrays}
+% % The fundamental object in NumPy is the \python{array}. You can create an array using the \python{np.array()} function.
+% % \begin{lstlisting}[language=Python, style=mystyle2]
+% % import numpy as np
+
+% % # Creating a 1D array
+% % a = np.array([1, 2, 3, 4])
+
+% % # Creating a 2D array (matrix)
+% % b = np.array([[1, 2], [3, 4]])
+
+% % print(a)
+% % print(b)
+% % \end{lstlisting}
+
 

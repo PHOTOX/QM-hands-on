@@ -1,6 +1,6 @@
 Postulates of quantum mechanics state, that observable quantities are given by the eigenvalues of the corresponding quantum-mechanical operator. Thus, most quantum mechanics calculations reduce to computing the eigenvalues and eigenfunctions of the operator of interest. The central operator we usually try to find the eigenvalues for is the Hamiltonian $\hat{H}$. The eigenvalues of the Hamiltonian are the energy spectrum that can be measured by, for example, spectroscopic techniques. Part~\ref{part:elstruc} of this book dealt with diagonalization of the Hamiltonian for atoms and molecules, using techniques of \acrfull{tise}. This is the standard approach taken in quantum chemistry. In Chapter~\ref{kap:spec}, we have shown that the energy spectrum can be obtained also from the time evolution of a wave function, which may be often more efficient than the full diagonalization of the Hamiltonian. However, this approach based on the autocorrelation function can provide us only with the eigenvalues, not with the eigenfunctions. Yet the eigenfunctions are necessary to calculate observables of other operators and we often need them. In this Chapter, we will show how both the eigenvalues and eigenfunctions can be obtained from time-dependent techniques using propagation in imaginary time. The imaginary-time propagation is less frequent than the autocorrelation approach and much less frequent than the operator diagonalization, but it is still a useful technique.
 
-\section{*Theoretical background}
+\section{Theoretical background}
 
 In Chapter~\ref{kap:spec}, we have derived an formula for the time evolution of a wave function expressed in the eigenstates of the Hamiltonian operator (see Section~\ref{sec:autocorrintro} and Eq.~\eqref{eq:tdpsi1}):
 \begin{equation}
@@ -16,7 +16,7 @@ First, we will inspect the wave function in Eq.~\eqref{eq:tdpsi2}, starting with
     \label{eq:itnorm}
 \end{align}
 As expected, the norm of the wave function is preserved in time since $c_k$s are constant, which is a requirement we have for the wave function in order to conserve the number of particles. The quantity $|c_k|^2$ is the probability of finding state $k$ in a system described by $\psi(x,t)$. In other words, $|c_k|^2$ is the contribution of the $k$-th state to the wave function. Eq.~\eqref{eq:itnorm} shows that all $\phi_k$ contribute constantly the same over time and the composition of the wave function does not vary.\footnote{We remind the reader that the wave function in Eq.~\eqref{eq:tdpsi2} was derived with the assumption of a time-independent Hamiltonian. If the Hamiltonian would depend on time (for example by containing a electromagnetic field), the contributions $|c_k|^2$ would vary.}
-Where has the time disappeared in Eq.~\eqrefeq:itnorm} such that the different contributions are constant? The time $t$ appears only in the imaginary exponentials $\e^{\frac{i}{\hbar}E_k t}$ which vanished due to the complex conjugation. 
+Where has the time disappeared in Eq.~\eqref{eq:itnorm} such that the different contributions are constant? The time $t$ appears only in the imaginary exponentials $\e^{\frac{i}{\hbar}E_k t}$ which vanished due to the complex conjugation. 
 % The coefficients $c_k$ and eigenfunctions $\phi_k$ left in the expansion are time-independent. Thus, different eigenstates $\phi_k$ contribute to the wave function the same way for all the times. 
 
 Let us now imagine that the state contributions could vary over time. Could we possibly design a propagator, that would enhance the contribution of one of the states and dump the others? If we could achieve this, applying such a propagator would lead to a pure eigenstate $\phi_k$ after the propagation, calculating Hamiltonian eigenstates by means of dynamics instead of solving the \acrlong{tise}. 
@@ -82,7 +82,7 @@ Hence, if we want to optimize an arbitrary eigenstate, we first need to optimize
 In the end, let us return and comment on the imaginary time. What is it and how should we image a propagation in imaginary time? The concept of imaginary time seems elusive since no one has ever seen a watch measuring imaginary time. Still, the concept of imaginary time is not new in physics and appears, for example, in general relativity and cosmology, yet the concept is definitely not easy to grasp. The imaginary time often appears in equations as a mathematical 'trick' that allows us to reformulate equations into a better form. Although there are attempts to interpret the imaginary time, they still remain in the realm of speculations. If the imaginary time creates confusion in the reader, we recommend to view it rather as a mathematical construct that allows us to create a new operator with desired properties. The operator serves as a tool to obtain eigenstates and we do not need to attribute it any physical meaning, despite having a clear connection to dynamics
 
 
-\section{*Numerical implementation}
+\section{Numerical implementation}
 
 Numerical implementation of the imaginary-time quantum dynamics builds on the real-time quantum dynamics, where the imaginary unit needs to be removed from the exponentials in the propagator. The propagation in time is otherwise the same except for two minor additions to the code.
 
@@ -97,10 +97,8 @@ The second addition to the code concerns the calculation of excited states (stat
 
 While this projection of the initial wave function would be in theory sufficient only at the beginning, the numerical precision of a computer alter the wave function a bit at every step which can create a tiny contribution of the lower states. These contributions are at the order of a computer precision, i.e., very small, but they can become important at longer dynamics since they are enhanced exponentially. Hence, the projecting out should be done also during the dynamics. The simplest is to project out at every time step but it is possible to optimize the algorithm and project out with some frequency.
 
-A special  we just need to select the initial wave function such that all the coefficients of the states of interest are non-zero. If the eigenstate we are seeking has $c_k=0$, we will not be able to optimize it with imaginary-time dynamics. This is similar to the previous chapter about the autocorrelation function and we can use the same principles. Contrarily to the real-time quantum dynamics, we need to add two more features.
+We conclude with a remark not related to the implementation. If the eigenstate we seek has $c_k=0$, we cannot optimize it with imaginary-time dynamics. The initial wave function $\psi(x,0)$ should always be selected such that the coefficient of the desired state $k$ is not zero. This is similar to the previous chapter about the autocorrelation function and we can use the same principles. 
 
-\textbf{ Maybe:}
-Note that we always need to set up the initial wave function $\psi(x,0)$ such that the coefficient of the desired state $k$ is not zero. Then we would not be able to optimize the wave function. Thus, it is usually desirable to construct the wave function such that it breaks the symmetry of the system and contains contributions of all the systems. We can always add some random noise.
 
 \section{Code}
 
