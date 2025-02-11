@@ -1,0 +1,35 @@
+\section{Diffuse Monte Carlo}
+
+The Diffusion Monte Carlo (DMC) method is a numerical approach used to solve the time-independent Schrödinger equation for quantum systems. It is particularly effective for determining the ground state energy and wave function of systems where analytical solutions are not feasible. The method exploits the fact that the time-dependent Schrödinger equation, when reformulated in imaginary time, filters out all but the ground state energy. This transformation is achieved by replacing \( t \) with \( -i\tau \), converting the Schrödinger equation into:
+
+\[
+-\frac{\partial \Psi(x, \tau)}{\partial \tau} = \hat{H} \Psi(x, \tau),
+\]
+
+where \( \hat{H} \) is the Hamiltonian of the system. This equation resembles a diffusion equation with a reaction term, and the solution for large imaginary time, \( \tau \to \infty \), converges to the ground state:
+
+\[
+\Psi(x, \tau) \propto \phi_0(x) e^{-E_0 \tau}.
+\]
+
+Here, \( \phi_0(x) \) is the ground state wave function, and \( E_0 \) is the ground state energy.
+
+The DMC algorithm simulates this process using stochastic techniques. The wave function is represented by a population of "walkers" in the system's configuration space. These walkers evolve under two processes: diffusion, governed by the kinetic energy term, and branching, determined by the potential energy. The diffusion step is modeled as a random walk:
+
+\[
+x_{n+1} = x_n + \sqrt{\Delta \tau} \, \xi,
+\]
+
+where \( \xi \) is a Gaussian random variable with zero mean and unit variance, and \( \Delta \tau \) is the time step. The branching step adjusts the population of walkers by replicating or removing them based on their weights:
+
+\[
+W(x) = \exp\left(-\Delta \tau \left[V(x) - \langle V \rangle\right]\right),
+\]
+
+where \( V(x) \) is the potential energy at position \( x \).
+
+As the simulation progresses, the spatial distribution of walkers converges to the ground state wave function \( \phi_0(x) \).
+
+The DMC method has been successfully applied to systems such as the harmonic oscillator, where the potential energy is \( V(x) = \frac{1}{2}kx^2 \), and the exact ground state energy is \( E_0 = \frac{1}{2}\hbar\omega \). For more complex systems, such as the hydrogen molecule, the DMC method provides an accurate numerical approach when analytical solutions are unavailable.
+
+While the DMC method is powerful, it faces challenges, including the sign problem for fermionic systems and computational limitations for large systems. Nevertheless, its ability to accurately determine ground state properties makes it a cornerstone of quantum computational methods.

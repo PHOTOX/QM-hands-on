@@ -39,10 +39,6 @@
 
 % TITULNI STRANA
 \input{scriptum/titulni_strana.tex}
-% Nasledující v tuto chvíli není potřeba, je uděláno automaticky pomocí \frontmatter
-%\pagestyle{plain}
-%\pagenumbering{roman}
-%\setcounter{page}{3}
 
 % OBSAH
 { \hypersetup{hidelinks} \tableofcontents }
@@ -82,6 +78,7 @@
 \chapter{Imaginary-time dynamics and stationary states}
 \label{kap:imqd}
 \input{scriptum/texty/imagtimeqd}
+\input{scriptum/texty/dmc}
 
 % \chapter{Nonadiabatic quantum dynamics}
 % \label{kap:nonad}
@@ -100,7 +97,6 @@
 \chapter*{Solutions}\label{kap:sol}
 \addcontentsline{toc}{chapter}{Solutions}
 
-\input{scriptum/texty/elstructure_solutions}
 \input{scriptum/texty/solutions}
 
 \chapter*{Literature}

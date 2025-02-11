@@ -1,6 +1,6 @@
 \acrfull{ht} is one of the first and probably also the simplest methods to solve the electronic structure of molecules. It ranks among semiempirical quantum chemical methods as it contains empirical parameters parametrized to experiments or high-level calculations. The strength of \acrshort{ht} lies in its simplicity because it allows to solve the secular equations using a pen-and-paper approach, which makes it excellent for education purposes. The downside of \acrshort{ht} is, on the contrary, its applicability to only frontier molecular orbitals. The most famous applications of \acrshort{ht} are unsaturated polyens such as buta-1,3-diene or benzene. Although these small molecules can be solved with only a pen and paper, \acrshort{ht} is applicable also to larger systems such as molecular rotors or porphyrins. In this Chapter, we will use \acrshort{ht} as a warm-up for the next more advanced electronic structure chapters and show how to calculate \acrshort{ht} for an arbitrary conjugated planar system.
 
-\section{*Theoretical background}
+\section{Theoretical background}
 
 The \acrshort{ht} is a one-particle theory (mean-field such as \acrlong{hf}) and considers the electronic Hamiltonian to be approximated as a sum of effective one-particle hamiltonians $\hat{h}_{i, \mathrm{eff}}$:
 \begin{equation}
@@ -43,7 +43,7 @@ The second series of approximations in \acrshort{ht} (the first is the truncatio
     \item If the basis functions $\phi_\nu$ and $\phi_\mu$ reside in neighboring atoms, that is, atoms linked by a chemical bond, the Hamiltonian matrix element is set to another predefined parameter, $H_{\nu\mu} = \beta$.
     \item If the basis functions $\phi_\nu$ and $\phi_\mu$ reside in atoms that are not linked by a chemical bond, the Hamiltonian matrix element is zero, $H_{\nu\mu} = 0$.
 \end{itemize}
-The parameters $\alpha$ and $\beta$ are usually parameterized from experiments. The value of $\alpha$ is $\SI{-11{,}4}{\ev}$ which is the carbon ionization energy. The parameter $\beta$ can acquire quite different values based on the parametrization. Using spectroscopic data gives $\beta = \SI{-3{,}48}{\eV}$, while thermochemistry yields $\beta = \SI{-0{,}78}{\ev}$. The parameterization depends on the purpose of our calculations. If we intend to calculate energy gaps between HOMO and LUMO orbitals, we will rather take the value obtained from spectroscopy and vice versa.
+The parameters $\alpha$ and $\beta$ are usually parameterized from experiments. The value of $\alpha$ is $\SI{-11.4}{\ev}$ which is the carbon ionization energy. The parameter $\beta$ can acquire quite different values based on the parametrization. Using spectroscopic data gives $\beta = \SI{-3.48}{\eV}$, while thermochemistry yields $\beta = \SI{-0.78}{\ev}$. The parameterization depends on the purpose of our calculations. If we intend to calculate energy gaps between HOMO and LUMO orbitals, we will rather take the value obtained from spectroscopy and vice versa.
 
 Taking all the approximations on the matrix elements together, the final working equations of the \acrlong{ht} are 
 \begin{equation}
@@ -78,89 +78,62 @@ Construction of the new matrix is even simpler than constructing the Hamiltonian
 
 \section{Numerical implementation}
 
+The numerical implementation of \acrlong{ht} is very simple and requires only diagonalization of either the Hamiltonian matrix or the matrix using 1 instead of $\beta$ and 0 instead of $\alpha$. The diagonalization can be performed with NumPy's routines such as \python{np.linalg.eig(H)} which provides both the eigenvalues and eigenvectors:
+\begin{lstlisting}[language=Python, style=mystyle2]
+eigenvalues, eigenvectors = np.linalg.eigh(H)
+\end{lstlisting}
+where the eigenvectors are the columns of the eigenvector matrix, see the \href{https://numpy.org/doc/2.1/reference/generated/numpy.linalg.eig.html}{NumPy manual}. Since the matrix is Hermitian, algorithms tailored for such matrices like \python{np.linalg.eigh(H)} can be used.
 
-\textbf{JJ ENDED HERE}
+The implementation of \acrshort{ht} is simple and we leave the coding fully to the student and provide only one possible author solution at the end of the book.
 
+\section{Applications}
 
+\subsection*{Exercise: Benchmarking the code on buta-1,3-diene}
 
-
-\vspace{5cm}
-\section*{SKRIPTA}
-
-\begin{equation}
+The \acrlong{ht} for buta-1,3-diene yields the following orbital energies 
+\begin{equation*}
 \begin{split}
-\varepsilon_1 &= \alpha+1{,}62\beta \\
-\varepsilon_2 &= \alpha+0{,}62\beta \\
-\varepsilon_3 &= \alpha-0{,}62\beta \\
-\varepsilon_4 & = \alpha-1{,}62\beta 
+\varepsilon_1 &= \alpha+1.62\beta \, ,\\
+\varepsilon_2 &= \alpha+0.62\beta \, ,\\
+\varepsilon_3 &= \alpha-0.62\beta \, ,\\
+\varepsilon_4 &= \alpha-1.62\beta \, ,
 \end{split}
-\label{rov:HM2}
-\end{equation}
-
-Vlnovou funkci orbitalu s~nejnižší energií pak můžeme schematicky znázornit následujícím způsobem
-
-
-Úplně analogicky bychom postupovali pro další orbitaly. Jejich vlnové funkce můžeme napsat jako
-\begin{equation}
+\end{equation*}
+and wave functions
+\begin{equation*}
 \begin{split}
-\phi_1 = 0{,}37\chi_1+0{,}60\chi_2+0{,}60\chi_3+0{,}37\chi_4 \\
-\phi_2 = 0{,}60\chi_1+0{,}37\chi_2-0{,}37\chi_3-0{,}60\chi_4 \\
-\phi_3 = 0{,}60\chi_1-0{,}37\chi_2-0{,}37\chi_3+0{,}60\chi_4 \\
-\phi_4 = 0{,}37\chi_1-0{,}60\chi_2+0{,}60\chi_3-0{,}37\chi_4 
+\psi_1 &= 0.37\phi_1+0.60\phi_2+0.60\phi_3+0.37\phi_4 \, ,\\
+\psi_2 &= 0.60\phi_1+0.37\phi_2-0.37\phi_3-0.60\phi_4 \, ,\\
+\psi_3 &= 0.60\phi_1-0.37\phi_2-0.37\phi_3+0.60\phi_4 \, ,\\
+\psi_4 &= 0.37\phi_1-0.60\phi_2+0.60\phi_3-0.37\phi_4 \, .
 \end{split}
-\end{equation}
-%
-Vlnové funkce orbitalů pak můžeme schematicky znázornit takto
+\end{equation*}
+In this Exercise, we will use this analytic result to benchmark the implemented code for \acrshort{ht}.
 
- 
-\subsection{Aplikace HMO: Výpočet excitační energie}
+\paragraph{Assignment:} Calculate the orbital energies $\varepsilon$ and expansion coefficients $\Vec{c}$, and compare them with the analytic solution to confirm a correct implementation of the \acrlong{ht}. Additionaly, use the parameters $\alpha = \SI{-11.4}{\ev}$ and $\beta = \SI{-3.48}{\eV}$ to predict the excitation energy of buta-1,3-diene.
 
-Jak můžeme pomocí HMO spočítat excitační energii? Excitujeme jeden elektron z~obsazeného do neobsazeného orbitalu (viz obrázek \ref{obr:HMbuta}) a potom spočítáme celkovou energii a od ní odečteme celkovou energii základního stavu. Pokud chceme spočítat nejnižší excitační energii butadienu, přesuneme jeden elektron z~orbitalu 2 do orbitalu 3. Výsledná energie potom bude
-\begin{equation}
-\Delta E = \varepsilon_3-\varepsilon_2 = -1{,}24 \beta = h\nu 
-\end{equation}
+\subsection*{Exercise: Excitation energies of benzene, naphthalene and phenanthrene}
 
-Vlnová délka excitujícího záření vyjde \SI{287}{\nm} ($\beta = -\SI{3{,}48}{\eV}$), zatímco experimentální hodnota je kolem \SI{200}{\nm}.
-Soulad to není ideální, ale není ani tragický, na to že jsme jej získali tak jednoduše. HMO také správně zachycuje experimentální fakt, že excitační energie se snižuje se zvyšující se délkou řetězce obsahující konjugované dvojné vazby.
+The \acrlong{ht} can be applied effectively to conjugated systems of aromatic rings such as benzene, naphthalene or phenanthrene. Frontier molecular orbitals in these systems are composed of the $\pi$ bonding and antibonding orbitals which can be well captured by \acrshort{ht}. In this Exercise, we will try to predict the structure of the conjugated system of aromatic compounds and their excitation energies. 
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.6\linewidth]{scriptum/obrazky/huckel/ex2.png}
+    % \caption{Str}
+    \label{fig:huckel1}
+\end{figure}
 
+\paragraph{Assignment:} Calculate the orbital energies $\varepsilon$ and expansion coefficients $\Vec{c}$ for benzene, naphthalene and phenanthrene. Try to plot the orbitals and compare them with literature or \acrlong{hf} calculations. Then, calculate the energy gap between the HOMO and LUMO orbitals using $\alpha = \SI{-11.4}{\ev}$ and $\beta = \SI{-3.48}{\eV}$ and predict excitation energies. Do they compare to experimental values? Do you see the same trends? 
 
-\subsection{Aplikace HMO: Výpočet delokalizační energie}
+\subsection*{Exercise: Excitation energy of porphyrin and its HOMO and LUMO}
 
-Z~organické chemie si ještě možná vzpomeneme, že konjugované dvojné vazby mají jiné vlastnosti než vazby izolované.
-Tuto delokalizaci můžeme vyjádřit pomocí poněkud nefyzikální veličiny delokalizační energie.
+Porphyrin is one of the building blocks of life and is often used in nature to capture photons. Its conjugated system of double bonds is responsible for a shift of the absorption spectrum to the visible region. Both HOMO and LUMO are mainly composed of $p$ orbitals on carbons and nitrogen. In this Exercise, we will test the predictability of \acrshort{ht} on bare porphyrin. 
 
-Pokud by se dvojné vazby vzájemně neovlivňovaly, tak by mělo platit, že  energie
-\textit{n}-krát konjugovaného systému by se rovnala \textit{n}-násobku energie ethenu, který má dvojnou vazbu jen jednu. Tato rovnost ale neplatí a rozdíl je právě delokalizační energie. 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.3\linewidth]{scriptum/obrazky/huckel/ex3.png}
+    % \caption{Str}
+    \label{fig:huckel1}
+\end{figure}
 
-Pojďme si vše ukázat na příkladě butadienu, jehož energii již známe. Musíme tedy dopočítat energii molekuly ethenu. Pro ten vychází následující sekulární determinant 
-\begin{equation}
-\begin{vmatrix}
-\alpha - \varepsilon & \beta \\
-\beta & \alpha - \varepsilon \\
-\end{vmatrix}
-=0
-\end{equation}
-z~čehož
-$$
-(\alpha-\varepsilon)^2=\beta^2
-$$
-$$
-\alpha - \varepsilon = \pm \beta
-$$
-$$
-\varepsilon_{1,2}= \alpha\pm \beta 
-$$
-Pro butadien poté vychází delokalizační energie
-\begin{equation}
-E_{\mathrm{D}} = E_{\mathrm{butadien}} - 2E_{\mathrm{ethylen}}=2(\alpha + 1{,}62\beta)+ 2(\alpha + 0{,}62\beta) - 4(\alpha + \beta) =0{,}48\beta = -\SI{36}{\kJ\per\mol}
-\end{equation}
-%
-Experimentálně můžeme míru delokalizace určit pomocí hydrogenačních tepel butadienu a ethenu.
-Hydrogenační teplo ethenu (tj. entalpie reakce ethen + H$_2 \xrightarrow{}$ ethan) je
-\SI{-136{,}94}{\kJ\per\mol}, zatímco hydrogenační teplo butadienu je \SI{-240{,}0}{\kJ\per\mol}. Experimentální delokalizační energie je tedy
-\begin{equation}
-E_{\mathrm{D}}^{\mathrm{exp}}=2\cdot136{,}94-240{,}0 = \SI{33{,}88}{\kJ\per\mol}
-\end{equation}
-\noindent což je v~dobrém souladu s~námi vypočtenou hodnotou.
-
+\paragraph{Assignment:} Calculate the orbital energies $\varepsilon$ and expansion coefficients $\Vec{c}$ for porphyrin. Plot the orbitals and compare them with literature or \acrlong{hf} calculations. Then, calculate the energy gap between HOMO and LUMO orbitals using $\alpha = \SI{-11.4}{\ev}$ and $\beta = \SI{-3.48}{\eV}$ and predict excitation energies. Do they compare to experimental values?

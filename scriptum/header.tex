@@ -154,7 +154,6 @@ group-minimum-digits = 4
 }
 \DeclareSIUnit{\kcal}{kcal}
 \DeclareSIUnit{\ev}{eV}
-\DeclareSIUnit{\eV}{eV}
 \DeclareSIUnit{\angstrom}{Å}
 
 % Vylepseni tabulek
@@ -202,9 +201,6 @@ group-minimum-digits = 4
 % http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/geometry/geometry.pdf
 % \usepackage[ paperheight = 240mm, paperwidth = 170mm,  % or: "paper=a4paper"
 \usepackage[ paperheight = 297mm, paperwidth = 210mm,  % or: "paper=a4paper"
-             % layoutheight = 200mm, layoutwidth = 138mm,
-             % layoutvoffset = 12mm, layouthoffset = 16mm,
-             % margin=0pt,
              left = 20mm,
              right = 20mm,
              top = 25mm,
@@ -217,6 +213,12 @@ group-minimum-digits = 4
              showframe = false, showcrop = false]{geometry}
 
 
+% removing dot after the section numbering as suggested by ChatGPT ("1.1. Section" -> "1.1 Section")
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname\quad} % Removes the dot
+\makeatother
+
+
 % Popisky obrazku a tabulek
 % http://ftp.cvut.cz/tex-archive/macros/latex/contrib/caption/caption-eng.pdf
 \usepackage{caption}   
@@ -224,7 +226,9 @@ group-minimum-digits = 4
 \captionsetup{format=plain}         % normal par justification
 \captionsetup{width=0.9\textwidth}  % úprava šířky popisků
 \captionsetup{font=small}           % mensi font u popisku
-\captionsetup[figure]{name=Obr.}
+\captionsetup{labelformat=simple}   % odstrani tecku za cislovanim tabulek a obrazku, tedy "Figure 1.1." -> "Figure 1.1"
+\captionsetup[figure]{name=Figure}
+\captionsetup[table]{name=Table}
 
 % Vektory tucne a ne italikou
 % definice fungujici i pro recke symboly, viz
@@ -252,14 +256,6 @@ group-minimum-digits = 4
 
 \newcommand{\dv}[2]{\frac{\dd #1}{\dd #2}}
 \newcommand{\ddv}[2]{\frac{\dd^2 #1}{\dd #2^2}}
-
-
-% zkraceny vyraz pro hmotnost elektronu
-\newcommand{\me}{m_{\mathrm{e}}}
-
-% magnetické spinové číslo elektronu
-\newcommand{\ms}{m_{\mathrm{s}}}
-\newcommand{\msi}[1]{m_{\mathrm{s}#1}}
 
 % zkraceny vyraz pro exponencialu
 \newcommand{\ee}{\mathrm{e}}
