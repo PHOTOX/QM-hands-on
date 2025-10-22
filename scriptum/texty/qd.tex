@@ -1,4 +1,4 @@
-Up to this point, we have taken the time-independent perspective on quantum mechanics, focusing on methods for calculating stationary states of electrons in molecules. In this chapter, we shift to time-dependent quantum mechanics and look at the time evolution of quantum systems. We will focus on simple low-dimensional models and introduce a simple numerical scheme suitable for wave function propagation. The power of low-dimensional models resides in the conceptual understanding of time evolution in quantum mechanics: they allow us to examine dynamics such as interference of two wave packets, tunnelling through energy barriers, or reflection of the wave packet on boundaries.
+Up to this point, we have taken the time-independent perspective on quantum mechanics, focusing on methods for calculating stationary states of electrons in molecules. In this chapter, we move to time-dependent quantum mechanics and look at the time evolution of quantum systems. We will focus on simple low-dimensional models and introduce a numerical scheme suitable for wave function propagation. The power of low-dimensional models resides in the conceptual understanding of time evolution in quantum mechanics: they allow us to examine dynamics such as interference of two wave packets, tunnelling through energy barriers, or reflection of the wave packet on boundaries.
 
 \section{Theoretical background}
 \label{sec:qdtheoback}
@@ -8,7 +8,7 @@ The time evolution in quantum mechanics is governed by the \acrfull{tdse},
     i\hbar\frac{\dd\psi(x,t)}{\dd t} = \hat{H}(x)\psi(x,t) \, ,
     \label{eq:tdse}
 \end{equation}
-where $i$ is the imaginary unit, $\hbar$ is the reduced Planck constant, $\psi$ is the wave function, $\hat{H}$ is the Hamiltonian, $t$ is time and $x$ represents the position of a quantum particle, such as an electron, proton, or any other particle. The solution of the \acrshort{tdse} can be in general written as
+where $i$ is the imaginary unit, $\hbar$ is the reduced Planck constant, $\psi$ is the wave function, $\hat{H}$ is the Hamiltonian, $t$ is time and $x$ represents the position of a quantum particle, such as an electron, proton, or any other particle. The solution of the \acrshort{tdse} can be, in general, written as
 \begin{equation}
     \psi(x,t) = \hat{U}(t)\psi(x,0) \, .
     \label{eq:U}
@@ -20,7 +20,7 @@ The propagator is easy to find if the Hamiltonian $\hat{H}$ does not depend on t
     \psi(x,t) = \e^{-\frac{i}{\hbar}\hat{H}(x)t} \psi(x,0)\, .
     \label{eq:tdse2}
 \end{equation}
-Notice that the result resembles the separation of variables for differential equations, only for an equation with operators. Considering the Hamiltonian to be time-independent restricts the validity of equation~\eqref{eq:tdse2} only for systems without any time-dependent interaction such as oscillating electromagnetic field (radiation), collisions between particles, interaction with the environment, etc. The solution for a time-dependent Hamiltonian is somewhat more complicated and will not be considered here.
+Notice that the result resembles the separation of variables for differential equations, only for an equation with operators. Considering the Hamiltonian to be time-independent restricts the validity of equation~\eqref{eq:tdse2} only for systems without any time-dependent interaction, such as oscillating electromagnetic field (radiation), collisions between particles, interaction with the environment, etc. The solution for a time-dependent Hamiltonian is somewhat more complicated and will not be considered here.
 
 Comparing equations~\eqref{eq:tdse2} and \eqref{eq:U}, we see that the evolution operator has a simple form of an exponential of the Hamiltonian,
 \begin{equation}
@@ -29,7 +29,7 @@ Comparing equations~\eqref{eq:tdse2} and \eqref{eq:U}, we see that the evolution
 \end{equation}
 Formally, we now have a propagator containing all information about the time evolution of the system and we can propagate the wave function to an arbitrary time $t$. While this works well on paper, analytical evaluation of the propagator is in practice not a straightforward task for most Hamiltonians. The hindrance lies in the evaluation of the exponential in equation~\eqref{eq:U1}.
 
-Let us briefly discuss why analytic evaluation of the exponential of Hamiltonian is a cumbersome task. The exponential of an operator is defined through its Taylor series as
+Let us briefly discuss why the analytic evaluation of the exponential of the Hamiltonian is a cumbersome task. The exponential of an operator is defined through its Taylor series as
 \begin{equation}
     \e^{\hat{A}} = \sum_{l=0}^\infty \frac{\hat{A}^l}{l!} \, ,
 \end{equation}
@@ -54,7 +54,7 @@ Thus, analytical solutions of the \acrshort{tdse} are used only in model systems
 
 \section{Numerical solution}
 
-Systems of chemical interest span, in general, an infinite Hilbert space. In other words, an infinite number of orthogonal basis functions are required to fully represent the wave function of such a system. However, any computer can only handle a finite basis set, since computer memory is finite, and often even quite limited. Thus, in any numerical implementation of quantum mechanics, we work in a truncated basis set. This basis truncation is the first and fundamental source of error for any computer simulation. There are other sources of error due to the numeric schemes employed, e.g. trapezoid rule for integration, or due to a finite time step in our propagation. While these sources of error can be eliminated by improving our numeric schemes or the time step, the truncation error will be always present and dependent on how much we truncated our basis.
+Systems of chemical interest span, in general, an infinite Hilbert space. In other words, an infinite number of orthogonal basis functions are required to fully represent the wave function of such a system. However, any computer can only handle a finite basis set, since computer memory is finite, and often even quite limited. Thus, in any numerical implementation of quantum mechanics, we work in a truncated basis set. This basis truncation is the first and fundamental source of error for any computer simulation. There are other sources of error due to the numeric schemes employed, e.g., trapezoid rule for integration, or due to a finite time step in our propagation. While these sources of error can be eliminated by improving our numeric schemes or the time step, the truncation error will always be present and dependent on how much we truncated our basis.
 % consider reformulating the fundamental error and other errors
 
 In this text, we will represent the system on a grid of discrete points, a natural representation for a computer. These grid points (we can think of them as a set of Dirac $\delta$-distributions) form our truncated basis set commonly referred to as a \textit{pseudospectral} basis. 
@@ -62,7 +62,7 @@ In the following, we will explain how to work with such a representation, includ
 
 \subsection{Representing wave function on a grid: the \textit{pseudospectral} basis}
 
-As stated above we will work in a truncated \textit{pseudospectral} basis and represent the system with a set of $N$ discrete points. Since we work as usual in chemistry in the position representation, we start with discretizing the position coordinate $x$ and replacing it by a set of points:
+As stated above, we will work in a truncated \textit{pseudospectral} basis and represent the system with a set of $N$ discrete points. Since we work as usual in chemistry in the position representation, we start with discretizing the position coordinate $x$ and replacing it by a set of points:
 \begin{align}
     x &\rightarrow \{x_0, x_1, x_2, \dots, x_N\} \, .
 \end{align}
@@ -72,9 +72,9 @@ Next, we express the wave function $\psi$ on this grid by evaluating it at each 
 \begin{align}
     \psi(x,t) &\rightarrow \{\psi(x_0,t), \psi(x_1,t), \psi(x_2,t), \dots, \psi(x_N,t)\} =  \{\psi_{0,t}, \psi_{1,t}, \psi_{2,t}, \dots, \psi_{N,t}\} \, .
 \end{align}
-We have now two indexes of $\psi$: the grid point index $i$ and time index $t$. Further in the text, we will drop the index $t$ to simplify the notation unless $\psi$ in two different times will appear in the equation.
+We now have two indices of $\psi$: the grid point index $i$ and the time index $t$. Further in the text, we will drop the index $t$ to simplify the notation unless $\psi$ at two different times will appear in the equation.
 
-Having the wave function defined on a grid, the next step is to compute its norm. In the position representation, the norm is an integral of $\psi^*\psi$ over the position $x$, which can be numerically realized for example by the trapezoidal rule:
+Having the wave function defined on a grid, the next step is to compute its norm. In the position representation, the norm is an integral of $\psi^*\psi$ over the position $x$, which can be numerically realized, for example, by the trapezoidal rule:
 \begin{equation}
     \langle \psi(x,t) | \psi(x,t) \rangle = \int_{-\infty}^\infty \psi^*(x,t)\psi(x,t) \dd x = \sum_{j=1}^N \frac{\psi^*_{j-1}\psi_{j-1} + \psi^*_{j}\psi_{j}}{2} \Delta x \, .
 \end{equation}
@@ -100,7 +100,7 @@ However, operators that depend on momentum $\hat{p}$ require a more complex trea
 
 % better structure: first show how to transfer between reps and then how we use it to evaluate
 
-To evaluate the action of the kinetic energy operator, or any other operator depending on momentum, it is convenient to switch to a basis where the action of momentum operator $\hat{p}$ is a simple multiplication. Such basis is the basis of the free particle states $\e^{ikx}$, the so-called $k$-space or momentum space since $p = \hbar k$. The wave function represented in the $k$-space can be obtained by \acrfull{ift} $\mathcal{F}^{-1}$ as
+To evaluate the action of the kinetic energy operator, or any other operator depending on momentum, it is convenient to switch to a basis where the action of the momentum operator $\hat{p}$ is a simple multiplication. Such a basis is the basis of the free particle states $\e^{ikx}$, the so-called $k$-space or momentum space since $p = \hbar k$. The wave function represented in the $k$-space can be obtained by \acrfull{ift} $\mathcal{F}^{-1}$ as
 \begin{align}
     \psi(k,t) = \mathcal{F}^{-1}[\psi(x,t)] =\int_{-\infty}^\infty \psi(x,t) \e^{ikx}\dd x \, .
 \end{align}
@@ -120,12 +120,12 @@ However, we are interested in the action of $\hat{T}$ in the position space sinc
 \end{align}
 Once again, \acrshort{ft} is a routine operation performed on computers.
 
-Let us now summarize the evaluation of $\hat{T}\psi(x,t)$. First, the wave function $\psi(x,t)$ has to be \acrshort{ift} to the momentum representation $\psi(k,t)$. Then, the action of $\hat{T}$ on $\psi(k,t)$ is evaluated by simply multiplying it by $\frac{\hbar^2 k^2}{2m}$. Finally, the \acrshort{ft} is applied to $\frac{\hbar^2 k^2}{2m} \psi(k,t)$ transforming it back to the position space. The whole procedure is depicted in the following scheme:
+Let us now summarize the evaluation of $\hat{T}\psi(x,t)$. First, the wave function $\psi(x,t)$ has to be \acrshort{ift} to the momentum representation $\psi(k,t)$. Then, the action of $\hat{T}$ on $\psi(k,t)$ is evaluated by simply multiplying it by $\frac{\hbar^2 k^2}{2m}$. Finally, the \acrshort{ft} is applied to $\frac{\hbar^2 k^2}{2m} \psi(k,t)$, transforming it back to the position space. The whole procedure is depicted in the following scheme:
 \begin{equation}
     \psi(x,t) \stackrel{\mathrm{IFT}}{\longrightarrow} \psi(k,t) \longrightarrow \frac{\hbar^2 k^2}{2m} \psi(k,t) \stackrel{\mathrm{FT}}{\longrightarrow} \hat{T}\psi(x,t) \, .
 \end{equation}
 
-Finally, we note that the Fourier method is not the only way how to evaluate the action of the kinetic energy operator. The most straightforward way would be to calculate the second derivative numerically using finite differences. However, the finite differences are a local method converging polynomial, while the Fourier method is global and converges exponentially.
+Finally, we note that the Fourier method is not the only way to evaluate the action of the kinetic energy operator. The most straightforward way would be to calculate the second derivative numerically using finite differences. However, the finite differences are a local method that converges polynomially, while the Fourier method is global and converges exponentially.
 
 \subsection{The propagator and the split-operator technique}
 
@@ -135,7 +135,7 @@ As we discussed in section~\ref{sec:qdtheoback}, evaluating the propagator is st
 \end{equation}
 If we could factorize the propagator as above, we could evaluate the exponential of $\hat{V}$ (in the position representation) and the exponential of $\hat{T}$ (in the momentum representation) separately. However, the non-commutativity of $\hat{V}$ and $\hat{T}$ does not allow for such factorization.
 
-A way to deal with this problem is to split the propagator into a series of $n$ short-time propagator
+A way to deal with this problem is to split the propagator into a series of $n$ short-time propagators
 \begin{equation}
     \hat{U}(t) = \e^{-\frac{i}{\hbar}\hat{H}(x)t} = \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \cdots \e^{-\frac{i}{\hbar}\hat{H}(x)\Delta t} \, ,
     \label{eq:U4}
@@ -187,7 +187,7 @@ Follows the incomplete code for quantum dynamics with empty gaps where the stude
 
 \subsection*{Exercise: Squeezed and coherent states of harmonic oscillator}
 
-The harmonic oscillator and Gaussian wave packet are some of the most important objects in quantum mechanics. While the harmonic oscillator is used as the first approximation to many bound Hamiltonians, the Gaussian wave packet is a commonly used basis function in quantum dynamics. There is a special relationship between them: any initial Gaussian wave function, $\psi(x,0)$, propagated in quadratic potential remains Gaussian throughout its evolution. In other words, a Gaussian wave packet evolving in a harmonic oscillator will retain its Gaussian form, with only its position, momentum, and width changing over time.
+The harmonic oscillator and Gaussian wave packet are some of the most important objects in quantum mechanics. While the harmonic oscillator is used as the first approximation to many bound Hamiltonians, the Gaussian wave packet is a commonly used basis function in quantum dynamics. There is a special relationship between them: any initial Gaussian wave function, $\psi(x,0)$, propagated in a quadratic potential remains Gaussian throughout its evolution. In other words, a Gaussian wave packet evolving in a harmonic oscillator will retain its Gaussian form, with only its position, momentum, and width changing over time.
 
 Gaussian wave packets evolving in harmonic oscillators can be classified into two groups: \textit{coherent} and \textit{squeezed} states. The \textit{coherent} states are characterized by a constant width of the Gaussian during the dynamics, meaning the wave packet preserves its shape while its position and momentum vary. Contrarily, if the Gaussian spreads and contracts (or contracts and spreads) during the dynamics, it is referred to as a \textit{squeezed} state.
 
@@ -196,14 +196,14 @@ In this exercise, we will explore the properties of \textit{coherent} and \texti
     \psi(x,0) = \left(\frac{2\alpha_0}{\pi}\right)^{\frac{1}{4}} \e^{-\alpha_0(x-x_0)^2 +\frac{i}{\hbar}p_0(x-x_0)} \, ,
     \label{eq:qdgauss}
 \end{equation}
-where $x_0$ and $p_0$ refer to the initial mean position and momentum of the Gaussian, and $\alpha_0$ is the initial Gaussian width. The potential for harmonic oscillator takes the following form:
+where $x_0$ and $p_0$ refer to the initial mean position and momentum of the Gaussian, and $\alpha_0$ is the initial Gaussian width. The potential for a harmonic oscillator takes the following form:
 \begin{equation}
     V = \frac{1}{2}m\omega^2x^2 \, .
     \label{eq:qdho}
 \end{equation}
 The aim is to determine the Gaussian width $\alpha_0$ corresponding to a \textit{coherent} state by trying different values of $\alpha_0$.
 
-\paragraph{Assignment:} Set up the harmonic oscillator from Eq.~\eqref{eq:qdho} and initial Gaussian wave packet from Eq~\eqref{eq:qdgauss} with the following parameters: $m=20$~a.u., $\omega=2$~a.u., $x_0=0$~a.u. and $p_0=20$~a.u. Set up a trial $\alpha_0$ (Hint: try $\alpha_0$ as a factor of $\frac{m\omega}{\hbar}$). Propagate the wave packet for several oscillation and visualize it. If the wave packet contracts in the center of the potential, increase $\alpha_0$. If the wave packet spreads, decrease $\alpha_0$ to approach a coherent state. Iterate that procedure until you find the value of $\alpha_0$ corresponding to the \textit{coherent} state. 
+\paragraph{Assignment:} Set up the harmonic oscillator from Eq.~\eqref{eq:qdho} and initial Gaussian wave packet from Eq~\eqref{eq:qdgauss} with the following parameters: $m=20$~a.u., $\omega=2$~a.u., $x_0=0$~a.u. and $p_0=20$~a.u. Set up a trial $\alpha_0$ (Hint: try $\alpha_0$ as a factor of $\frac{m\omega}{\hbar}$). Propagate the wave packet for several oscillations and visualize it. If the wave packet contracts in the center of the potential, increase $\alpha_0$. If the wave packet spreads, decrease $\alpha_0$ to approach a coherent state. Iterate that procedure until you find the value of $\alpha_0$ corresponding to the \textit{coherent} state. 
 
 \subsection*{Exercise: Ehrenfest's theorems in harmonic oscillator}
 
@@ -212,30 +212,30 @@ Ehrenfest's theorems provide a connection between classical and quantum dynamics
     \frac{\dd \braket{x}}{\dd t} &= \frac{\braket{p}}{m} \\
     \frac{\dd \braket{p}}{\dd t} &= -\frac{\dd V(\braket{x})}{\dd \braket{x}} \, .
 \end{align*}
-These equations are equivalent to the classical Newton's equations of motion, only for expectation values of position $\braket{x}$ and momenta $\braket{p}$ instead of classical $x$ and $p$. This exercise aims to verify that the relations above hold true for harmonic oscillator and $\braket{x}$ and $\braket{p}$ follow a classical trajectory. Equally, one can consider a anharmonic potential, e.g. Morse potential, and show that the relations above are not exact.
+These equations are equivalent to the classical Newton's equations of motion, only for expectation values of position $\braket{x}$ and momenta $\braket{p}$ instead of classical $x$ and $p$. This exercise aims to verify that the relations above hold for the harmonic oscillator and $\braket{x}$ and $\braket{p}$ follow a classical trajectory. Equally, one can consider an anharmonic potential, e.g., the Morse potential, and show that the relations above are not exact.
 
-\paragraph{Assignment:} Choose an arbitrary initial wave function and harmonic potential. Propagate the wave function for several oscillations and calculate the expectation values of position $\braket{x}$ and momenta $\braket{p}$ over time. Compare the calculated values with a classical trajectory with the same initial conditions. The classical trajectory can be obtained by solving Newton's equations of motion. Repeat the same procedure for an anharmonic Morse potential and show that the relation above does not hold. Note that you will probably need to calculate the classical trajectory numerically, for example by a Verlet method.
+\paragraph{Assignment:} Choose an arbitrary initial wave function and harmonic potential. Propagate the wave function for several oscillations and calculate the expectation values of position $\braket{x}$ and momenta $\braket{p}$ over time. Compare the calculated values with a classical trajectory with the same initial conditions. The classical trajectory can be obtained by solving Newton's equations of motion. Repeat the same procedure for an anharmonic Morse potential and show that the relation above does not hold. Note that you will probably need to calculate the classical trajectory numerically, for example, by a Verlet method.
 
 
 \subsection*{Exercise: Tunnelling in a double-well potential}
 
-Tunnelling is an ubiquitous phenomenon in quantum world which is difficult to grasp from classical perspective. It plays an important role in chemistry where light atoms, such as protons, can tunnel through energy barriers causing energetically forbidden reactions. This exercise focuses at tunnelling through a double-well potential,
+Tunnelling is an ubiquitous phenomenon in the quantum world which is difficult to grasp from a classical perspective. It plays an important role in chemistry where light atoms, such as protons, can tunnel through energy barriers causing energetically forbidden reactions. This exercise focuses on tunnelling through a double-well potential,
 \begin{equation*}
     V = \frac{1}{2}m\omega^2(x^4 - x^2) \, .
 \end{equation*}
-The wave function will be initiated at the edge of the left well, which will send it to the right towards the barrier. Two scenarios are possible. First, the energy of the wave packet is below the barrier. Then, no density should be observed at the other well from classical perspective. Thus, any density observed in the right well is due to quantum tunnelling. In the second scenario, the wave packet energy is above the barrier. Classical particles would then transfer to the other well without loss of density, yet this is again not true for the quantum world. The wave packet partially reflects on the barrier and some density remains in the original well.
+The wave function will be initiated at the edge of the left well, which will send it to the right towards the barrier. Two scenarios are possible. First, the energy of the wave packet is below the barrier. Then, no density should be observed at the other well from a classical perspective. Thus, any density observed in the right well is due to quantum tunnelling. In the second scenario, the wave packet energy is above the barrier. Classical particles would then transfer to the other well without loss of density, yet this is again not true for the quantum world. The wave packet partially reflects on the barrier and some density remains in the original well.
 
 To assess the amount of density transferred to the right well, we devise a coefficient $\kappa$ defined as
 \begin{equation*}
     \kappa(t) = \int_0^{\infty} \psi^*(x,t) \psi(x,t) \dd x \,.
 \end{equation*}
-The value of $\kappa$ will tell us how big portion of the density is located in the right well, i.e. about the tunnelling efficiency in the first scenario and reflective strength in the second scenario.
+The value of $\kappa$ will tell us how big portion of the density is located in the right well, i.e., about the tunnelling efficiency in the first scenario and reflective strength in the second scenario.
 
-\paragraph{Assignment:} Prepare a double well potential with parameters $m=20$~a.u. and $\omega=2$~a.u. First, initialize the dynamics with a wave function in form of Eq.~\eqref{eq:qdgauss} with parameters $x_0=-0.90$~a.u., $p_0=0$~a.u. and $\alpha_0 = 2m\omega$~a.u. (the energy of the wave packet should be below the barrier). Second, initialize the dynamics with parameters $x_0=-0.95$~a.u., $p_0=8$~a.u. and $\alpha_0=2m\omega$~a.u. (the energy should be above the barrier). Calculate the parameter $\kappa$ for both scenarios and compare them with your expectations base on classical physics. Analyse the dynamics also visually by plotting the density in time. Con you identify interferences of the reflected and tunnelled wave packets?
+\paragraph{Assignment:} Prepare a double well potential with parameters $m=20$~a.u. and $\omega=2$~a.u. First, initialize the dynamics with a wave function in the form of Eq.~\eqref{eq:qdgauss} with parameters $x_0=-0.90$~a.u., $p_0=0$~a.u. and $\alpha_0 = 2m\omega$~a.u. (the energy of the wave packet should be below the barrier). Second, initialize the dynamics with parameters $x_0=-0.95$~a.u., $p_0=8$~a.u. and $\alpha_0=2m\omega$~a.u. (the energy should be above the barrier). Calculate the parameter $\kappa$ for both scenarios and compare them with your expectations based on classical physics. Analyse the dynamics also visually by plotting the density in time. Can you identify the interferences of the reflected and tunnelled wave packets?
 
-\subsection*{Exercise: Heisenberg's uncertainity relations}
+\subsection*{Exercise: Heisenberg's uncertainty relations}
 
-The uncertainty principle developed by Werner Heisenberg is one of the corner stones of quantum mechanics. It states that
+The uncertainty principle developed by Werner Heisenberg is one of the cornerstones of quantum mechanics. It states that
 \begin{equation*}
     \Delta x \Delta p \ge \frac{\hbar}{2} \, , 
 \end{equation*}
