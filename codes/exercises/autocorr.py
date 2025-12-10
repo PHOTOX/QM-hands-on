@@ -96,8 +96,8 @@ while t < simtime:  # loop until simulation time is reached
 autocorr = np.array(autocorr)  # converting the autocorrelation function to a numpy array
 time = np.array(time)  # converting the time to a numpy array
 
-# apply the damping to the autocorrelation function in form of exp(-kappa*time)
-autocorr =  # apply the damping factor
+# apply the damping to the autocorrelation function
+autocorr =  # apply the damping function
 
 # extend the autocorrelation function to negative times assuming that S(t) = S^*(-t)
 time = np.concatenate([-time[::-1], time])  # new time array in range [-t_max, t_max]
