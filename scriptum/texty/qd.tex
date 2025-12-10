@@ -241,8 +241,10 @@ The uncertainty principle developed by Werner Heisenberg is one of the cornersto
 \end{equation*}
 where
 \begin{align*}
-    \Delta x &= \braket{x^2} - \braket{x}^2 = \bra{\psi(x, t)}x^2\ket{\psi(x,t)} -  \bra{\psi(x, t)}x\ket{\psi(x,t)}^2\\
-    \Delta p &= \braket{p^2} - \braket{p}^2 = \bra{\psi(x, t)}\hat{p}^2\ket{\psi(x,t)} -  \bra{\psi(x, t)}\hat{p}\ket{\psi(x,t)}^2 \, .
+    % (\Delta x)^2 &= \braket{x^2} - \braket{x}^2 = \bra{\psi(x, t)}x^2\ket{\psi(x,t)} -  \bra{\psi(x, t)}x\ket{\psi(x,t)}^2\\    
+    \Delta x &= \sqrt{\braket{x^2} - \braket{x}^2} = \sqrt{\bra{\psi(x, t)}x^2\ket{\psi(x,t)} -  \bra{\psi(x, t)}x\ket{\psi(x,t)}^2} \, , \\
+    % (\Delta p)^2 &= \braket{p^2} - \braket{p}^2 = \bra{\psi(x, t)}\hat{p}^2\ket{\psi(x,t)} -  \bra{\psi(x, t)}\hat{p}\ket{\psi(x,t)}^2 \, .
+    \Delta p &= \sqrt{\braket{p^2} - \braket{p}^2} = \sqrt{\bra{\psi(x, t)}\hat{p}^2\ket{\psi(x,t)} -  \bra{\psi(x, t)}\hat{p}\ket{\psi(x,t)}^2} \, .
 \end{align*}
 However, the uncertainty principle states only the lower boundary for $\Delta x \Delta p$ and does not tell us if it remains constant, rises or oscillates throughout the time evolution. The goal of this exercise is to empirically estimate whether the product $ \Delta x \Delta p$ remains constant in time or not. If not, how does it behave?
 

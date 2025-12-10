@@ -94,6 +94,7 @@ Nonetheless, the autocorrelation function does not decay naturally with time in 
 Typical damping functions are an exponential, 
 \begin{equation}
     \xi(t) = \e^{-\gamma t} \, ,
+    \label{eq:expdamping}
 \end{equation}
 or a  Gaussian function,
 \begin{equation}
@@ -157,8 +158,8 @@ Now, we need to process the autocorrelation function and calculate the energy sp
 autocorr = np.array(autocorr)  # converting the autocorrelation function to a numpy array
 time = np.array(time)  # converting the time to a numpy array
 
-# apply the damping to the autocorrelation function in form of exp(-kappa*time)
-autocorr =  # apply the damping factor
+# apply the damping to the autocorrelation function
+autocorr =  # apply the damping function
 
 # extend the autocorrelation function to negative times assuming that S(t) = S^*(-t)
 time = np.concatenate([-time[::-1], time])  # new time array in range [-t_max, t_max]
@@ -212,7 +213,7 @@ The spectrum of a harmonic oscillator (Eq.~\eqref{eq:qdho}) is derived in all in
 \end{equation*}
 The derivation of the spectrum is a typical example of the Hamiltonian diagonalization, which is the time-independent approach. In this exercise, we will contrast the exact spectrum with the spectrum calculated by the time-dependent approach presented in this Chapter.
 
-\paragraph{Assignment:} Set up a harmonic oscillator from Eq.~\eqref{eq:qdho} and an initial Gaussian wave packet from Eq~\eqref{eq:qdgauss} with the following parameters: $m=1$~a.u., $\omega=0.1$~a.u., $x_0=6$~a.u., $p_0=0$~a.u. and $\alpha_0 = 0.3$. Propagate the wave packet for at least 10000~a.u. Don't forget to set a corresponding grid and time step! Then, apply the Gaussian damping function \eqref{eq:gaussdamping} with the parameter $\gamma = 0.005$. Do the peak positions correspond to the energies of the harmonic oscillator $E_n^\mathrm{HO}$? Try also values of $\gamma=0.02$, 0.05 and 0.1. Can you still distinguish all the peaks in the spectrum? Try to find the limit of $\gamma$ where the peaks can be still distinguished and energies clearly estimated.
+\paragraph{Assignment:} Set up a harmonic oscillator from Eq.~\eqref{eq:qdho} and an initial Gaussian wave packet from Eq~\eqref{eq:qdgauss} with the following parameters: $m=1$~a.u., $\omega=0.1$~a.u., $x_0=6$~a.u., $p_0=0$~a.u. and $\alpha_0 = 0.3$. Propagate the wave packet for at least 10000~a.u. Don't forget to set a corresponding grid and time step! Then, apply the exponential damping function \eqref{eq:expdamping} with the parameter $\gamma = 0.005$. Do the peak positions correspond to the energies of the harmonic oscillator $E_n^\mathrm{HO}$? Try also values of $\gamma=0.02$, 0.05 and 0.1. Can you still distinguish all the peaks in the spectrum? Try to find the limit of $\gamma$ where the peaks can be still distinguished and energies clearly estimated.
 
 \subsection*{Exercise: Initial wave function effect on the spectrum}
 
