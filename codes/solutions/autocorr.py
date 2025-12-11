@@ -97,7 +97,7 @@ autocorr = np.array(autocorr) # converting the autocorrelation function to a num
 time = np.array(time) # converting the time to a numpy array
 
 # apply the damping to the autocorrelation function
-autocorr *= np.exp(-gamma*time**2)
+autocorr *= np.exp(-gamma*np.abs(time))
 
 # extend the autocorrelation function to negative times assuming that S(t) = S^*(-t)
 time = np.concatenate([-time[::-1], time])  # new time array in range [-t_max, t_max]
